@@ -10,11 +10,14 @@ class PGNGame:
         self.meta_data = {}
         self.moves = []
 
-    def add_move(self, move) -> None:
-        self.moves.append(move)
+    def add_move(self, Move) -> None:
+        self.moves.append(Move)
 
     def add_meta_data(self, key, value) -> None:
         self.meta_data[key] = value
+
+    def get_meta_data(self) -> dict:
+        return self.meta_data
     
     def get_moves(self) -> list:
         return self.moves
@@ -22,5 +25,7 @@ class PGNGame:
     def get_last_move(self):
         return self.moves[-1]
 
+    def lookup_meta_data(self, key):
+        return self.meta_data[key]
     
 

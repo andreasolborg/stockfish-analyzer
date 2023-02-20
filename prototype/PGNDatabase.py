@@ -1,5 +1,5 @@
-#from PNGGame import *
-#from PNGMove import *
+from PGNGame import *
+from PGNMove import *
 import re
 
 class PGNDatabase:
@@ -16,15 +16,18 @@ class PGNDatabase:
         pgn_data = file.read()
 
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
+
+        game_list = []
         
         for i, game in enumerate(games, start=1):
-            print(i)
-            
+            chessgame = PGNGame()            
             g = list(filter(lambda x: len(x) > 0, game.split('\n\n')))
             
             meta_data = g[0]
-            moves = g[1].replace('\n', ' ')
+            print(meta_data)
+
             
+            moves = g[1].replace('\n', ' ')
             pattern = r'\d+\.\s[\S\s]+?(?=\d+\.\s|\Z)' # Matches all moves
             matches = re.findall(pattern, moves)
             for match in matches:
@@ -35,8 +38,13 @@ class PGNDatabase:
                 white_move_comment = result[2]
                 black_move = result[3]
                 black_move_comment = result[4]
-                print(number, white_move, white_move_comment, black_move, black_move_comment)     
+                # print(number, white_move, white_move_comment, black_move, black_move_comment)
+                chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
 
+            game_list.append(chessgame)
+
+        return game_list
+            
     
     def parse(self,path):
         file = open(path, 'r')
@@ -73,7 +81,10 @@ class PGNDatabase:
 def main():
     
     pgn = PGNDatabase()
-    pgn.parse("./prototype/sample.pgn")
+    game_list = pgn.parse2("./prototype/sample.pgn")
+    for game in game_list:
+        print(game.get_last_move())
+
  
 main()
 
