@@ -22,27 +22,12 @@ class PGNGame
         self.blackelo = blackelo
         self.moves = moves
         self.result = result
-
         self.meta = meta
         
         
         
         
-        PGNGame.meta[result]
-        PNGGame.result
-        
-        
-        PNGGame.__dict__[result]
-        PGNGame.meta.__dict__[result]
-        
-        
-        
-        
-        
-        dictt["tisss"]
-        
-        
-        {key:vaulueeueuee, sdfsdf}
+    
     
         
     

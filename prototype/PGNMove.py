@@ -5,8 +5,6 @@ class PGNMove
     
     def __init__(self):
         self.number = number
-        self.white_move = white_move
-        self.white_comment = white_comment
-        self.black_move = black_move
-        self.black_comment = black_comment
+        self.white = white
+        self.black = black
         
