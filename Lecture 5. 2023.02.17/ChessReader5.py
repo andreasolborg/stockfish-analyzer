@@ -50,4 +50,4 @@ def ReadChessDataBase(inputFile):
 
       
 
-ImportChessDataBase("../Stockfish_15_64-bit.commented.[2600].pgn")
+ImportChessDataBase("DataBases/Stockfish_15_64-bit.commented.[2600].pgn")
