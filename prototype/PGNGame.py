@@ -22,14 +22,5 @@ class PGNGame:
     def get_last_move(self):
         return self.moves[-1]
 
-
-    def import_from_file(self, filename):
-        step = 1
-        file = open(filename, "r")
-        line = file.readline().rstrip()
-        if line == "":
-            return None
-        while True:
-            if step==1:
     
 

@@ -1,5 +1,7 @@
-#from PNGGame import *
-#from PNGMove import *
+from PGNGame import *
+from PGNMove import *
+from PGNPly import * 
+import re
 
 class PGNDatabase:
     '''
@@ -10,6 +12,8 @@ class PGNDatabase:
         pass
 
     
+  
+        
     def parse(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
@@ -24,9 +28,21 @@ class PGNDatabase:
             meta_data = g[0]
             moves = g[1]
             
-            print repr(moves)
+            
+            moves = moves.replace('\n', '')
+            
+            moves = re.sub(r'\d+\.\.\.|\d+\.', '', moves)
+            moves = re.sub(r'(\)|\(|\$\d+)', r' \1 ', moves) 
+            
+            test = list(filter(lambda x: x, re.split(r'({[\w\W]*?})|\s', moves)))[:-1]
+            
+ 
+            for e in test:
+                print(e)
+              
+            #print(moves)
   
-            print("dsffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")
+            print(test)
             
             
 
