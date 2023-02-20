@@ -1,33 +1,26 @@
+from PGNMove import *
 
 
-
-class PGNGame    
+class PGNGame:
     '''
     Describes a single chess game in PGN format.
     '''
     
     def __init__(self):  
-        
-        self.event = event
-        self.site = site
-        self.date = date
-        self.round = round 
-        self.white = white
-        self.black = black
-        self.result = result
-        self.eco_code = eco_code
-        self.opening = opening
-        self.plycount = plycount
-        self.whiteelo = whiteelo
-        self.blackelo = blackelo
-        self.moves = moves
-        self.result = result
-        self.meta = meta
-        
-        
-        
-        
+        self.meta_data = {}
+        self.moves = []
+
+    def add_move(self, move) -> None:
+        self.moves.append(move)
+
+    def add_meta_data(self, key, value) -> None:
+        self.meta_data[key] = value
     
+    def get_moves(self) -> list:
+        return self.moves
     
-        
+    def get_last_move(self):
+        return self.moves[-1]
+
     
+

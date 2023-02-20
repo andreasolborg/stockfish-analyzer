@@ -11,9 +11,10 @@ class PGNDatabase:
         pass
 
     
-    def parse(self,path):
+    def parse2(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
+
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
         
         for i, game in enumerate(games, start=1):
@@ -34,8 +35,39 @@ class PGNDatabase:
                 white_move_comment = result[2]
                 black_move = result[3]
                 black_move_comment = result[4]
-                print(number, white_move, white_move_comment, black_move, black_move_comment)                   
-                            
+                print(number, white_move, white_move_comment, black_move, black_move_comment)     
+
+    
+    def parse(self,path):
+        file = open(path, 'r')
+        pgn_data = file.read()
+
+        games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
+        
+        for i, game in enumerate(games, start=1):
+            print(i)
+            
+            g = list(filter(lambda x: len(x) > 0, game.split('\n\n')))
+            
+            meta_data = g[0]
+            moves = g[1].replace('\n', ' ')
+            
+            
+            moves = moves.replace('\n', '')
+            
+            moves = re.sub(r'\d+\.\.\.|\d+\.', '', moves)
+            moves = re.sub(r'(\)|\(|\$\d+)', r' \1 ', moves) 
+            
+            test = list(filter(lambda x: x, re.split(r'({[\w\W]*?})|\s', moves)))[:-1]
+            
+ 
+            for e in test:
+                print(e)
+              
+            #print(moves)
+  
+            print(test)
+            
             
 
 def main():
