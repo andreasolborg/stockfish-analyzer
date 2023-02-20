@@ -53,8 +53,6 @@ class PGNDatabase:
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
         
         for i, game in enumerate(games, start=1):
-            print(i)
-            
             g = list(filter(lambda x: len(x) > 0, game.split('\n\n')))
             
             meta_data = g[0]
@@ -68,10 +66,16 @@ class PGNDatabase:
             
             test = list(filter(lambda x: x, re.split(r'({[\w\W]*?})|\s', moves)))[:-1]
             
- 
-            for e in test:
-                print(e)
-              
+            moves = []
+            
+            for i in range(0, len(test), 4)
+                white_move = PNGPly()
+                black_move = PNGPly()
+                
+                move = PNGMove((i+1)/4, white_move, black_move)
+                moves.append(move)
+            
+                
             #print(moves)
   
             print(test)
