@@ -1,1 +1,1 @@
-print(match)
+pattern = re.compile(r"(\w+|\{[\w\s\+\-\.\/\(\)]+\})") 

@@ -18,14 +18,13 @@ class PGNMove:
     
     def get_white_comment(self):
         return self.white_comment
-
-    def get_black(self):
-        return self.black
     
     def get_black_comment(self):
         return self.black_comment
-        
 
+    def get_black(self):
+        return self.black
+        
     def __str__(self):
         return self.number + " " + self.white + " " + self.black
 

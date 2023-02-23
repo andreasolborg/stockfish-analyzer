@@ -28,4 +28,8 @@ class PGNGame:
     def lookup_meta_data(self, key):
         return self.meta_data[key]
     
+    def __str__(self):
+        return str(self.meta_data)
+
+
 
