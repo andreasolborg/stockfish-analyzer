@@ -1,0 +1,7 @@
+https://www.pythonforbeginners.com/data-structures/tree-data-structure-in-python
+
+
+
+Big tasks:
+Task 10: Parse the database into a tree structure
+

@@ -54,40 +54,20 @@ class PGNDatabase:
     def sort_plycount_distribution_by_key(self, plycount_distribution):
         return sorted(plycount_distribution.items(), key=lambda x: int(x[0]))
     
-    def get_stockfish_draws(self):
-        stockfish_draws_as_white = []
-        stockfish_draws_as_black = []
-        draws = self.get_draws()
-        for game in draws:
-            if game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
-                stockfish_draws_as_white.append(game)
-            if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
-                stockfish_draws_as_black.append(game)
+    def get_stockfish_draws(self, list_of_drawed_games):
+        stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
+        stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
         return stockfish_draws_as_white, stockfish_draws_as_black
-        
-    def get_stockfish_wins(self):
-        stockfish_wins_as_white = []
-        stockfish_wins_as_black = []
-        games = self.get_games()
-        for game in games:
-            if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0':
-                stockfish_wins_as_white.append(game)
-            if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1':
-                stockfish_wins_as_black.append(game)
+
+    def get_stockfish_wins(self, list_of_games):
+        stockfish_wins_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
+        stockfish_wins_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
         return stockfish_wins_as_white, stockfish_wins_as_black
 
-
-    def get_stockfish_losses(self):
-        stockfish_losses_as_white = []
-        stockfish_losses_as_black = []
-        games = self.get_games()
-        for game in games:
-            if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1':
-                stockfish_losses_as_white.append(game)
-            if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0':
-                stockfish_losses_as_black.append(game)
+    def get_stockfish_losses(self, list_of_games):
+        stockfish_losses_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
+        stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
-
 
 
     def plot_plycount_distribution(self, plycount_distribution):
@@ -99,9 +79,7 @@ class PGNDatabase:
         plt.bar(x, y)
         plt.show()
 
-
         
-            
     def parse(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
@@ -181,6 +159,8 @@ class PGNDatabase:
             
 
 def main():
+    start_time = time.time()
+
     # pgn = PGNDatabase("./prototype/sample.pgn")
     # pgn = PGNDatabase("./prototype/test.pgn")
     # pgn = PGNDatabase("./prototype/bigger_sample.pgn")
@@ -188,31 +168,36 @@ def main():
 
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     # game_list = pgn.parse2("./Stockfish_15_64-bit.commented.[2600].pgn")
+    print(f"Time: {time.time() - start_time}")
+
     
     # print(f"White wins: {len(pgn.white_wins)}")
     # print(f"Black wins: {len(pgn.black_wins)}")
     # print(f"Draws: {len(pgn.draws)}")
 
-    print("Getting plycount distribution")
-    plycount_distribution = pgn.get_plycount_distribution()
-    print("Sorting plycount distribution")
-    sorted_plycount_distribution = pgn.sort_plycount_distribution_by_key(plycount_distribution)
-    print(sorted_plycount_distribution)
-    print("Plotting plycount distribution")
-    pgn.plot_plycount_distribution(sorted_plycount_distribution)
-
+    # print("Getting plycount distribution")
+    # plycount_distribution = pgn.get_plycount_distribution()
+    # print("Sorting plycount distribution")
+    # sorted_plycount_distribution = pgn.sort_plycount_distribution_by_key(plycount_distribution)
+    # print(sorted_plycount_distribution)
+    # print("Plotting plycount distribution")
+    # pgn.plot_plycount_distribution(sorted_plycount_distribution)
+    start_time = time.time()
+    print("Getting games")
+    list_of_games = pgn.get_games()
+    list_of_draws = pgn.get_draws()
     print("Getting stockfish wins")
-    stockfish_wins_as_white, stockfish_wins_as_black = pgn.get_stockfish_wins()
+    stockfish_wins_as_white, stockfish_wins_as_black = pgn.get_stockfish_wins(list_of_games)
     print(f"Stockfish wins as white: {len(stockfish_wins_as_white)}")
     print(f"Stockfish wins as black: {len(stockfish_wins_as_black)}")
 
     print("Getting stockfish losses")
-    stockfish_losses_as_white, stockfish_losses_as_black = pgn.get_stockfish_losses()
+    stockfish_losses_as_white, stockfish_losses_as_black = pgn.get_stockfish_losses(list_of_games)
     print(f"Stockfish losses as white: {len(stockfish_losses_as_white)}")
     print(f"Stockfish losses as black: {len(stockfish_losses_as_black)}")
 
     print("Getting stockfish draws")
-    stockfish_draws_as_white, stockfish_draws_as_black = pgn.get_stockfish_draws()
+    stockfish_draws_as_white, stockfish_draws_as_black = pgn.get_stockfish_draws(list_of_draws)
     print(f"Stockfish draws as white: {len(stockfish_draws_as_white)}")
     print(f"Stockfish draws as black: {len(stockfish_draws_as_black)}")
 
@@ -221,7 +206,6 @@ def main():
     print(f"Time: {time.time() - start_time}")
         
 
-start_time = time.time()
 main()
 
 
