@@ -8,7 +8,7 @@ import os
 from docx import Document
 from docx.shared import Inches
 
-
+import numpy as np
 import matplotlib.pyplot as plt
 
 class PGNDatabase:
@@ -45,6 +45,49 @@ class PGNDatabase:
             if game.lookup_meta_data('Result') == '1/2-1/2':
                 draws.append(game)
         return draws
+    
+    def get_games_where_stockfish_is_white(self):
+        stockfish_white = []
+        for game in self.games:
+            if game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+                stockfish_white.append(game)
+        return stockfish_white
+    
+    def get_games_where_stockfish_is_black(self):
+        stockfish_black = []
+        for game in self.games:
+            if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+                stockfish_black.append(game)
+        return stockfish_black
+
+
+    ##### TASK 8 ########
+    def get_standard_deviation_of_moves(self):
+        amount_of_moves = []
+        for game in self.games:
+            amount_of_moves.append(len(game.get_moves()))
+        return np.std(amount_of_moves)
+
+    def get_mean_number_of_moves(self):
+        amount_of_moves = []
+        for game in self.games:
+            amount_of_moves.append(len(game.get_moves()))
+        return np.mean(amount_of_moves)
+    
+
+
+    #########
+
+    def get_move_count_distribution(self, list_of_games):
+        move_count_distribution = {}
+        for game in list_of_games:
+            move_count = len(game.get_moves())
+            if move_count in move_count_distribution:
+                move_count_distribution[move_count] += 1
+            else:
+                move_count_distribution[move_count] = 1
+        return move_count_distribution
+
 
     def get_plycount_distribution(self):
         plycount_distribution = {}
@@ -56,9 +99,12 @@ class PGNDatabase:
                 plycount_distribution[plycount] = 1
         return plycount_distribution
 
-    def sort_plycount_distribution_by_key(self, plycount_distribution):
-        return sorted(plycount_distribution.items(), key=lambda x: int(x[0]))
+    def sort_dict(self, dict):
+        return sorted(dict.items(), key=lambda x: x[0])
     
+
+
+
     def get_stockfish_draws(self, list_of_drawed_games):
         stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
         stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
@@ -76,15 +122,35 @@ class PGNDatabase:
 
 
     def plot_plycount_distribution(self, plycount_distribution):
+        #Clear plot
+        plt.clf()
         x = []
         y = []
         for key, value in plycount_distribution:
             x.append(key)
             y.append(value)
-        plt.bar(x, y)
+        plt.plot(x, y)
         plt.savefig('plycount_distribution.png')
 
+
+    def plot_move_count_distribution(self, move_count_distribution):
+        #Clear plot
+        plt.clf()
+        x = []
+        y = []
+        for key, value in move_count_distribution:
+            x.append(key)
+            y.append(value)
+        plt.plot(x, y)
+        plt.xlabel('Number of moves')
+        plt.ylabel('Number of games')
+        plt.fill_between(x, y, color='blue', alpha=0.5)
         
+
+
+        plt.savefig('move_count_distribution.png')
+
+
     def parse(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
@@ -170,46 +236,21 @@ def main():
     # pgn = PGNDatabase("./prototype/test.pgn")
     # pgn = PGNDatabase("./prototype/bigger_sample.pgn")
 
-
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
-    database = PGNDatabase("./prototype/humongous_database.pgn")
 
-    # game_list = pgn.parse2("./Stockfish_15_64-bit.commented.[2600].pgn")
-    print(f"Time: {time.time() - start_time}")
-
-    
-    # print(f"White wins: {len(pgn.white_wins)}")
-    # print(f"Black wins: {len(pgn.black_wins)}")
-    # print(f"Draws: {len(pgn.draws)}")
-
-    # print("Getting plycount distribution")
-    # plycount_distribution = pgn.get_plycount_distribution()
-    # print(plycount_distribution)
-    # print("Sorting plycount distribution")
-    # sorted_plycount_distribution = pgn.sort_plycount_distribution_by_key(plycount_distribution)
-    # print(sorted_plycount_distribution)
-    # print("Plotting plycount distribution")
-    # pgn.plot_plycount_distribution(sorted_plycount_distribution)
-
-
-    start_time = time.time()
-    print("Getting games")
+    list_of_drawed_games = pgn.get_draws()
     list_of_games = pgn.get_games()
-    list_of_draws = pgn.get_draws()
-    print("Getting stockfish wins")
-    stockfish_wins_as_white, stockfish_wins_as_black = pgn.get_stockfish_wins(list_of_games)
-    print(f"Stockfish wins as white: {len(stockfish_wins_as_white)}")
-    print(f"Stockfish wins as black: {len(stockfish_wins_as_black)}")
+    
+    list_of_games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
 
-    print("Getting stockfish losses")
-    stockfish_losses_as_white, stockfish_losses_as_black = pgn.get_stockfish_losses(list_of_games)
-    print(f"Stockfish losses as white: {len(stockfish_losses_as_white)}")
-    print(f"Stockfish losses as black: {len(stockfish_losses_as_black)}")
+    move_count_distribution = pgn.get_move_count_distribution(list_of_games)
+    sorted_dict = pgn.sort_dict(move_count_distribution)
+    print(sorted_dict)
+    pgn.plot_move_count_distribution(sorted_dict)
 
-    print("Getting stockfish draws")
-    stockfish_draws_as_white, stockfish_draws_as_black = pgn.get_stockfish_draws(list_of_draws)
-    print(f"Stockfish draws as white: {len(stockfish_draws_as_white)}")
-    print(f"Stockfish draws as black: {len(stockfish_draws_as_black)}")
+    plycount_distribution = pgn.get_plycount_distribution()
+    sorted_dict = pgn.sort_dict(plycount_distribution)
+    pgn.plot_plycount_distribution(sorted_dict)
 
 
     print(f"Time: {time.time() - start_time}")
@@ -217,6 +258,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
+    
 
     
