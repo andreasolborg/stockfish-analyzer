@@ -1,6 +1,5 @@
 from PGNGame import *
 from PGNMove import *
-from PGNPly import *
 import re
 import time
 
@@ -13,9 +12,8 @@ import matplotlib.pyplot as plt
 
 class PGNDatabase:
     '''
-    Encapsultaes all games TODO, skriv bedre
+    Encapsulate all games parsed from a PGN file.
     '''
-    
     def __init__(self, path):
         self.games = self.parse(path)  
         self.white_wins = self.get_white_wins()
@@ -73,10 +71,6 @@ class PGNDatabase:
         for game in self.games:
             amount_of_moves.append(len(game.get_moves()))
         return np.mean(amount_of_moves)
-    
-
-
-    #########
 
     def get_move_count_distribution(self, list_of_games):
         move_count_distribution = {}
@@ -87,7 +81,6 @@ class PGNDatabase:
             else:
                 move_count_distribution[move_count] = 1
         return move_count_distribution
-
 
     def get_plycount_distribution(self):
         plycount_distribution = {}
@@ -102,9 +95,6 @@ class PGNDatabase:
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
-
-
-
     def get_stockfish_draws(self, list_of_drawed_games):
         stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
         stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
@@ -120,7 +110,6 @@ class PGNDatabase:
         stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
 
-
     def plot_plycount_distribution(self, plycount_distribution):
         #Clear plot
         x = []
@@ -131,10 +120,7 @@ class PGNDatabase:
         plt.plot(x, y)
         plt.savefig('plycount_distribution.png')
 
-
-    def plot_move_count_distribution(self, list_of_games, textinfo):
-        move_count_distribution = self.get_move_count_distribution(list_of_games)
-        move_count_distribution = self.sort_dict(move_count_distribution)
+    def plot_move_count_distribution(self, move_count_distribution):
         #Clear plot
         x = []
         y = []
@@ -147,8 +133,8 @@ class PGNDatabase:
         plt.xlim(15, 125)
         plt.xlabel('Number of moves')
         plt.ylabel('Number of games')
-        plt.fill_between(x, y, color='blue', alpha=0.01)
-        plt.legend([textinfo], loc='upper right')
+        plt.fill_between(x, y, color='blue', alpha=0.5)
+
         plt.savefig('move_count_distribution.png')
 
 
@@ -182,9 +168,7 @@ class PGNDatabase:
         plt.clf()
 
     def compose(self):
-        # TODO
-        # fix correct linebreak in the moves; http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm#c4.3
-        # fix parse function so it collects the score after all the moves correct
+        # TODO fix correct linebreak in the moves
         
         pgn_data = ""
         for game in self.games:
@@ -198,19 +182,21 @@ class PGNDatabase:
             moves = ""
             for move in game.get_moves(): 
                 moves += move.get_number() + ". "
-                moves += move.get_white_move() + " "
                 
-                # Comment might not exist
+                if move.get_white_move() is not None:
+                    moves += move.get_white_move() + " "
+               
                 if move.get_white_comment() is not None:
                     moves += move.get_white_comment() + " "
-                
-                moves += move.get_black_move() + " "
-                
-                # Comment might not exist
+               
+                if move.get_black_move() is not None:
+                    moves += move.get_black_move() + " "
+             
                 if move.get_black_comment() is not None:
                     moves += move.get_black_comment() + " "
-         
-            pgn_data += moves + "\n\n"
+            
+            score = game.get_meta_data()["Result"]
+            pgn_data += moves + score + "\n\n"
         
         pgn_file = open("test.pgn","w")
         pgn_file.write(pgn_data)
@@ -238,6 +224,10 @@ class PGNDatabase:
                 chessgame.add_meta_data(key, value)
             
             moves = g[1].replace('\n', ' ')
+            
+            # remove score at the end of the moves
+            moves = re.sub(r'\s(1\/2-1\/2|1-0|0-1)$', '', moves)
+            
             pattern = r'\d+\.\s[\S\s]+?(?=\d+\.\s|\Z)' # Matches all moves
             # Define a regular expression to match the input string
             matches = re.findall(pattern, moves)
