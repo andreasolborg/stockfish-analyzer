@@ -79,7 +79,41 @@ class PGNDatabase:
         plt.bar(x, y)
         plt.show()
 
+    def compose(self):
+        # TODO
+        # fix correct linebreak in the moves; http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm#c4.3
+        # fix parse function so it collects the score after all the moves correct
         
+        pgn_data = ""
+        for game in self.games:
+            meta_data = ""
+            for key, value in game.get_meta_data().items():
+                line = "[" + str(key) + " \"" + str(value) + "\"]"
+                meta_data = meta_data + line + "\n"
+            
+            pgn_data += meta_data + "\n"
+
+            moves = ""
+            for move in game.get_moves(): 
+                moves += move.get_number() + ". "
+                moves += move.get_white_move() + " "
+                
+                # Comment might not exist
+                if move.get_white_comment() is not None:
+                    moves += move.get_white_comment() + " "
+                
+                moves += move.get_black_move() + " "
+                
+                # Comment might not exist
+                if move.get_black_comment() is not None:
+                    moves += move.get_black_comment() + " "
+         
+            pgn_data += moves + "\n\n"
+        
+        pgn_file = open("test.pgn","w")
+        pgn_file.write(pgn_data)
+        pgn_file.close()
+            
     def parse(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
@@ -121,40 +155,25 @@ class PGNDatabase:
 
         return game_list
             
+def test():
+    start_time = time.time()
+    pgn = PGNDatabase("./sample.pgn")
     
-    def parse2(self,path):
-        file = open(path, 'r')
-        pgn_data = file.read()
+    # manual testing
+    for i, g in enumerate(pgn.get_games()):
+        pass
+        #print("-----------------" + str(i) + "-----------------")
+        #print(g.meta_data)
+        #print("")
+        for m in g.moves:
+            pass
+            #print(m)
+    
+    pgn.compose()
+    
+    print(f"Time: {time.time() - start_time}")
 
-        games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
-        
-        for i, game in enumerate(games, start=1):
-            g = list(filter(lambda x: len(x) > 0, game.split('\n\n')))
-            
-            meta_data = g[0]
-            moves = g[1].replace('\n', ' ')
-            
-            
-            moves = moves.replace('\n', '')
-            
-            moves = re.sub(r'\d+\.\.\.|\d+\.', '', moves)
-            moves = re.sub(r'(\)|\(|\$\d+)', r' \1 ', moves) 
-            
-            test = list(filter(lambda x: x, re.split(r'({[\w\W]*?})|\s', moves)))[:-1]
-            
-            moves = []
-            
-            for i in range(0, len(test), 4):
-                white_move = PNGPly()
-                black_move = PNGPly()
-                
-                move = PNGMove((i+1)/4, white_move, black_move)
-                moves.append(move)
-            
-                
-            #print(moves)
-  
-            print(test)
+test()
             
             
 
@@ -206,7 +225,7 @@ def main():
     print(f"Time: {time.time() - start_time}")
         
 
-main()
+#main()
 
 
     
