@@ -4,6 +4,11 @@ from PGNPly import *
 import re
 import time
 
+import os
+from docx import Document
+from docx.shared import Inches
+
+
 import matplotlib.pyplot as plt
 
 class PGNDatabase:
@@ -77,14 +82,14 @@ class PGNDatabase:
             x.append(key)
             y.append(value)
         plt.bar(x, y)
-        plt.show()
+        plt.savefig('plycount_distribution.png')
 
         
     def parse(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
-
+        
         game_list = []
         
         for game in games:
@@ -167,6 +172,8 @@ def main():
 
 
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    database = PGNDatabase("./prototype/humongous_database.pgn")
+
     # game_list = pgn.parse2("./Stockfish_15_64-bit.commented.[2600].pgn")
     print(f"Time: {time.time() - start_time}")
 
@@ -177,11 +184,14 @@ def main():
 
     # print("Getting plycount distribution")
     # plycount_distribution = pgn.get_plycount_distribution()
+    # print(plycount_distribution)
     # print("Sorting plycount distribution")
     # sorted_plycount_distribution = pgn.sort_plycount_distribution_by_key(plycount_distribution)
     # print(sorted_plycount_distribution)
     # print("Plotting plycount distribution")
     # pgn.plot_plycount_distribution(sorted_plycount_distribution)
+
+
     start_time = time.time()
     print("Getting games")
     list_of_games = pgn.get_games()
@@ -202,11 +212,11 @@ def main():
     print(f"Stockfish draws as black: {len(stockfish_draws_as_black)}")
 
 
-
     print(f"Time: {time.time() - start_time}")
         
 
-main()
+if __name__ == "__main__":
+    main()
 
 
     
