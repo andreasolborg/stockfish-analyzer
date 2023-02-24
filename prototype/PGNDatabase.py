@@ -123,7 +123,6 @@ class PGNDatabase:
 
     def plot_plycount_distribution(self, plycount_distribution):
         #Clear plot
-        plt.clf()
         x = []
         y = []
         for key, value in plycount_distribution:
@@ -133,22 +132,54 @@ class PGNDatabase:
         plt.savefig('plycount_distribution.png')
 
 
-    def plot_move_count_distribution(self, move_count_distribution):
+    def plot_move_count_distribution(self, list_of_games, textinfo):
+        move_count_distribution = self.get_move_count_distribution(list_of_games)
+        move_count_distribution = self.sort_dict(move_count_distribution)
         #Clear plot
-        plt.clf()
         x = []
         y = []
         for key, value in move_count_distribution:
             x.append(key)
             y.append(value)
         plt.plot(x, y)
+        #Min and max values for x and y axis
+        plt.ylim(0, 150)        
+        plt.xlim(15, 125)
         plt.xlabel('Number of moves')
         plt.ylabel('Number of games')
-        plt.fill_between(x, y, color='blue', alpha=0.5)
-        
-
-
+        plt.fill_between(x, y, color='blue', alpha=0.01)
+        plt.legend([textinfo], loc='upper right')
         plt.savefig('move_count_distribution.png')
+
+
+    def plot_move_count_histogram_cumulative(self, list_of_games, textinfo, axis=None):
+        move_count_distribution = self.get_move_count_distribution(list_of_games)
+        move_count_distribution = self.sort_dict(move_count_distribution)
+        data = [(moves, games) for moves, games in move_count_distribution]
+        data = sorted([(moves, games) for moves, games in data], reverse=True)
+        # calculate the cumulative sum of the games for each move count
+        cumulative_data = []
+        cumulative_sum = 0
+        for moves, games in data:
+            cumulative_sum += games
+            cumulative_data.append((moves, cumulative_sum))
+        # plot the cumulative frequency as a function of the move count
+        x = [moves for moves, games in cumulative_data]
+        y = [games for moves, games in cumulative_data]
+        if axis is None:  # if no axis is given, create a new one
+            axis = plt.gca() # get current axis
+        axis.plot(x, y, label=textinfo)
+        axis.set_xlim(15, 125)
+        axis.set_xlabel('Number of Moves')
+        axis.set_ylabel('Cumulative Number of Games')
+        axis.set_title('Reverse Histogram of Chess Game Length')
+
+    def save_histogram(self, path):
+        plt.savefig(path)
+
+
+    def clear_plot(self):
+        plt.clf()
 
     def compose(self):
         # TODO
@@ -244,36 +275,26 @@ def test():
     
     print(f"Time: {time.time() - start_time}")
 
-test()
+#test()
             
             
 
 def main():
-    start_time = time.time()
-
-    # pgn = PGNDatabase("./prototype/sample.pgn")
-    # pgn = PGNDatabase("./prototype/test.pgn")
-    # pgn = PGNDatabase("./prototype/bigger_sample.pgn")
-
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
-
-    list_of_drawed_games = pgn.get_draws()
     list_of_games = pgn.get_games()
+    games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
+    games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
-    list_of_games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
+    fig, ax = plt.subplots()
 
-    move_count_distribution = pgn.get_move_count_distribution(list_of_games)
-    sorted_dict = pgn.sort_dict(move_count_distribution)
-    print(sorted_dict)
-    pgn.plot_move_count_distribution(sorted_dict)
+    pgn.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
+    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_white, "Games where Stockfish is white", axis=ax)
+    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
 
-    plycount_distribution = pgn.get_plycount_distribution()
-    sorted_dict = pgn.sort_dict(plycount_distribution)
-    pgn.plot_plycount_distribution(sorted_dict)
+    plt.legend()
+    plt.show()
 
 
-    print(f"Time: {time.time() - start_time}")
-        
 
 if __name__ == "__main__":
     main()

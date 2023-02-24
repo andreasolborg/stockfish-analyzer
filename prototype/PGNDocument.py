@@ -41,9 +41,12 @@ class PGNDocument:
         self.create_document_result_table(list_of_games, list_of_drawed_games)
         self.create_document_result_table_with_stockfish(list_of_games, list_of_drawed_games)
         self.create_document_body_plycount_distribution()
-        self.create_document_moves_distribution(list_of_games)
-        self.create_document_moves_distribution(list_of_games_where_stockfish_is_white)
-        self.create_document_moves_distribution(list_of_games_where_stockfish_is_black)
+        self.database.clear_plot()
+        self.create_document_cumulative_moves_distribution(list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black)
+        
+        
+
+        
         self.create_document_moves_table_mean_and_standard_deviation()
 
 
@@ -125,13 +128,26 @@ class PGNDocument:
         self.document.add_picture('plycount_distribution.png', width=Inches(6))
 
 
-    def create_document_moves_distribution(self, list_of_games):
+    def create_document_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
         self.document.add_heading('2.4 Moves distribution', level=2)
         self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
         self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-        move_count_distribution = self.database.get_move_count_distribution(list_of_games)
-        sorted_moves_distribution = self.database.sort_dict(move_count_distribution)
-        self.database.plot_move_count_distribution(sorted_moves_distribution)
+        self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_white, "Stockfish as white")
+        self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_black, "Stockfish as black")
+        self.database.plot_move_count_distribution(list_of_games, "All games")
+        self.document.add_picture('move_count_distribution.png', width=Inches(6))
+
+    def create_document_cumulative_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
+        self.database.clear_plot()
+        self.document.add_heading('2.4 Moves distribution', level=2)
+        self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
+        self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
+        fig, ax = plt.subplots()
+        self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_white, "Stockfish as white", axis=ax)
+        self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_black, "Stockfish as black", axis=ax)
+        self.database.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
+        plt.legend()
+        self.database.save_histogram('move_count_distribution.png')
         self.document.add_picture('move_count_distribution.png', width=Inches(6))
 
     def create_document_moves_table_mean_and_standard_deviation(self):
