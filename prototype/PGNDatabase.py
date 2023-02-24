@@ -1,6 +1,5 @@
 from PGNGame import *
 from PGNMove import *
-from PGNPly import *
 import re
 import time
 
