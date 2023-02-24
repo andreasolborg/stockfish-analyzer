@@ -81,8 +81,7 @@ class PGNDatabase:
 
     def compose(self):
         # TODO
-        # fix correct linebreak in the moves; http://www.saremba.de/chessgml/standards/pgn/pgn-complete.htm#c4.3
-        # fix parse function so it collects the score after all the moves correct
+        # fix correct linebreak in the moves; 
         
         pgn_data = ""
         for game in self.games:
@@ -96,19 +95,24 @@ class PGNDatabase:
             moves = ""
             for move in game.get_moves(): 
                 moves += move.get_number() + ". "
-                moves += move.get_white_move() + " "
                 
-                # Comment might not exist
+                if move.get_white_move() is not None:
+                    moves += move.get_white_move() + " "
+                
+               
                 if move.get_white_comment() is not None:
                     moves += move.get_white_comment() + " "
                 
-                moves += move.get_black_move() + " "
+               
+                if move.get_black_move() is not None:
+                    moves += move.get_black_move() + " "
                 
-                # Comment might not exist
+             
                 if move.get_black_comment() is not None:
                     moves += move.get_black_comment() + " "
-         
-            pgn_data += moves + "\n\n"
+            
+            score = game.get_meta_data()["Result"]
+            pgn_data += moves + score + "\n\n"
         
         pgn_file = open("test.pgn","w")
         pgn_file.write(pgn_data)
@@ -136,6 +140,10 @@ class PGNDatabase:
                 chessgame.add_meta_data(key, value)
             
             moves = g[1].replace('\n', ' ')
+            
+            # remove score at the end of the moves
+            moves = re.sub(r'\s(1\/2-1\/2|1-0|0-1)$', '', moves)
+            
             pattern = r'\d+\.\s[\S\s]+?(?=\d+\.\s|\Z)' # Matches all moves
             # Define a regular expression to match the input string
             matches = re.findall(pattern, moves)
