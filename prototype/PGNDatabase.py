@@ -12,9 +12,8 @@ import matplotlib.pyplot as plt
 
 class PGNDatabase:
     '''
-    Encapsultaes all games TODO, skriv bedre
+    Encapsulate all games parsed from a PGN file.
     '''
-    
     def __init__(self, path):
         self.games = self.parse(path)  
         self.white_wins = self.get_white_wins()
@@ -72,10 +71,6 @@ class PGNDatabase:
         for game in self.games:
             amount_of_moves.append(len(game.get_moves()))
         return np.mean(amount_of_moves)
-    
-
-
-    #########
 
     def get_move_count_distribution(self, list_of_games):
         move_count_distribution = {}
@@ -86,7 +81,6 @@ class PGNDatabase:
             else:
                 move_count_distribution[move_count] = 1
         return move_count_distribution
-
 
     def get_plycount_distribution(self):
         plycount_distribution = {}
@@ -101,9 +95,6 @@ class PGNDatabase:
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
-
-
-
     def get_stockfish_draws(self, list_of_drawed_games):
         stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
         stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
@@ -119,7 +110,6 @@ class PGNDatabase:
         stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
 
-
     def plot_plycount_distribution(self, plycount_distribution):
         #Clear plot
         plt.clf()
@@ -130,7 +120,6 @@ class PGNDatabase:
             y.append(value)
         plt.plot(x, y)
         plt.savefig('plycount_distribution.png')
-
 
     def plot_move_count_distribution(self, move_count_distribution):
         #Clear plot
@@ -144,14 +133,11 @@ class PGNDatabase:
         plt.xlabel('Number of moves')
         plt.ylabel('Number of games')
         plt.fill_between(x, y, color='blue', alpha=0.5)
-        
-
 
         plt.savefig('move_count_distribution.png')
 
     def compose(self):
-        # TODO
-        # fix correct linebreak in the moves; 
+        # TODO fix correct linebreak in the moves
         
         pgn_data = ""
         for game in self.games:
@@ -168,15 +154,12 @@ class PGNDatabase:
                 
                 if move.get_white_move() is not None:
                     moves += move.get_white_move() + " "
-                
                
                 if move.get_white_comment() is not None:
                     moves += move.get_white_comment() + " "
-                
                
                 if move.get_black_move() is not None:
                     moves += move.get_black_move() + " "
-                
              
                 if move.get_black_comment() is not None:
                     moves += move.get_black_comment() + " "
@@ -253,8 +236,6 @@ def test():
 
 test()
             
-            
-
 def main():
     start_time = time.time()
 

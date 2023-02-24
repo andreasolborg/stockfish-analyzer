@@ -1,8 +1,7 @@
 class PGNMove:  
     '''
-    Describes a single chess move in PGN format.
+    Describes a single chess move from PGN format.
     '''
-    
     def __init__(self, number, white_move, white_comment, black_move, black_comment):
         self.number = number
         self.white_move = white_move

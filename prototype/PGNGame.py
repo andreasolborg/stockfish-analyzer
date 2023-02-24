@@ -3,9 +3,8 @@ from PGNMove import *
 
 class PGNGame:
     '''
-    Describes a single chess game in PGN format.
+    Describes a single chess game from PGN format.
     '''
-    
     def __init__(self):  
         self.meta_data = {}
         self.moves = []
