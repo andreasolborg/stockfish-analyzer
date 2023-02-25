@@ -110,31 +110,39 @@ class PGNDatabase:
         stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
 
-    def plot_plycount_distribution(self, plycount_distribution):
+    def plot_plycount_distribution(self, list_of_games):
+        plycount_distribution = self.get_move_count_distribution(list_of_games)
+        plycount_distribution = self.sort_dict(plycount_distribution)
         #Clear plot
         x = []
         y = []
         for key, value in plycount_distribution:
             x.append(key)
             y.append(value)
+        plt.figure(figsize=(5,10))
         plt.plot(x, y)
+        plt.xlim(15, 150)
+        plt.ylim(0, 150)
         plt.savefig('plycount_distribution.png')
+        plt.show()
 
-    def plot_move_count_distribution(self, move_count_distribution):
+    def plot_move_count_distribution(self, list_of_games):
+        move_count_distribution = self.get_move_count_distribution(list_of_games)
+        move_count_distribution = self.sort_dict(move_count_distribution)
         #Clear plot
         x = []
         y = []
         for key, value in move_count_distribution:
             x.append(key)
             y.append(value)
-        plt.plot(x, y)
         #Min and max values for x and y axis
         plt.ylim(0, 150)        
         plt.xlim(15, 125)
+        plt.figure(figsize=(50,100))
         plt.xlabel('Number of moves')
         plt.ylabel('Number of games')
+        plt.plot(x, y)
         plt.fill_between(x, y, color='blue', alpha=0.5)
-
         plt.savefig('move_count_distribution.png')
 
 
@@ -276,13 +284,16 @@ def main():
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
     fig, ax = plt.subplots()
-
+    fig.set_size_inches(10,5)
+    
     pgn.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
     pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_white, "Games where Stockfish is white", axis=ax)
     pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
 
     plt.legend()
     plt.show()
+    
+    pgn.plot_plycount_distribution(list_of_games)
 
 
 

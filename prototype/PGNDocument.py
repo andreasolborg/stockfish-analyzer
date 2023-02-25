@@ -87,6 +87,7 @@ class PGNDocument:
     def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):
         self.document.add_heading('2.1.2 Result table for Stockfish', level=2)
         self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color.')
+        self.document.add_paragraph("def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):")
         stockfish_wins_as_white, stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
         stockfish_losses_as_white, stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
         stockfish_draws_as_white, stockfish_draws_as_black = self.database.get_stockfish_draws(list_of_drawed_games)
@@ -122,9 +123,8 @@ class PGNDocument:
         self.document.add_heading('2.3 Plycount distribution', level=2)
         self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
         self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
-        plycount_distribution = self.database.get_plycount_distribution()
-        sorted_plycount_distribution = self.database.sort_dict(plycount_distribution)
-        self.database.plot_plycount_distribution(sorted_plycount_distribution)
+        list_of_games = self.database.get_games()
+        self.database.plot_plycount_distribution(list_of_games)
         self.document.add_picture('plycount_distribution.png', width=Inches(6))
 
 
@@ -143,6 +143,8 @@ class PGNDocument:
         self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
         self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
         fig, ax = plt.subplots()
+        fig.set_size_inches(10,5)
+        
         self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_white, "Stockfish as white", axis=ax)
         self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_black, "Stockfish as black", axis=ax)
         self.database.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
