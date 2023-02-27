@@ -48,56 +48,52 @@ class PGNDocument:
         self.create_document_introduction()
         # self.create_document_section_for_all_games()
         # Should include a table with game count for each player
-        self.document.add_heading('2. Games', level=2)
+        self.document.add_heading('2. Statistics', level=2)
         self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
         # self.create_document_subsection_for_all_games()
         
 
-        self.document.add_heading('2.1 Results', level=1)
-        self.document.add_paragraph('For all games, the following table shows the results.')
-
-        self.document.add_heading('2.1.1 Result table', level=2)
+        self.document.add_heading('2.1 General results', level=1)
         self.document.add_paragraph('The following table shows the results of games.')
         self.create_document_result_table_for_all_games(list_of_games, list_of_drawed_games)
 
-        self.document.add_heading('2.1.2 Result table for Stockfish', level=2)
+        self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
         self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
         self.document.add_paragraph("def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):")
         self.create_document_result_table_with_stockfish(list_of_games, list_of_drawed_games)
 
-
-        self.document.add_heading('2.3 Plycount distribution', level=2)
-        self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
-        self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
-        self.add_picture_of_plycount_distribution()
-
-        self.document.add_heading('2.2 Move distributions', level=2)
+        self.document.add_heading('2.2 Move count distributions', level=2)
         self.document.add_paragraph('The following graphs shows the distribution of the amount moves in the given set of games.')
-        self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-        
+                
         self.document.add_heading('2.2.1 All games', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
         # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black
         dictionary_for_first_plot = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "1stMoveCountCDPlot.png")
-        self.document.add_paragraph('The following table shows the mean and standard deviation of the amount moves in all games.')
+        self.document.add_paragraph('Mean and standard deviation table for all games')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games)
 
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
-        
         # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
         dictionary_for_second_plot = {"Games where Stockfish won": list_of_games_where_stockfish_wins, "Games where Stockfish drew": list_of_drawed_games}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "2ndMoveCountCDPlot.png")
-        self.document.add_paragraph('The following table shows the mean and standard deviation of the amount moves in games where Stockfish won.')
+        
+        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_wins)
-
+        self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
+                                    
         self.document.add_heading('2.2.3 Stockfish loses', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish lost.')
         dictionary_for_third_plot = {"Games where Stockfish lost": list_of_games_where_stockfish_losses}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "3rdMoveCountCDPlot.png")
-        self.document.add_paragraph('The following table shows the mean and standard deviation of the amount moves in games where Stockfish lost.')
+        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_losses)
+        
+        self.document.add_heading('2.3 Plycount distribution', level=2)
+        self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
+        self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
+        self.add_picture_of_plycount_distribution()
 
 
 
@@ -235,7 +231,7 @@ class PGNDocument:
 
 def main():
     start_time = time.time()
-    database = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    database = PGNDatabase("./big_database.pgn")
     document = PGNDocument(database)
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
     document.create_document()
