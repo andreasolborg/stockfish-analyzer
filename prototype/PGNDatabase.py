@@ -16,9 +16,8 @@ class PGNDatabase:
     '''
     def __init__(self, path):
         self.games = self.parse(path)  
-        self.white_wins = self.get_white_wins()
-        self.black_wins = self.get_black_wins()
-        self.draws = self.get_draws()
+        self.path = path
+
 
     def get_games(self):
         return self.games
@@ -57,21 +56,37 @@ class PGNDatabase:
             if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
                 stockfish_black.append(game)
         return stockfish_black
+    
+    def get_stockfish_draws(self, list_of_drawed_games):
+        stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
+        stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
+        return stockfish_draws_as_white, stockfish_draws_as_black
+
+    def get_stockfish_wins(self, list_of_games):
+        stockfish_wins_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
+        stockfish_wins_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
+        return stockfish_wins_as_white, stockfish_wins_as_black
+
+    def get_stockfish_losses(self, list_of_games):
+        stockfish_losses_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
+        stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
+        return stockfish_losses_as_white, stockfish_losses_as_black
+
 
 
     ##### TASK 8 ########
-    def get_standard_deviation_of_moves(self):
+    def get_standard_deviation_of_moves(self, list_of_games):
         amount_of_moves = []
-        for game in self.games:
+        for game in list_of_games:
             amount_of_moves.append(len(game.get_moves()))
         return np.std(amount_of_moves)
 
-    def get_mean_number_of_moves(self):
+    def get_mean_number_of_moves(self, list_of_games):
         amount_of_moves = []
-        for game in self.games:
+        for game in list_of_games:
             amount_of_moves.append(len(game.get_moves()))
         return np.mean(amount_of_moves)
-
+    
     def get_move_count_distribution(self, list_of_games):
         move_count_distribution = {}
         for game in list_of_games:
@@ -95,20 +110,6 @@ class PGNDatabase:
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
-    def get_stockfish_draws(self, list_of_drawed_games):
-        stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
-        stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
-        return stockfish_draws_as_white, stockfish_draws_as_black
-
-    def get_stockfish_wins(self, list_of_games):
-        stockfish_wins_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
-        stockfish_wins_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
-        return stockfish_wins_as_white, stockfish_wins_as_black
-
-    def get_stockfish_losses(self, list_of_games):
-        stockfish_losses_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
-        stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
-        return stockfish_losses_as_white, stockfish_losses_as_black
 
     def plot_plycount_distribution(self, list_of_games):
         plycount_distribution = self.get_move_count_distribution(list_of_games)
@@ -119,12 +120,12 @@ class PGNDatabase:
         for key, value in plycount_distribution:
             x.append(key)
             y.append(value)
-        plt.figure(figsize=(5,10))
+        plt.figure(figsize=(10,3))
         plt.plot(x, y)
-        plt.xlim(15, 150)
+        plt.xlim(15, 125)
         plt.ylim(0, 150)
         plt.savefig('plycount_distribution.png')
-        plt.show()
+        # plt.show()
 
     def plot_move_count_distribution(self, list_of_games):
         move_count_distribution = self.get_move_count_distribution(list_of_games)
@@ -167,6 +168,11 @@ class PGNDatabase:
         axis.set_xlabel('Number of Moves')
         axis.set_ylabel('Cumulative Number of Games')
         axis.set_title('Reverse Histogram of Chess Game Length')
+
+    def plot_multiple_move_count_histogram_cumulative(self, dict_of_lists_of_games):
+        for key, value in dict_of_lists_of_games.items():
+            self.plot_move_count_histogram_cumulative(value, key)
+        plt.legend()
 
     def save_histogram(self, path):
         plt.savefig(path)
