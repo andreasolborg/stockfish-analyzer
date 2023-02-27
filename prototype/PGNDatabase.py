@@ -10,6 +10,9 @@ from docx.shared import Inches
 import numpy as np
 import matplotlib.pyplot as plt
 
+from openpyxl import Workbook
+from openpyxl import load_workbook
+
 class PGNDatabase:
     '''
     Encapsulate all games parsed from a PGN file.
@@ -224,7 +227,7 @@ class PGNDatabase:
         game_list = []
         
         for game in games:
-            chessgame = PGNGame()            
+            chessgame = PGNGame({}, [])            
             g = list(filter(lambda x: len(x) > 0, game.split('\n\n'))) # Split on empty lines
             meta_data = g[0]
             meta_data = meta_data.split('\n')
@@ -264,18 +267,34 @@ class PGNDatabase:
 def test():
     start_time = time.time()
     pgn = PGNDatabase("./sample.pgn")
-    
-    # manual testing
+    print(pgn.games)
     for i, g in enumerate(pgn.get_games()):
         pass
-        #print("-----------------" + str(i) + "-----------------")
-        #print(g.meta_data)
-        #print("")
+        print("-----------------" + str(i) + "-----------------")
+        print(g.meta_data)
+        print("")
         for m in g.moves:
             pass
-            #print(m)
+            print(m)
     
-    pgn.compose()
+    
+    pgn.games = []
+    
+    print(pgn.games)
+    
+
+    
+    #pgn.compose_to_excel()
+    pgn.parse_from_excel()
+
+    for i, g in enumerate(pgn.get_games()):
+        pass
+        print("-----------------" + str(i) + "-----------------")
+        print(g.meta_data)
+        print("")
+        for m in g.moves:
+            pass
+            print(m)
     
     print(f"Time: {time.time() - start_time}")
 
@@ -304,7 +323,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    pass
     
 
     

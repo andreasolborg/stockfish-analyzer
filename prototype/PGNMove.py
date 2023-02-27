@@ -24,8 +24,29 @@ class PGNMove:
     def get_black_comment(self):
         return self.black_comment
         
-    #def __str__(self):
-    #    return str(self.number) + " " + self.white_move + " " + self.white_comment  + " " + self.black_move + " " 
+    def __str__(self):     
+        number = ""
+        white_move = ""
+        white_comment = ""
+        black_move = ""
+        black_comment = ""
+        
+        if self.number is not None:
+            number = self.number
+            
+        if self.white_move is not None:
+            white_move = self.white_move
+            
+        if self.white_comment is not None:
+            white_comment = self.white_comment
+            
+        if self.black_move is not None:
+            black_move = self.black_move
+            
+        if self.black_comment is not None:
+            black_comment = self.black_comment
+        
+        return number + " " + white_move + " " + white_comment  + " " + black_move + " " + black_comment
 
     
 

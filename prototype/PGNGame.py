@@ -5,9 +5,9 @@ class PGNGame:
     '''
     Describes a single chess game from PGN format.
     '''
-    def __init__(self):  
-        self.meta_data = {}
-        self.moves = []
+    def __init__(self, meta_data, moves):  
+        self.meta_data = meta_data
+        self.moves = moves
 
     def add_move(self, Move) -> None:
         self.moves.append(Move)
