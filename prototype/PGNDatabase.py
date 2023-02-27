@@ -10,6 +10,9 @@ from docx.shared import Inches
 import numpy as np
 import matplotlib.pyplot as plt
 
+from openpyxl import Workbook
+from openpyxl import load_workbook
+
 class PGNDatabase:
     '''
     Encapsulate all games parsed from a PGN file.
@@ -120,7 +123,8 @@ class PGNDatabase:
             y.append(value)
         plt.plot(x, y)
         plt.savefig('plycount_distribution.png')
-
+        
+        
     def plot_move_count_distribution(self, move_count_distribution):
         #Clear plot
         plt.clf()
@@ -135,7 +139,70 @@ class PGNDatabase:
         plt.fill_between(x, y, color='blue', alpha=0.5)
 
         plt.savefig('move_count_distribution.png')
+    
+    def compose_to_excel(self):
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.title = 'pgn_as_excel'
+        
+        i = 1
+        for game in self.games:
+         
+            for key, value in game.get_meta_data().items():
+                worksheet.cell(row=i, column=1, value=key)
+                worksheet.cell(row=i, column=2, value=value)
+                i += 1
+            i += 1  
+            
+            for move in game.get_moves():
+                worksheet.cell(row=i, column=1, value=move.get_number())
+                worksheet.cell(row=i, column=2, value=move.get_white_move())
+                worksheet.cell(row=i, column=3, value=move.get_white_comment())
+                worksheet.cell(row=i, column=4, value=move.get_black_move())
+                worksheet.cell(row=i, column=5, value=move.get_black_comment())
+                i += 1
+                
+            i += 1
+        workbook.save(filename='pgn_as_excel.xlsx')
+    
+    def parse_from_excel(self):
+        workbook = load_workbook(filename='pgn_as_excel.xlsx')
+        worksheet = workbook['pgn_as_excel']
 
+        new_game=False
+        phase = 0
+        
+        meta_data = {}
+        moves = []
+        for row in worksheet.iter_rows(min_row=1, values_only=True):
+            
+            if phase == 0:
+                if row[0] is None:
+                    phase = 1
+                    continue
+                
+                meta_data[row[0]] = row[1]
+                
+            if phase == 1:
+                if row[0] is None:
+                    phase = 2
+                    continue
+                
+                number = row[0]
+                white_move = row[1]
+                white_move_comment = row[2]
+                black_move = row[3]
+                black_move_comment = row[4]
+                
+                moves.append(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
+                
+            if phase == 2:
+                self.games.append(PGNGame(meta_data, moves))
+                meta_data = {}
+                moves = []
+                phase = 0
+                continue
+        
     def compose(self):
         # TODO fix correct linebreak in the moves
         
@@ -179,7 +246,7 @@ class PGNDatabase:
         game_list = []
         
         for game in games:
-            chessgame = PGNGame()            
+            chessgame = PGNGame({}, [])            
             g = list(filter(lambda x: len(x) > 0, game.split('\n\n'))) # Split on empty lines
             meta_data = g[0]
             meta_data = meta_data.split('\n')
@@ -219,18 +286,34 @@ class PGNDatabase:
 def test():
     start_time = time.time()
     pgn = PGNDatabase("./sample.pgn")
-    
-    # manual testing
+    print(pgn.games)
     for i, g in enumerate(pgn.get_games()):
         pass
-        #print("-----------------" + str(i) + "-----------------")
-        #print(g.meta_data)
-        #print("")
+        print("-----------------" + str(i) + "-----------------")
+        print(g.meta_data)
+        print("")
         for m in g.moves:
             pass
-            #print(m)
+            print(m)
     
-    pgn.compose()
+    
+    pgn.games = []
+    
+    print(pgn.games)
+    
+
+    
+    #pgn.compose_to_excel()
+    pgn.parse_from_excel()
+
+    for i, g in enumerate(pgn.get_games()):
+        pass
+        print("-----------------" + str(i) + "-----------------")
+        print(g.meta_data)
+        print("")
+        for m in g.moves:
+            pass
+            print(m)
     
     print(f"Time: {time.time() - start_time}")
 
@@ -243,7 +326,7 @@ def main():
     # pgn = PGNDatabase("./prototype/test.pgn")
     # pgn = PGNDatabase("./prototype/bigger_sample.pgn")
 
-    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    pgn = PGNDatabase("./sample.pgn")
 
     list_of_drawed_games = pgn.get_draws()
     list_of_games = pgn.get_games()
@@ -264,7 +347,8 @@ def main():
         
 
 if __name__ == "__main__":
-    main()
+    #main()
+    pass
     
 
     
