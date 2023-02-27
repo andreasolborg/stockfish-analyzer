@@ -113,96 +113,71 @@ class PGNDatabase:
         stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
 
-    def plot_plycount_distribution(self, plycount_distribution):
+    def plot_plycount_distribution(self, list_of_games):
+        plycount_distribution = self.get_move_count_distribution(list_of_games)
+        plycount_distribution = self.sort_dict(plycount_distribution)
         #Clear plot
-        plt.clf()
         x = []
         y = []
         for key, value in plycount_distribution:
             x.append(key)
             y.append(value)
+        plt.figure(figsize=(5,10))
         plt.plot(x, y)
+        plt.xlim(15, 150)
+        plt.ylim(0, 150)
         plt.savefig('plycount_distribution.png')
-        
-        
-    def plot_move_count_distribution(self, move_count_distribution):
+        plt.show()
+
+    def plot_move_count_distribution(self, list_of_games):
+        move_count_distribution = self.get_move_count_distribution(list_of_games)
+        move_count_distribution = self.sort_dict(move_count_distribution)
         #Clear plot
-        plt.clf()
         x = []
         y = []
         for key, value in move_count_distribution:
             x.append(key)
             y.append(value)
-        plt.plot(x, y)
+        #Min and max values for x and y axis
+        plt.ylim(0, 150)        
+        plt.xlim(15, 125)
+        plt.figure(figsize=(50,100))
         plt.xlabel('Number of moves')
         plt.ylabel('Number of games')
+        plt.plot(x, y)
         plt.fill_between(x, y, color='blue', alpha=0.5)
-
         plt.savefig('move_count_distribution.png')
-    
-    def compose_to_excel(self):
-        workbook = Workbook()
-        worksheet = workbook.active
-        worksheet.title = 'pgn_as_excel'
-        
-        i = 1
-        for game in self.games:
-         
-            for key, value in game.get_meta_data().items():
-                worksheet.cell(row=i, column=1, value=key)
-                worksheet.cell(row=i, column=2, value=value)
-                i += 1
-            i += 1  
-            
-            for move in game.get_moves():
-                worksheet.cell(row=i, column=1, value=move.get_number())
-                worksheet.cell(row=i, column=2, value=move.get_white_move())
-                worksheet.cell(row=i, column=3, value=move.get_white_comment())
-                worksheet.cell(row=i, column=4, value=move.get_black_move())
-                worksheet.cell(row=i, column=5, value=move.get_black_comment())
-                i += 1
-                
-            i += 1
-        workbook.save(filename='pgn_as_excel.xlsx')
-    
-    def parse_from_excel(self):
-        workbook = load_workbook(filename='pgn_as_excel.xlsx')
-        worksheet = workbook['pgn_as_excel']
 
-        new_game=False
-        phase = 0
-        
-        meta_data = {}
-        moves = []
-        for row in worksheet.iter_rows(min_row=1, values_only=True):
-            
-            if phase == 0:
-                if row[0] is None:
-                    phase = 1
-                    continue
-                
-                meta_data[row[0]] = row[1]
-                
-            if phase == 1:
-                if row[0] is None:
-                    phase = 2
-                    continue
-                
-                number = row[0]
-                white_move = row[1]
-                white_move_comment = row[2]
-                black_move = row[3]
-                black_move_comment = row[4]
-                
-                moves.append(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
-                
-            if phase == 2:
-                self.games.append(PGNGame(meta_data, moves))
-                meta_data = {}
-                moves = []
-                phase = 0
-                continue
-        
+
+    def plot_move_count_histogram_cumulative(self, list_of_games, textinfo, axis=None):
+        move_count_distribution = self.get_move_count_distribution(list_of_games)
+        move_count_distribution = self.sort_dict(move_count_distribution)
+        data = [(moves, games) for moves, games in move_count_distribution]
+        data = sorted([(moves, games) for moves, games in data], reverse=True)
+        # calculate the cumulative sum of the games for each move count
+        cumulative_data = []
+        cumulative_sum = 0
+        for moves, games in data:
+            cumulative_sum += games
+            cumulative_data.append((moves, cumulative_sum))
+        # plot the cumulative frequency as a function of the move count
+        x = [moves for moves, games in cumulative_data]
+        y = [games for moves, games in cumulative_data]
+        if axis is None:  # if no axis is given, create a new one
+            axis = plt.gca() # get current axis
+        axis.plot(x, y, label=textinfo)
+        axis.set_xlim(15, 125)
+        axis.set_xlabel('Number of Moves')
+        axis.set_ylabel('Cumulative Number of Games')
+        axis.set_title('Reverse Histogram of Chess Game Length')
+
+    def save_histogram(self, path):
+        plt.savefig(path)
+
+
+    def clear_plot(self):
+        plt.clf()
+
     def compose(self):
         # TODO fix correct linebreak in the moves
         
@@ -317,34 +292,29 @@ def test():
     
     print(f"Time: {time.time() - start_time}")
 
-test()
+#test()
             
+            
+
 def main():
-    start_time = time.time()
-
-    # pgn = PGNDatabase("./prototype/sample.pgn")
-    # pgn = PGNDatabase("./prototype/test.pgn")
-    # pgn = PGNDatabase("./prototype/bigger_sample.pgn")
-
-    pgn = PGNDatabase("./sample.pgn")
-
-    list_of_drawed_games = pgn.get_draws()
+    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     list_of_games = pgn.get_games()
+    games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
+    games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
-    list_of_games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
+    fig, ax = plt.subplots()
+    fig.set_size_inches(10,5)
+    
+    pgn.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
+    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_white, "Games where Stockfish is white", axis=ax)
+    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
 
-    move_count_distribution = pgn.get_move_count_distribution(list_of_games)
-    sorted_dict = pgn.sort_dict(move_count_distribution)
-    print(sorted_dict)
-    pgn.plot_move_count_distribution(sorted_dict)
-
-    plycount_distribution = pgn.get_plycount_distribution()
-    sorted_dict = pgn.sort_dict(plycount_distribution)
-    pgn.plot_plycount_distribution(sorted_dict)
+    plt.legend()
+    plt.show()
+    
+    pgn.plot_plycount_distribution(list_of_games)
 
 
-    print(f"Time: {time.time() - start_time}")
-        
 
 if __name__ == "__main__":
     #main()

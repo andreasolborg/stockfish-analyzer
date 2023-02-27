@@ -1,1 +1,1 @@
-pattern = re.compile(r"(\w+|\{[\w\s\+\-\.\/\(\)]+\})") 
+plot_plycount_distribution

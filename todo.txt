@@ -1,0 +1,2 @@
+[] I want CDF for Move count, not sure how to implemented it though (Cumulative Histogram Distribution)
+[] Must fix so that mulitple graphs are shown on each figure
