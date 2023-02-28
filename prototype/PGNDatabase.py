@@ -370,6 +370,9 @@ def test():
 def main():
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     list_of_games = pgn.get_games()
+    
+    for game in list_of_games:
+        print(game.get_moves_without_comments())
     games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
@@ -384,7 +387,6 @@ def main():
     
     pgn.plot_plycount_distribution(list_of_games)
     
-    print(pgn.get_stockfish_wins(list_of_games))
     
     
     

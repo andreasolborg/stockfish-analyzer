@@ -42,56 +42,105 @@ tree.visualize()
 
 import pydot
 from PGNDatabase import PGNDatabase
+from anytree import Node as AnyNode, RenderTree
 
-class Tree:
-    '''
-    TODO: write class desc
-    '''
-    def __init__(self, games):
-        '''
-        Params:
-            player_color: Either 'w' or 'b'. This is the color of the player we want to analyze openings for
-            games: A list with instances of PGNGame
-        '''
-        self.nodes = [] # When we parse self.games we should get this filled up
-        # self.root_node = root_node # We must choose the root node we want? Or do we create a three starting from no move?
-        self.games = games
-        
-        
-    def create_tree(self):
-        pass
+class Node:
+    def __init__(self):
+        self.player = None
+        self.moves = []
+        self.game_counts = {"1-0": 0, "0-1": 0, "1/2-1/2": 0}
+        self.children = {}
     
-    def visualize(self):
-        pass
+    def increment_game_count(self, result):
+        self.game_counts[result] += 1
     
+    def get_statistics(self):
+        return self.game_counts
+    
+    def get_or_create_child(self, move):
+        if move not in self.children:
+            self.children[move] = Node()
+        return self.children[move]
+        
+
+class OpeningTree:
+    def __init__(self):
+        self.root = Node()
+    
+    def add_game(self, moves, result):
+        node = self.root
+        node.increment_game_count(result)
+        for move in moves:
+            node = node.get_or_create_child(move)
+            node.increment_game_count(result)
+    
+    def get_node(self, move_sequence):
+        node = self.root
+        for move in move_sequence:
+            node = node.children.get(move)
+            if not node:
+                return None
+        return node
+    
+    def get_statistics(self, move_sequence=[]):
+        node = self.get_node(move_sequence)
+        if not node:
+            return None
+        return node.get_statistics()
+    
+    def get_moves(self, move_sequence=[]):
+        node = self.get_node(move_sequence)
+        if not node:
+            return None
+        return list(node.children.keys())
+
+
+      
 
 def main():
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
-    tree = Tree(pgn)
-
-    # Anytree package
-    from anytree import Node, RenderTree
-    from anytree.exporter import DotExporter
+    # pgn = PGNDatabase("./prototype/sample.pgn")
     
-    
+    tree = OpeningTree()
     for game in pgn.get_games():
-        parent_node = Node(game.get_move(0))
-        for move in game.get_moves():
-            child = Node(move, parent=parent_node)
-            parent_node = child
+        moves = game.get_moves_without_comments()
+        result = game.get_result()
+        tree.add_game(moves, result)
+    
+    # Print out the whole tree in a nice way
+    
+    level_0 = tree.get_moves()
+    for move in level_0:
+        print(tree.get_moves([move]))
+        
+        
+    print(tree.get_statistics(["e4", "c5"]))
+        
+        
+
+    # # Anytree package
+    # from anytree import Node, RenderTree
+    # from anytree.exporter import DotExporter
+    
+    
+    # for game in pgn.get_games():
+    #     parent_node = Node(game.get_move(0))
+    #     for move in game.get_moves():
+    #         child = Node(move, parent=parent_node)
+    #         parent_node = child
         
         
 
         
-    udo = Node("Udo")
-    marc = Node("Marc", parent=udo)
-    lian = Node("Lian", parent=marc)
-    dan = Node("Dan", parent=udo)
-    jet = Node("Jet", parent=dan)
-    jan = Node("Jan", parent=dan)
-    joe = Node("Joe", parent=dan)
-    print(udo)
-    DotExporter(udo).to_picture("udo.png")
+    # udo = Node("Udo")
+    # marc = Node("Marc", parent=udo)
+    # lian = Node("Lian", parent=marc)
+    # dan = Node("Dan", parent=udo)
+    # jet = Node("Jet", parent=dan)
+    # jan = Node("Jan", parent=dan)
+    # joe = Node("Joe", parent=dan)
+    # print(udo)
+    # DotExporter(udo).to_picture("udo.png")
 
 
 
