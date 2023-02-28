@@ -95,8 +95,8 @@ class OpeningTree:
     def print_node(self, node, depth, current_depth, dot_file):
         if current_depth < depth:
             for child in node.get_children():
-                dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_move(), node.get_color()))
-                dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), node.get_result()))
+                dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
+                dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), child.get_move()))
 
                 self.print_node(child, depth, current_depth + 1, dot_file)
         else: # leaf node
