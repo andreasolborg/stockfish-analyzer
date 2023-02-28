@@ -49,30 +49,32 @@ class PGNDatabase:
     def get_games_where_stockfish_is_white(self):
         stockfish_white = []
         for game in self.games:
-            if game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+            if "Stockfish" in game.lookup_meta_data('White'): #Uses regex to check if "Stockfish" is in the string, so we can test for Stockfish 15 64-bit, Stockfish 15 32-bit, etc.
                 stockfish_white.append(game)
         return stockfish_white
     
     def get_games_where_stockfish_is_black(self):
         stockfish_black = []
         for game in self.games:
-            if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+            if "Stockfish" in game.lookup_meta_data('Black'):
                 stockfish_black.append(game)
         return stockfish_black
     
+    
     def get_stockfish_draws(self, list_of_drawed_games):
-        stockfish_draws_as_white = [game for game in list_of_drawed_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit']
-        stockfish_draws_as_black = [game for game in list_of_drawed_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit']
+        stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
+        stockfish_draws_as_black = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('Black')]
         return stockfish_draws_as_white, stockfish_draws_as_black
 
+    #IF game.lookup_meta_data('White') includes "Stockfish"
     def get_stockfish_wins(self, list_of_games):
-        stockfish_wins_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
-        stockfish_wins_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
+        stockfish_wins_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '1-0']
+        stockfish_wins_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '0-1']
         return stockfish_wins_as_white, stockfish_wins_as_black
 
     def get_stockfish_losses(self, list_of_games):
-        stockfish_losses_as_white = [game for game in list_of_games if game.lookup_meta_data('White') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '0-1']
-        stockfish_losses_as_black = [game for game in list_of_games if game.lookup_meta_data('Black') == 'Stockfish 15 64-bit' and game.lookup_meta_data('Result') == '1-0']
+        stockfish_losses_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '0-1']
+        stockfish_losses_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '1-0']
         return stockfish_losses_as_white, stockfish_losses_as_black
 
 
@@ -125,7 +127,7 @@ class PGNDatabase:
             y.append(value)
         plt.figure(figsize=(10,3))
         plt.plot(x, y)
-        plt.xlim(15, 125)
+        plt.xlim(15, 250)
         plt.ylim(0, 150)
         plt.savefig('plycount_distribution.png')
         # plt.show()
@@ -316,14 +318,18 @@ def main():
     pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
 
     plt.legend()
-    plt.show()
     
     pgn.plot_plycount_distribution(list_of_games)
+    
+    print(pgn.get_stockfish_wins(list_of_games))
+    
+    
+    
 
 
 
 if __name__ == "__main__":
-    #main()
+    main()
     pass
     
 
