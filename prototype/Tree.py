@@ -38,6 +38,7 @@ tree.visualize()
 
 ### Task 12
 
+
 '''
 
 import pydot
@@ -66,32 +67,32 @@ class Tree:
     
 
 def main():
-    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
-    tree = Tree(pgn)
+    #pgn = PGNDatabase("sample.pgn")
+    #tree = Tree(pgn)
 
     # Anytree package
-    from anytree import Node, RenderTree
-    from anytree.exporter import DotExporter
+    #from anytree import Node, RenderTree
+    #from anytree.exporter import DotExporter
     
     
-    for game in pgn.get_games():
-        parent_node = Node(game.get_move(0))
-        for move in game.get_moves():
-            child = Node(move, parent=parent_node)
-            parent_node = child
+    #for game in pgn.get_games():
+    #    parent_node = Node(game.get_move(0))
+    #    for move in game.get_moves():
+    #        child = Node(move, parent=parent_node)
+    #        parent_node = child
         
         
 
         
-    udo = Node("Udo")
-    marc = Node("Marc", parent=udo)
-    lian = Node("Lian", parent=marc)
-    dan = Node("Dan", parent=udo)
-    jet = Node("Jet", parent=dan)
-    jan = Node("Jan", parent=dan)
-    joe = Node("Joe", parent=dan)
-    print(udo)
-    DotExporter(udo).to_picture("udo.png")
+    #udo = Node("Udo")
+    #marc = Node("Marc", parent=udo)
+    #lian = Node("Lian", parent=marc)
+    #dan = Node("Dan", parent=udo)
+    #jet = Node("Jet", parent=dan)
+    #jan = Node("Jan", parent=dan)
+    #joe = Node("Joe", parent=dan)
+    #print(udo)
+    #DotExporter(udo).to_picture("udo.png")
 
 
 

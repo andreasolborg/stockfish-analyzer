@@ -368,7 +368,7 @@ def test():
             
 
 def main():
-    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    pgn = PGNDatabase("sample.pgn")
     list_of_games = pgn.get_games()
     games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
@@ -392,7 +392,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
     pass
     
 
