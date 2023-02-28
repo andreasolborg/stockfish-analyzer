@@ -56,14 +56,14 @@ class TreeNode:
     
 
 class OpeningTree:
-    def __init__(self, database):
-        self.database = database
+    def __init__(self, list_of_games):
+        self.list_of_games = list_of_games
         self.root = TreeNode(None, None, None, None)
         self.create_tree()
 
 
     def create_tree(self):
-        for game in self.database.get_games():
+        for game in self.list_of_games:
             result = game.get_result()
             moves = game.get_moves_without_comments()
             current_node = self.root
@@ -132,17 +132,16 @@ def main():
     # database = PGNDatabase("./prototype/sample.pgn")
     # database = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     database = PGNDatabase("./100_games.pgn")
-    for data in database():
-        print(data)
+    list_of_games = database.get_games_where_stockfish_is_black()
     
     
-    tree = OpeningTree(database)
+    tree = OpeningTree(list_of_games)
     # tree.print_tree(3)
     # tree.print_node(tree.get_node_from_moves([]), 20, 0, open("tree.dot", "w"))
     
     tree.print_tree(3)
     
-    os.system("dot -Tpng tree.dot -o tree.png")
+    os.system("dot -Tpng tree.dot -o tree2.png")
 
     
     
