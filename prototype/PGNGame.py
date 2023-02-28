@@ -9,6 +9,16 @@ class PGNGame:
         self.meta_data = meta_data
         self.moves = moves
 
+    # 0 will give you the first black ply
+    # 1 will give you the first white ply
+    # 2 will give you the second white ply
+    # etc ...
+    def get_half_move(self, number):
+        if number % 2 == 0:
+            return self.moves[number//2].get_white_move()
+        else: 
+            return self.moves[number//2].get_black_move()
+        
     def add_move(self, Move) -> None:
         self.moves.append(Move)
 
