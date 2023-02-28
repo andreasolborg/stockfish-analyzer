@@ -183,6 +183,7 @@ class PGNDocument:
         self.database.plot_multiple_move_count_histogram_cumulative(dict)
         plt.savefig(filename)
         self.document.add_picture(filename, width=Inches(6))
+        
 
 
     ### This is the old version of the function above, which only plots one list of games at a time ###

@@ -1,214 +1,101 @@
-'''
-# PLAN
 
-### Task 9: 
-- Each position is only stored once in the chess tree. This means that regardless of the moves played to reach it, the exact same information will be stored
-    - The number of games won by white in this position
-    - The number of games win by black in this position
-    - The number of games resulted in a draw in this position
-    - The name of the opening
-    - The move
-    - The children nodes
-    - The degree (move number)
-    
-### Task 10: 
-- We use PGNDatabase functions and send a list of games into this class as a argument
-    - For example, get_games_where_stockfish_is_black()
-- TODO: how do we parse this game an create a tree??
-
-root = Node(color, children, meta_data)
-node2 = Node(color2, children2, meta_data2)
-node3 = Node(...)
-node4 = Node(...)
-node5 = Node(...)
-node6 = Node(...)
-
-root.add_child(node2)
-root.add_child(node3)
-node2.add_child(node4)
-node2.add_child(node5)
-node3.add_child(node6)
-
-tree = Tree(root)
-tree.visualize()
-
-### Task 11: 
-- Depth is number of half moves
-- We print the opening tree using graphviz
-
-### Task 12
-
-'''
-
-import pydot
 from PGNDatabase import PGNDatabase
-from anytree import Node as AnyNode, RenderTree
+from anytree import Node, RenderTree
+from anytree.exporter import DotExporter
+import os
 
-class Node:
-    def __init__(self):
-        self.player = None
-        self.moves = []
-        self.game_counts = {"1-0": 0, "0-1": 0, "1/2-1/2": 0}
-        self.children = {}
-    
-    def increment_game_count(self, result):
-        self.game_counts[result] += 1
-    
-    def get_statistics(self):
-        return self.game_counts
-    
-    def get_or_create_child(self, move):
-        if move not in self.children:
-            self.children[move] = Node()
-        return self.children[move]
-    
+class TreeNode:
+    def __init__(self, move, result):
+        self.move = move
+        self.result = result
+        self.children = []
+        self.parent = None
+
+    def add_child(self, child):
+        child.parent = self
+        self.children.append(child)
+
+    def get_move(self):
+        return self.move
+
+    def get_result(self):
+        return self.result
+
     def get_children(self):
         return self.children
+
+    def get_parent(self):
+        return self.parent
+
+    def __str__(self):
+        return str(self.move)
     
-    def get_next_moves(self):
-        return list(self.children.keys())
-    
-        
 
 class OpeningTree:
-    def __init__(self):
-        self.root = Node()
-    
-    def add_game(self, moves, result):
-        node = self.root
-        node.increment_game_count(result)
-        for move in moves:
-            node = node.get_or_create_child(move)
-            node.increment_game_count(result)
-    
-    def get_node(self, move_sequence):
-        node = self.root
-        for move in move_sequence:
-            node = node.children.get(move)
-            if not node:
-                return None
-        return node
-    
-    def get_statistics(self, move_sequence=[]):
-        node = self.get_node(move_sequence)
-        if not node:
-            return None
-        return node.get_statistics()
-    
-    def get_moves(self, move_sequence=[]):
-        node = self.get_node(move_sequence)
-        if not node:
-            return None
-        return list(node.children.keys()) # List of Node objects
-    
+    def __init__(self, database):
+        self.database = database
+        self.tree = {}
+        self.create_tree()
 
-# Create the Anytree representation of the OpeningTree
-def create_anytree_node(node):
-    anynode = AnyNode(name=str(node.moves), data=node.get_statistics())
-    for child_node in node.children.values():
-        anychild = create_anytree_node(child_node)
-        anychild.parent = anynode
-    return anynode
+    def get_tree(self):
+        return self.tree
 
-      
+    def create_tree(self):
+        for game in self.database.get_games():
+            result = game.get_result()
+            moves = game.get_moves_without_comments()
+            current_node = self.tree
+            for move in moves:
+                if move in current_node:
+                    current_node = current_node[move]
+                else:
+                    current_node[move] = {}
+                    current_node = current_node[move]
+
+    def print_tree(self, depth):
+        self.print_node(self.tree, depth, 0)
+        
+
+    def print_node(self, node, depth, current_depth, dot_file):
+        if current_depth < depth:
+            for key in node:
+                dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(node[key])), key))
+                self.print_node(node[key], depth, current_depth + 1, dot_file)
+            
+        else:
+            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), len(node)))
+        
+            
+    def get_node(self, node, moves):
+        if len(moves) == 0:
+            return node
+    
+        else:
+            return self.get_node(node[moves[0]], moves[1:])
+        
+    def get_node_from_moves(self, moves):
+        return self.get_node(self.tree, moves)
+
+    def get_node_from_game(self, game):
+        return self.get_node_from_moves(game.get_moves_without_comments())
+    
 
 def main():
-    # pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
-    # pgn = PGNDatabase("./prototype/sample.pgn")
-    pgn = PGNDatabase("./prototype/humongous_database.pgn")
+    database = PGNDatabase("./prototype/sample.pgn")
     
-    
-    # Initialize the OpeningTree
-    tree = OpeningTree()
-    for game in pgn.get_games():
-        moves = game.get_moves_without_comments()
-        result = game.get_result()
-        tree.add_game(moves, result)
-    
+    tree = OpeningTree(database)
+    # tree.print_tree(3)
+    # tree.print_node(tree.get_node_from_moves([]), 20, 0, open("tree.dot", "w"))
+    with open('tree.dot', 'w') as f:
+        f.write('digraph G {\n')
+        tree.print_node(tree.get_tree(), 10, 0, f)
+        f.write('}\n')
         
-        
-    print("------------------")
-    
-    # Print the tree at a certain depth (
-    def print_nested_statistics(tree, num_levels):
-        def nested_loop(level, moves, node):
-            if level == num_levels:
-                print(" -> ".join(moves), node.get_statistics())
-            else:
-                children = node.children
-                for move, child_node in children.items():
-                    nested_loop(level + 1, moves + [move], child_node)
-
-        root_node = tree.get_node([])
-        nested_loop(0, [], root_node)        
-        
-    print_nested_statistics(tree, 20)
-    
-
-    # first_level = tree.get_node([]).children
-    # for move1, node in first_level.items():
-    #     second_level = node.children
-    #     for move2, node in second_level.items():
-    #         third_level = node.children
-    #         for move3, node in third_level.items():
-    #             print(move1, "->", move2, "->", move3, "->", node.get_statistics())
-        
-
-        
-
+    os.system('dot -Tpng tree.dot -o tree.png')
 
     
     
-    
-        
-        
-        
-
-
-    # # Anytree package
-    # from anytree import Node, RenderTree
-    # from anytree.exporter import DotExporter
-    
-    
-    # for game in pgn.get_games():
-    #     parent_node = Node(game.get_move(0))
-    #     for move in game.get_moves():
-    #         child = Node(move, parent=parent_node)
-    #         parent_node = child
-        
-        
-
-        
-    # udo = Node("Udo")
-    # marc = Node("Marc", parent=udo)
-    # lian = Node("Lian", parent=marc)
-    # dan = Node("Dan", parent=udo)
-    # jet = Node("Jet", parent=dan)
-    # jan = Node("Jan", parent=dan)
-    # joe = Node("Joe", parent=dan)
-    # print(udo)
-    # DotExporter(udo).to_picture("udo.png")
-
-
-
-    ## pydot package
-    
-    # graph = pydot.Dot("my_graph", graph_type="graph", bgcolor="white")
-    # # Add nodes
-    # my_node = pydot.Node("a", label="Foo")
-    # graph.add_node(my_node)
-    # # Or, without using an intermediate variable:
-    # graph.add_node(pydot.Node("b", shape="circle"))
-
-    # # Add edges
-    # my_edge = pydot.Edge("a", "b", color="blue")x
-    # graph.add_edge(my_edge)
-    # # Or, without using an intermediate variable:
-    # graph.add_edge(pydot.Edge("b", "c", color="blue"))
-
-    # graph.write_png("output.png")
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
-        
     
+

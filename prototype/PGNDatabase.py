@@ -25,6 +25,8 @@ class PGNDatabase:
     def get_games(self):
         return self.games
     
+    
+    
     def get_white_wins(self):
         white_wins = []
         for game in self.games:
@@ -52,6 +54,12 @@ class PGNDatabase:
             if move_sequence in game.get_moves_without_comments(): 
                 games_with_move_sequence.append(game)
         return games_with_move_sequence
+    
+    def get_statistics_from_games(self, list_of_games):
+        white_wins = [game for game in list_of_games if game.lookup_meta_data('Result') == '1-0']
+        black_wins = [game for game in list_of_games if game.lookup_meta_data('Result') == '0-1']
+        draws = [game for game in list_of_games if game.lookup_meta_data('Result') == '1/2-1/2']
+        return white_wins, black_wins, draws
     
     def get_games_where_stockfish_is_white(self):
         stockfish_white = []
@@ -221,10 +229,9 @@ class PGNDatabase:
     def parse_from_excel(self):
         workbook = load_workbook(filename='pgn_as_excel.xlsx')
         worksheet = workbook['pgn_as_excel']
-
         new_game=False
         phase = 0
-
+        
         meta_data = {}
         moves = []
         for row in worksheet.iter_rows(min_row=1, values_only=True):
@@ -329,7 +336,7 @@ class PGNDatabase:
                     white_move_comment = result.group(3)
                     black_move = result.group(4)
                     black_move_comment = result.group(5)
-                    chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
+                    chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment)) # Add move to game
                 else:
                     print("No match---------------------")
             game_list.append(chessgame)

@@ -30,6 +30,8 @@ class PGNGame:
                 moves.append(move.get_black_move())
         return moves
     
+    
+    
     def get_last_move(self):
         return self.moves[-1]
     
