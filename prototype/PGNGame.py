@@ -23,6 +23,10 @@ class PGNGame:
     
     def get_last_move(self):
         return self.moves[-1]
+    
+    def get_move(self, move_number):
+        return self.moves[move_number]
+    
 
     def lookup_meta_data(self, key):
         return self.meta_data[key]

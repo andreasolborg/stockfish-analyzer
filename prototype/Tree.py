@@ -39,21 +39,22 @@ tree.visualize()
 ### Task 12
 
 '''
-import graphviz
+
+import pydot
+from PGNDatabase import PGNDatabase
 
 class Tree:
     '''
     TODO: write class desc
     '''
-    def __init__(self, player_color, games):
+    def __init__(self, games):
         '''
         Params:
             player_color: Either 'w' or 'b'. This is the color of the player we want to analyze openings for
             games: A list with instances of PGNGame
         '''
         self.nodes = [] # When we parse self.games we should get this filled up
-        self.player_color = player_color
-        self.root_node = root_node # We must choose the root node we want? Or do we create a three starting from no move?
+        # self.root_node = root_node # We must choose the root node we want? Or do we create a three starting from no move?
         self.games = games
         
         
@@ -62,5 +63,56 @@ class Tree:
     
     def visualize(self):
         pass
+    
+
+def main():
+    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    tree = Tree(pgn)
+
+    # Anytree package
+    from anytree import Node, RenderTree
+    from anytree.exporter import DotExporter
+    
+    
+    for game in pgn.get_games():
+        parent_node = Node(game.get_move(0))
+        for move in game.get_moves():
+            child = Node(move, parent=parent_node)
+            parent_node = child
+        
+        
+
+        
+    udo = Node("Udo")
+    marc = Node("Marc", parent=udo)
+    lian = Node("Lian", parent=marc)
+    dan = Node("Dan", parent=udo)
+    jet = Node("Jet", parent=dan)
+    jan = Node("Jan", parent=dan)
+    joe = Node("Joe", parent=dan)
+    print(udo)
+    DotExporter(udo).to_picture("udo.png")
+
+
+
+    ## pydot package
+    
+    # graph = pydot.Dot("my_graph", graph_type="graph", bgcolor="white")
+    # # Add nodes
+    # my_node = pydot.Node("a", label="Foo")
+    # graph.add_node(my_node)
+    # # Or, without using an intermediate variable:
+    # graph.add_node(pydot.Node("b", shape="circle"))
+
+    # # Add edges
+    # my_edge = pydot.Edge("a", "b", color="blue")x
+    # graph.add_edge(my_edge)
+    # # Or, without using an intermediate variable:
+    # graph.add_edge(pydot.Edge("b", "c", color="blue"))
+
+    # graph.write_png("output.png")
+
+if __name__ == '__main__':
+    main()
         
     

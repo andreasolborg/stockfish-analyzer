@@ -76,7 +76,7 @@ class PGNDocument:
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
         # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
-        dictionary_for_second_plot = {"Games where Stockfish won": list_of_games_where_stockfish_wins, "Games where Stockfish drew": list_of_drawed_games}
+        dictionary_for_second_plot = {"Games where Stockfish won": list_of_games_where_stockfish_wins, "Games that ended in draw": list_of_drawed_games}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "2ndMoveCountCDPlot.png")
         
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
