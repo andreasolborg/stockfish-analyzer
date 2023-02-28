@@ -186,6 +186,69 @@ class PGNDatabase:
     def clear_plot(self):
         plt.clf()
 
+    def compose_to_excel(self):
+        workbook = Workbook()
+        worksheet = workbook.active
+        worksheet.title = 'pgn_as_excel'
+
+        i = 1
+        for game in self.games:
+
+            for key, value in game.get_meta_data().items():
+                worksheet.cell(row=i, column=1, value=key)
+                worksheet.cell(row=i, column=2, value=value)
+                i += 1
+            i += 1  
+
+            for move in game.get_moves():
+                worksheet.cell(row=i, column=1, value=move.get_number())
+                worksheet.cell(row=i, column=2, value=move.get_white_move())
+                worksheet.cell(row=i, column=3, value=move.get_white_comment())
+                worksheet.cell(row=i, column=4, value=move.get_black_move())
+                worksheet.cell(row=i, column=5, value=move.get_black_comment())
+                i += 1
+
+            i += 1
+        workbook.save(filename='pgn_as_excel.xlsx')
+
+    def parse_from_excel(self):
+        workbook = load_workbook(filename='pgn_as_excel.xlsx')
+        worksheet = workbook['pgn_as_excel']
+
+        new_game=False
+        phase = 0
+
+        meta_data = {}
+        moves = []
+        for row in worksheet.iter_rows(min_row=1, values_only=True):
+
+            if phase == 0:
+                if row[0] is None:
+                    phase = 1
+                    continue
+
+                meta_data[row[0]] = row[1]
+
+            if phase == 1:
+                if row[0] is None:
+                    phase = 2
+                    continue
+
+                number = row[0]
+                white_move = row[1]
+                white_move_comment = row[2]
+                black_move = row[3]
+                black_move_comment = row[4]
+
+                moves.append(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
+
+            if phase == 2:
+                self.games.append(PGNGame(meta_data, moves))
+                meta_data = {}
+                moves = []
+                phase = 0
+                continue
+
     def compose(self):
         # TODO fix correct linebreak in the moves
         
