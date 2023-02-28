@@ -51,8 +51,12 @@ class PGNDatabase:
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []
         for game in self.games:
-            if move_sequence in game.get_moves_without_comments(): 
-                games_with_move_sequence.append(game)
+            moves = game.get_moves_without_comments()
+            if len(moves) >= len(move_sequence):
+                for i in range(len(moves) - len(move_sequence) + 1):
+                    if moves[i:i+len(move_sequence)] == move_sequence:
+                        games_with_move_sequence.append(game)
+                        break
         return games_with_move_sequence
     
     def get_statistics_from_games(self, list_of_games):
@@ -385,8 +389,13 @@ def main():
     pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     list_of_games = pgn.get_games()
     
-    for game in list_of_games:
-        print(game.get_moves_without_comments())
+    
+    sequence_of_moves = ["d4", "Nf6"]
+    list_of_games_with_sequence = pgn.get_games_with_move_sequence(sequence_of_moves)
+    print(list_of_games_with_sequence)
+    
+    # for game in list_of_games:
+    #     print(game.get_moves_without_comments())
     games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
