@@ -390,9 +390,11 @@ def main():
     list_of_games = pgn.get_games()
     
     
-    sequence_of_moves = ["d4", "Nf6"]
+    sequence_of_moves = ["d4", "Nf6", "c4", "g6"]
     list_of_games_with_sequence = pgn.get_games_with_move_sequence(sequence_of_moves)
-    print(list_of_games_with_sequence)
+    for game in list_of_games_with_sequence:
+        print(game.get_moves_without_comments())
+    print(len(list_of_games_with_sequence))
     
     # for game in list_of_games:
     #     print(game.get_moves_without_comments())
