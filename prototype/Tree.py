@@ -61,6 +61,13 @@ class Node:
         if move not in self.children:
             self.children[move] = Node()
         return self.children[move]
+    
+    def get_children(self):
+        return self.children
+    
+    def get_next_moves(self):
+        return list(self.children.keys())
+    
         
 
 class OpeningTree:
@@ -92,31 +99,71 @@ class OpeningTree:
         node = self.get_node(move_sequence)
         if not node:
             return None
-        return list(node.children.keys())
+        return list(node.children.keys()) # List of Node objects
+    
 
+# Create the Anytree representation of the OpeningTree
+def create_anytree_node(node):
+    anynode = AnyNode(name=str(node.moves), data=node.get_statistics())
+    for child_node in node.children.values():
+        anychild = create_anytree_node(child_node)
+        anychild.parent = anynode
+    return anynode
 
       
 
 def main():
-    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    # pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
     # pgn = PGNDatabase("./prototype/sample.pgn")
+    pgn = PGNDatabase("./prototype/humongous_database.pgn")
     
+    
+    # Initialize the OpeningTree
     tree = OpeningTree()
     for game in pgn.get_games():
         moves = game.get_moves_without_comments()
         result = game.get_result()
         tree.add_game(moves, result)
     
-    # Print out the whole tree in a nice way
+        
+        
+    print("------------------")
     
-    level_0 = tree.get_moves()
-    for move in level_0:
-        print(tree.get_moves([move]))
+    # Print the tree at a certain depth (
+    def print_nested_statistics(tree, num_levels):
+        def nested_loop(level, moves, node):
+            if level == num_levels:
+                print(" -> ".join(moves), node.get_statistics())
+            else:
+                children = node.children
+                for move, child_node in children.items():
+                    nested_loop(level + 1, moves + [move], child_node)
+
+        root_node = tree.get_node([])
+        nested_loop(0, [], root_node)        
+        
+    print_nested_statistics(tree, 20)
+    
+
+    # first_level = tree.get_node([]).children
+    # for move1, node in first_level.items():
+    #     second_level = node.children
+    #     for move2, node in second_level.items():
+    #         third_level = node.children
+    #         for move3, node in third_level.items():
+    #             print(move1, "->", move2, "->", move3, "->", node.get_statistics())
+        
+
+        
+
+
+    
+    
+    
         
         
-    print(tree.get_statistics(["e4", "c5"]))
         
-        
+
 
     # # Anytree package
     # from anytree import Node, RenderTree

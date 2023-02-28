@@ -46,6 +46,13 @@ class PGNDatabase:
                 draws.append(game)
         return draws
     
+    def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
+        games_with_move_sequence = []
+        for game in self.games:
+            if move_sequence in game.get_moves_without_comments(): 
+                games_with_move_sequence.append(game)
+        return games_with_move_sequence
+    
     def get_games_where_stockfish_is_white(self):
         stockfish_white = []
         for game in self.games:
