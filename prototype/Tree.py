@@ -49,6 +49,9 @@ class TreeNode:
         
     def get_move_number(self):
         return self.move_number
+    
+    def is_root(self):
+        return self.parent is None
          
 
 class OpeningTree:
@@ -82,7 +85,7 @@ class OpeningTree:
                 move_number += 1
 
     def print_tree(self, depth, filename):
-        with open("{}.dot".format(filename), "w") as dot_file:
+        with open("./graphs/{}.dot".format(filename), "w") as dot_file:
             dot_file.write("digraph G {\n")
             self.print_node(self.root, depth, 0, dot_file)
             dot_file.write("}\n")
@@ -94,16 +97,15 @@ class OpeningTree:
                 dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), child.get_move()))
                 self.print_node(child, depth, current_depth + 1, dot_file)
         else: # leaf node
-            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), node.get_result())) 
+            dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
             
-    
+ 
 
 def save_tree_to_file(tree, depth, filename):
-    with open("./graphs/{}.dot".format(filename), "w") as dot_file:
-        dot_file.write("digraph G {\n")
-        tree.print_node(tree.root, depth, 0, dot_file)
-        dot_file.write("}\n")
-    
+    tree.print_tree(depth, filename)
+    os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
+
+
 def save_mulitple_trees_from_openings(database, openings, depth, filename):
     for opening in openings:
         print("Creating tree for {}".format(opening))
@@ -119,12 +121,21 @@ def main():
     # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
-    list_of_games = database.get_games_with_opening("Bird's opening")
-    print(len(list_of_games))
+    list_of_games = database.get_games_with_opening("A03")
+    # print(len(list_of_games))
     
     
-    openings = database.get_openings_that_occurred_at_least_n_times(2)
-    save_mulitple_trees_from_openings(database, openings, 5, "tree")
+    tree = OpeningTree(list_of_games)
+    save_tree_to_file(tree, 26, "tree")
+
+    
+    openings = database.get_openings_that_occurred_at_least_n_times(70)
+    print(openings)
+    # for opening in openings:
+    #     list_of_games = database.get_games_with_opening(opening)
+    #     print("{}: {}".format(opening, len(list_of_games)))
+    #     save_tree_to_file(OpeningTree(list_of_games), 20, "{}_{}".format("tree", opening.replace(" ", "_")))
+    save_mulitple_trees_from_openings(database, openings, 20, "tree")
     
     
     # tree = OpeningTree(list_of_games)

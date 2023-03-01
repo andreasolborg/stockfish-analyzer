@@ -57,14 +57,14 @@ class PGNDatabase:
                         break
         return games_with_move_sequence
     
-    def get_games_with_opening(self, opening):
+    def get_games_with_opening1(self, opening):
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
                 games_with_opening.append(game)
         return games_with_opening
     
-    def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
+    def get_statistics_on_openings1(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
         openings = {}
         for game in self.games:
             opening = game.lookup_meta_data('Opening')
@@ -81,6 +81,24 @@ class PGNDatabase:
             if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
                 openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
         return openings_that_occurred_at_least_n_times
+    
+    def get_games_with_opening(self, opening):
+        games_with_opening = []
+        for game in self.games:
+            if game.lookup_meta_data('ECO') == opening:
+                games_with_opening.append(game)
+        return games_with_opening
+    
+    def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
+        openings = {}
+        for game in self.games:
+            opening = game.lookup_meta_data('ECO')
+            if opening in openings:
+                openings[opening] += 1      #If the opening is already in the dictionary, increment its value by 1
+            else:
+                openings[opening] = 1       #If the opening is not in the dictionary, add it with a value of 1
+        return openings
+
     
     
     def get_games_where_stockfish_is_white(self):
@@ -404,7 +422,7 @@ def test():
             
 
 def main():
-    pgn = PGNDatabase("./Stockfish_15_64-bit.commented.[2600].pgn")
+    pgn = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     list_of_games = pgn.get_games()
     
     
