@@ -123,18 +123,13 @@ def main():
     list_of_games = database.get_games_with_eco("A03")
     print(len(list_of_games))
     
+    # You can either do this
+    eco = database.get_eco_that_occurred_at_least_n_times(60)
+    save_mulitple_trees_from_openings(database, eco, 20, "eco")
     
-    openings = database.get_eco_that_occurred_at_least_n_times(60)
-    save_mulitple_trees_from_openings(database, openings, 20, "tree")
-    
-    
-    # tree = OpeningTree(list_of_games)
-    
-    # tree.print_tree(26, "tree")
-    
-    # os.system("dot -Tpng tree.dot -o tree.png")
-    
-    # tree.save_tree_to_file(26, "tre")
+    # Or this
+    # openings = database.get_openings_that_occurred_at_least_n_times(60)
+    # save_mulitple_trees_from_openings(database, openings, 20, "tree")
 
     
     
