@@ -83,12 +83,11 @@ class OpeningTree:
                 move_number += 1
 
     def print_tree(self, depth, filename):
-        with open("{}.dot".format(filename), "w") as dot_file:
+        with open("./graphs/{}.dot".format(filename), "w") as dot_file:
             dot_file.write("digraph G {\n")
             self.print_node(self.root, depth, 0, dot_file)
             dot_file.write("}\n")
-        
-        os.system("dot -Tpng tree.dot -o tree.png")
+        # os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
 
     def print_node(self, node, depth, current_depth, dot_file):
         if current_depth < depth:
@@ -97,14 +96,18 @@ class OpeningTree:
                 dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), child.get_move()))
                 self.print_node(child, depth, current_depth + 1, dot_file)
         else: # leaf node
-            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), node.get_result())) 
+            dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
             
-def save_tree_to_file(tree, depth, filename):
-    with open("./graphs/{}.dot".format(filename), "w") as dot_file:
-        dot_file.write("digraph G {\n")
-        tree.print_node(tree.root, depth, 0, dot_file)
-        dot_file.write("}\n")
     
+def save_tree_to_file(tree, depth, filename):
+    if os.path.exists("./graphs/{}.dot".format(filename)):
+        os.remove("./graphs/{}.dot".format(filename))
+    if os.path.exists("./graphs/{}.png".format(filename)):
+        os.remove("./graphs/{}.png".format(filename))
+    tree.print_tree(depth, filename)
+    os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
+
+
 def save_mulitple_trees_from_openings(database, openings, depth, filename):
     for opening in openings:
         print("Creating tree for {}".format(opening))
@@ -112,7 +115,7 @@ def save_mulitple_trees_from_openings(database, openings, depth, filename):
         tree = OpeningTree(list_of_games)
         save_tree_to_file(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
         os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
-        
+             
 def main():
     # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
