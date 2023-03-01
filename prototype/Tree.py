@@ -48,7 +48,8 @@ class TreeNode:
     
     def get_move_number(self):
         return self.move_number
-        
+         
+
 class OpeningTree:
     
     def __init__(self, list_of_games):
@@ -87,8 +88,7 @@ class OpeningTree:
             dot_file.write("digraph G {\n")
             self.print_node(self.root, depth, 0, dot_file)
             dot_file.write("}\n")
-        
-        os.system("dot -Tpng tree.dot -o tree.png")
+        # os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
 
     def print_node(self, node, depth, current_depth, dot_file):
         if current_depth < depth:
@@ -99,7 +99,13 @@ class OpeningTree:
         else: # leaf node
             dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
             
+    
+
 def save_tree_to_file(tree, depth, filename):
+    if os.path.exists("./graphs/{}.dot".format(filename)):
+        os.remove("./graphs/{}.dot".format(filename))
+    if os.path.exists("./graphs/{}.png".format(filename)):
+        os.remove("./graphs/{}.png".format(filename))
     tree.print_tree(depth, filename)
     os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
 
@@ -121,10 +127,10 @@ def main():
     
     
     tree = OpeningTree(list_of_games)
-    save_tree_to_file(tree, 26, "tree")
+    # save_tree_to_file(tree, 26, "tree")
 
     
-    openings = database.get_openings_that_occurred_at_least_n_times(70)
+    openings = database.get_openings_that_occurred_at_least_n_times(60)
     print(openings)
     # for opening in openings:
     #     list_of_games = database.get_games_with_opening(opening)
