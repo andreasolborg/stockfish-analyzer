@@ -111,7 +111,7 @@ def save_tree_to_file(tree, depth, filename):
 def save_mulitple_trees_from_openings(database, openings, depth, filename):
     for opening in openings:
         print("Creating tree for {}".format(opening))
-        list_of_games = database.get_games_with_opening(opening)
+        list_of_games = database.get_games_with_eco(opening)
         tree = OpeningTree(list_of_games)
         save_tree_to_file(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
         os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
@@ -120,12 +120,12 @@ def main():
     # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
-    list_of_games = database.get_games_with_opening("A03")
+    list_of_games = database.get_games_with_eco("A03")
     print(len(list_of_games))
     
     
-    openings = database.get_openings_that_occurred_at_least_n_times(60)
-    save_mulitple_trees_from_openings(database, openings, 5, "tree")
+    openings = database.get_eco_that_occurred_at_least_n_times(60)
+    save_mulitple_trees_from_openings(database, openings, 20, "tree")
     
     
     # tree = OpeningTree(list_of_games)
