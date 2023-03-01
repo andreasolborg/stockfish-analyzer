@@ -21,9 +21,9 @@ class PGNDatabase:
         self.games = self.parse(path)  
         self.path = path
 
-
     def get_games(self):
         return self.games
+    
     
     def get_white_wins(self):
         white_wins = []
@@ -45,6 +45,43 @@ class PGNDatabase:
             if game.lookup_meta_data('Result') == '1/2-1/2':
                 draws.append(game)
         return draws
+    
+    def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
+        games_with_move_sequence = []
+        for game in self.games:
+            moves = game.get_moves_without_comments()
+            if len(moves) >= len(move_sequence):
+                for i in range(len(moves) - len(move_sequence) + 1):
+                    if moves[i:i+len(move_sequence)] == move_sequence:
+                        games_with_move_sequence.append(game)
+                        break
+        return games_with_move_sequence
+    
+    def get_games_with_opening(self, opening):
+        games_with_opening = []
+        for game in self.games:
+            if game.lookup_meta_data('Opening') == opening:
+                games_with_opening.append(game)
+        return games_with_opening
+    
+    def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
+        openings = {}
+        for game in self.games:
+            opening = game.lookup_meta_data('Opening')
+            if opening in openings:
+                openings[opening] += 1      #If the opening is already in the dictionary, increment its value by 1
+            else:
+                openings[opening] = 1       #If the opening is not in the dictionary, add it with a value of 1
+        return openings
+    
+    def get_openings_that_occurred_at_least_n_times(self, n):
+        openings = self.get_statistics_on_openings()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
+        openings_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
+        for opening in openings:                            
+            if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
+                openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
+        return openings_that_occurred_at_least_n_times
+    
     
     def get_games_where_stockfish_is_white(self):
         stockfish_white = []
@@ -129,7 +166,7 @@ class PGNDatabase:
         plt.plot(x, y)
         plt.xlim(15, 250)
         plt.ylim(0, 150)
-        plt.savefig('plycount_distribution.png')
+        plt.savefig('./plots/plycount_distribution.png')
         # plt.show()
 
     def plot_move_count_distribution(self, list_of_games):
@@ -149,7 +186,7 @@ class PGNDatabase:
         plt.ylabel('Number of games')
         plt.plot(x, y)
         plt.fill_between(x, y, color='blue', alpha=0.5)
-        plt.savefig('move_count_distribution.png')
+        plt.savefig('./plots/move_count_distribution.png')
 
 
     def plot_move_count_histogram_cumulative(self, list_of_games, textinfo, axis=None):
@@ -214,10 +251,9 @@ class PGNDatabase:
     def parse_from_excel(self):
         workbook = load_workbook(filename='pgn_as_excel.xlsx')
         worksheet = workbook['pgn_as_excel']
-
         new_game=False
         phase = 0
-
+        
         meta_data = {}
         moves = []
         for row in worksheet.iter_rows(min_row=1, values_only=True):
@@ -280,7 +316,7 @@ class PGNDatabase:
             score = game.get_meta_data()["Result"]
             pgn_data += moves + score + "\n\n"
         
-        pgn_file = open("test.pgn","w")
+        pgn_file = open("./databases/test.pgn","w")
         pgn_file.write(pgn_data)
         pgn_file.close()
     
@@ -293,8 +329,8 @@ class PGNDatabase:
         
         for game in games:
             chessgame = PGNGame({}, [])            
-            g = list(filter(lambda x: len(x) > 0, game.split('\n\n'))) # Split on empty lines
-            meta_data = g[0]
+            sections = list(filter(lambda x: len(x) > 0, game.split('\n\n'))) # Split on empty lines
+            meta_data = sections[0]
             meta_data = meta_data.split('\n')
             meta_data = list(filter(lambda x: len(x) > 0, meta_data))                       # Remove empty strings
             # Remove quatation marks
@@ -305,7 +341,7 @@ class PGNDatabase:
             for key, value in meta_data.items():
                 chessgame.add_meta_data(key, value)
             
-            moves = g[1].replace('\n', ' ')
+            moves = sections[1].replace('\n', ' ')
             
             # remove score at the end of the moves
             moves = re.sub(r'\s(1\/2-1\/2|1-0|0-1)$', '', moves)
@@ -322,7 +358,7 @@ class PGNDatabase:
                     white_move_comment = result.group(3)
                     black_move = result.group(4)
                     black_move_comment = result.group(5)
-                    chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
+                    chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment)) # Add move to game
                 else:
                     print("No match---------------------")
             game_list.append(chessgame)
@@ -331,7 +367,7 @@ class PGNDatabase:
             
 def test():
     start_time = time.time()
-    pgn = PGNDatabase("./sample.pgn")
+    pgn = PGNDatabase("./databases/sample.pgn")
     print(pgn.games)
     for i, g in enumerate(pgn.get_games()):
         pass
@@ -370,6 +406,20 @@ def test():
 def main():
     pgn = PGNDatabase("sample.pgn")
     list_of_games = pgn.get_games()
+    
+    
+    one = pgn.get_openings_that_occurred_at_least_n_times(60)
+    print(one)
+
+    
+    # sequence_of_moves = ["d4", "Nf6", "c4", "g6"]
+    # list_of_games_with_sequence = pgn.get_games_with_move_sequence(sequence_of_moves)
+    # for game in list_of_games_with_sequence:
+    #     print(game.get_moves_without_comments())
+    # print(len(list_of_games_with_sequence))
+    
+    # for game in list_of_games:
+    #     print(game.get_moves_without_comments())
     games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
@@ -384,7 +434,6 @@ def main():
     
     pgn.plot_plycount_distribution(list_of_games)
     
-    print(pgn.get_stockfish_wins(list_of_games))
     
     
     

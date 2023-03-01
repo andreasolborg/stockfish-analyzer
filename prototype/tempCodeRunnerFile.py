@@ -1,1 +1,1 @@
-plot_plycount_distribution
+white_wins, black_wins, draws

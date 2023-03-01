@@ -69,7 +69,7 @@ class PGNDocument:
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
         # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black
         dictionary_for_first_plot = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "1stMoveCountCDPlot.png")
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "./plots/1stMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for all games')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games)
 
@@ -77,7 +77,7 @@ class PGNDocument:
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
         # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
         dictionary_for_second_plot = {"Games where Stockfish won": list_of_games_where_stockfish_wins, "Games that ended in draw": list_of_drawed_games}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "2ndMoveCountCDPlot.png")
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "./plots/2ndMoveCountCDPlot.png")
         
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_wins)
@@ -86,7 +86,7 @@ class PGNDocument:
         self.document.add_heading('2.2.3 Stockfish loses', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish lost.')
         dictionary_for_third_plot = {"Games where Stockfish lost": list_of_games_where_stockfish_losses}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "3rdMoveCountCDPlot.png")
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "./plots/3rdMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_losses)
         
@@ -163,7 +163,7 @@ class PGNDocument:
     def add_picture_of_plycount_distribution(self):
         list_of_games = self.database.get_games()
         self.database.plot_plycount_distribution(list_of_games)
-        self.document.add_picture('plycount_distribution.png', width=Inches(6))
+        self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
 
 
     def create_document_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
@@ -173,7 +173,7 @@ class PGNDocument:
         self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_white, "Stockfish as white")
         self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_black, "Stockfish as black")
         self.database.plot_move_count_distribution(list_of_games, "All games")
-        self.document.add_picture('move_count_distribution.png', width=Inches(6))
+        self.document.add_picture('./plots/move_count_distribution.png', width=Inches(6))
 
 
     def add_picture_of_cumulative_moves_distribution_for_multiple_games(self, dict, filename): # dict is a dictionary with the key being the name of the list of games, and the value being the list of games
@@ -183,6 +183,7 @@ class PGNDocument:
         self.database.plot_multiple_move_count_histogram_cumulative(dict)
         plt.savefig(filename)
         self.document.add_picture(filename, width=Inches(6))
+        
 
 
     ### This is the old version of the function above, which only plots one list of games at a time ###
@@ -231,7 +232,7 @@ class PGNDocument:
 
 def main():
     start_time = time.time()
-    database = PGNDatabase("./big_database.pgn")
+    database = PGNDatabase("./databases/big_database.pgn")
     document = PGNDocument(database)
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
     document.create_document()

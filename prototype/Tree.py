@@ -1,106 +1,141 @@
-import time
 from PGNDatabase import PGNDatabase
-from anytree import RenderTree
-from graphviz import Digraph
+import os
 
-class Node:
-    '''
-    A class representing a node in the chess opening tree.
-    '''
-    def __init__(self, moves_list):
-        '''
-        Params:
-            TODO
-        '''
-        if len(moves_list) < 2:
-            self.parent_moves_token = ""
-        else:
-            self.parent_moves_token = "".join(moves_list[:-1])
-            
-        self.moves_token = ''.join(moves_list)
-        self.moves_list = moves_list
+class TreeNode:
+    def __init__(self, move, move_number):
+        self.move = move
+        self.move_number = move_number
+        self.parent = None
+        self.color = None
+        self.results = {"1-0": 0, "0-1": 0, "1/2-1/2": 0}
         self.children = []
-
-    def get_moves_token(self):
-        return self.moves_token
-    
-    def get_parent_moves_token(self):
-        return self.parent_moves_token
-    
-    def add_child(self, node):
-        self.children.append(node)
         
-    def get_label(self):
-        if self.moves_list:
-            return self.moves_list[-1]
-        return "root"
+        self.set_color(move_number)
+
+    def add_child(self, child):
+        child.parent = self
+        self.children.append(child)
+
+    def get_move(self):
+        return self.move
+
+    def get_result(self):
+        return self.results
+
+    def get_children(self):
+        return self.children
+
+    def get_parent(self):
+        return self.parent
+
+    def __str__(self):
+        return str(self.move)
     
-class Tree:
-    '''
-    A class that creates the chess opening tree of nodes
-    '''
-    def __init__(self, database):
-        '''
-        Params:
-            TODO
-        '''
-        self.database = database
-        self.root_node = Node([])
-        self.node_lookup = {}
-        self.add_node_to_lookup(self.root_node)
-    
-    def add_node_to_lookup(self, node):
-        self.node_lookup[node.get_moves_token()] = node
-    
-    def get_node_from_lookup(self, moves_token):
-        return self.node_lookup[moves_token]
-    
-    def create_white_tree(self, depth):
-        games = self.database.get_games_where_stockfish_is_white()
+    def increment_result(self, result):
+        self.results[result] += 1
         
-        for i in range(depth):
-            for game in games:
-                moves_list = []
-
-                for j in range(i+1):
-                    moves_list.append(game.get_half_move(j))
-                    
-                moves_token = ''.join(moves_list)
-
-                if moves_token not in self.node_lookup:
-                    node = Node(moves_list)
-                    self.add_node_to_lookup(node)
-                    self.get_node_from_lookup(node.get_parent_moves_token()).add_child(node)
-                else:
-                    
+    def set_color(self, number):
+        if number != None:
+            if number % 2 == 0:
+                self.color = "white"
+            else:
+                self.color = "grey"
+        else:
+            self.color = "white"
     
-    def visualize_tree_in_terminal(self):
-        for pre, _, node in RenderTree(self.root_node):
-            print(f"{pre}{node.moves_token}")
+    def get_color(self):
+        return self.color
     
-    def visualize_tree_in_png(self):
-        dot = Digraph()
-        for pre, _, node in RenderTree(self.root_node):
-            dot.node(node.get_moves_token(), label=node.get_label())  
-            if node.get_moves_token() != "":
-                dot.edge(node.get_parent_moves_token(), node.get_moves_token())
+    def get_move_number(self):
+        return self.move_number
+        
+class OpeningTree:
+    
+    def __init__(self, list_of_games):
+        self.list_of_games = list_of_games
+        self.root = TreeNode(None, None)
+        self.create_tree()
+
+    def create_tree(self):
+        for game in self.list_of_games:
+            
+            result = game.get_result()
+            moves = game.get_moves_without_comments()
+            
+            current_node = self.root
+            move_number = 0
+            
+            for move in moves:
+                child_node = None
      
-        dot.render('tree', format='png')
-        
+                for existing_child in current_node.get_children(): # check if child already exists
+                    if existing_child.get_move() == move: # if child exists, increment result
+                        child_node = existing_child # and
+                        child_node.increment_result(result)
+                        break # break out of loop
+                        
+                if child_node is None: # if child does not exist, create it 
+                    child_node = TreeNode(move, move_number) # create child
+                    child_node.increment_result(result) # and increment result
+                    current_node.add_child(child_node) # add child to parent
+                
+                current_node = child_node
+                move_number += 1
 
+    def print_tree(self, depth, filename):
+        with open("{}.dot".format(filename), "w") as dot_file:
+            dot_file.write("digraph G {\n")
+            self.print_node(self.root, depth, 0, dot_file)
+            dot_file.write("}\n")
+        
+        os.system("dot -Tpng tree.dot -o tree.png")
+
+    def print_node(self, node, depth, current_depth, dot_file):
+        if current_depth < depth:
+            for child in node.get_children():
+                dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
+                dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), child.get_move()))
+                self.print_node(child, depth, current_depth + 1, dot_file)
+        else: # leaf node
+            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), node.get_result())) 
+            
+def save_tree_to_file(tree, depth, filename):
+    with open("./graphs/{}.dot".format(filename), "w") as dot_file:
+        dot_file.write("digraph G {\n")
+        tree.print_node(tree.root, depth, 0, dot_file)
+        dot_file.write("}\n")
+    
+def save_mulitple_trees_from_openings(database, openings, depth, filename):
+    for opening in openings:
+        print("Creating tree for {}".format(opening))
+        list_of_games = database.get_games_with_opening(opening)
+        tree = OpeningTree(list_of_games)
+        save_tree_to_file(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
+        os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
+        
 def main():
-    start_time = time.time()
-    pgn = PGNDatabase("sample.pgn")
+    # database = PGNDatabase("./databases/sample.pgn")
+    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    # database = PGNDatabase("./databases/100_games.pgn")
+    list_of_games = database.get_games_with_opening("Bird's opening")
+    print(len(list_of_games))
     
-    tree = Tree(pgn)
-    tree.create_white_tree(20) #TODO; list out of index
-    #tree.visualize_tree_in_terminal()
-    tree.visualize_tree_in_png()
+    
+    openings = database.get_openings_that_occurred_at_least_n_times(2)
+    save_mulitple_trees_from_openings(database, openings, 5, "tree")
+    
+    
+    # tree = OpeningTree(list_of_games)
+    
+    # tree.print_tree(26, "tree")
+    
+    # os.system("dot -Tpng tree.dot -o tree.png")
+    
+    # tree.save_tree_to_file(26, "tre")
+
+    
+    
+if __name__ == "__main__":
+    main()
     
 
-    print(f"Time: {time.time() - start_time}")
-
-
-main()
-        
-    
