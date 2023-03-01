@@ -120,11 +120,11 @@ def main():
     # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
-    list_of_games = database.get_games_with_opening("Bird's opening")
+    list_of_games = database.get_games_with_opening("A03")
     print(len(list_of_games))
     
     
-    openings = database.get_openings_that_occurred_at_least_n_times(2)
+    openings = database.get_openings_that_occurred_at_least_n_times(60)
     save_mulitple_trees_from_openings(database, openings, 5, "tree")
     
     
