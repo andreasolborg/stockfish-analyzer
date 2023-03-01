@@ -81,9 +81,9 @@ class OpeningTree:
                 
                 current_node = child_node
                 move_number += 1
-    
-    def print_tree(self, depth):
-        with open("tree.dot", "w") as dot_file:
+
+    def print_tree(self, depth, filename):
+        with open("{}.dot".format(filename), "w") as dot_file:
             dot_file.write("digraph G {\n")
             self.print_node(self.root, depth, 0, dot_file)
             dot_file.write("}\n")
@@ -95,29 +95,45 @@ class OpeningTree:
             for child in node.get_children():
                 dot_file.write('{} [label="{}" fillcolor="{}", style="filled"] \n'.format(str(id(node)), node.get_result(), node.get_color()))
                 dot_file.write('{} -> {} [label="{}"]\n'.format(str(id(node)), str(id(child)), child.get_move()))
-
                 self.print_node(child, depth, current_depth + 1, dot_file)
         else: # leaf node
-            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), node.get_result()))
-         
-    def get_node(self, node, moves):
-        if len(moves) == 0:
-            return node
-        else:
-            return self.get_node(node[moves[0]], moves[1:])
+            dot_file.write('{} [label="{}"]\n'.format(str(id(node)), node.get_result())) 
+            
+def save_tree_to_file(tree, depth, filename):
+    with open("./graphs/{}.dot".format(filename), "w") as dot_file:
+        dot_file.write("digraph G {\n")
+        tree.print_node(tree.root, depth, 0, dot_file)
+        dot_file.write("}\n")
+    
+def save_mulitple_trees_from_openings(database, openings, depth, filename):
+    for opening in openings:
+        print("Creating tree for {}".format(opening))
+        list_of_games = database.get_games_with_opening(opening)
+        tree = OpeningTree(list_of_games)
+        save_tree_to_file(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
+        os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
         
-    def get_node_from_moves(self, moves):
-        return self.get_node(self.tree, moves)
-
-    def get_node_from_game(self, game):
-        return self.get_node_from_moves(game.get_moves_without_comments())
-    
 def main():
-    database = PGNDatabase("sample2.pgn")
-    list_of_games = database.get_games_where_stockfish_is_black()
+    # database = PGNDatabase("./databases/sample.pgn")
+    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    # database = PGNDatabase("./databases/100_games.pgn")
+    list_of_games = database.get_games_with_opening("Bird's opening")
+    print(len(list_of_games))
     
-    tree = OpeningTree(list_of_games)
-    tree.print_tree(6)
+    
+    openings = database.get_openings_that_occurred_at_least_n_times(2)
+    save_mulitple_trees_from_openings(database, openings, 5, "tree")
+    
+    
+    # tree = OpeningTree(list_of_games)
+    
+    # tree.print_tree(26, "tree")
+    
+    # os.system("dot -Tpng tree.dot -o tree.png")
+    
+    # tree.save_tree_to_file(26, "tre")
+
+    
     
 if __name__ == "__main__":
     main()
