@@ -1,96 +1,53 @@
-'''
-# PLAN
-
-### Task 9: 
-- Each position is only stored once in the chess tree. This means that regardless of the moves played to reach it, the exact same information will be stored
-    - The number of games won by white in this position
-    - The number of games win by black in this position
-    - The number of games resulted in a draw in this position
-    - The name of the opening
-    - The move
-    - The children nodes
-    - The degree (move number)
-    
-### Task 10: 
-- We use PGNDatabase functions and send a list of games into this class as a argument
-    - For example, get_games_where_stockfish_is_black()
-- TODO: how do we parse this game an create a tree??
-
-root = Node(color, children, meta_data)
-node2 = Node(color2, children2, meta_data2)
-node3 = Node(...)
-node4 = Node(...)
-node5 = Node(...)
-node6 = Node(...)
-
-root.add_child(node2)
-root.add_child(node3)
-node2.add_child(node4)
-node2.add_child(node5)
-node3.add_child(node6)
-
-tree = Tree(root)
-tree.visualize()
-
-### Task 11: 
-- Depth is number of half moves
-- We print the opening tree using graphviz
-
-### Task 12
-
-
-'''
-
-
-
 import time
 from PGNDatabase import PGNDatabase
-from anytree import Node, RenderTree
+from anytree import RenderTree
+from graphviz import Digraph
 
 class Node:
     '''
     A class representing a node in the chess opening tree.
     '''
-    def __init__(self, moves_token):
+    def __init__(self, moves_list):
         '''
         Params:
-            color: Either the character 'w' for white or 'b' for black
-            games: A list with instances of PGNGame
+            TODO
         '''
-        
-        self.moves_token = moves_token   
+        if len(moves_list) < 2:
+            self.parent_moves_token = ""
+        else:
+            self.parent_moves_token = "".join(moves_list[:-1])
+            
+        self.moves_token = ''.join(moves_list)
+        self.moves_list = moves_list
         self.children = []
-        self.count = 1
 
     def get_moves_token(self):
         return self.moves_token
     
+    def get_parent_moves_token(self):
+        return self.parent_moves_token
+    
     def add_child(self, node):
         self.children.append(node)
+        
+    def get_label(self):
+        if self.moves_list:
+            return self.moves_list[-1]
+        return "root"
     
-    def get_all_children(self):
-        return self.children
-    
-    def increase_count(self):
-        self.count += 1
-
-
 class Tree:
     '''
-    TODO: write class desc
+    A class that creates the chess opening tree of nodes
     '''
     def __init__(self, database):
         '''
         Params:
-     
+            TODO
         '''
         self.database = database
-        self.root_node = Node("")
+        self.root_node = Node([])
         self.node_lookup = {}
         self.add_node_to_lookup(self.root_node)
-        
-    def get_node_by_move_token(self):
-        pass
     
     def add_node_to_lookup(self, node):
         self.node_lookup[node.get_moves_token()] = node
@@ -102,50 +59,45 @@ class Tree:
         games = self.database.get_games_where_stockfish_is_white()
         
         for i in range(depth):
-            #print("####",i, "####")
-            
             for game in games:
-                parent_moves_token = ""
-                new_moves_token = ""
-                
-                # this will create a string token for the parent and the new node
+                moves_list = []
+
                 for j in range(i+1):
-                    if j != i:
-                        parent_moves_token += game.get_half_move(j) + " "
-                    new_moves_token += game.get_half_move(j) + " "
-                
-                # if the sequence of moves does not exist as a node we create a new node and add it to the children of its parent
-                if new_moves_token not in self.node_lookup:
-                    new_node = Node(new_moves_token)
-                    self.add_node_to_lookup(new_node)
-                    self.get_node_from_lookup(parent_moves_token).add_child(new_node)
-                # if the node exist we can add meta data etc to it
+                    moves_list.append(game.get_half_move(j))
+                    
+                moves_token = ''.join(moves_list)
+
+                if moves_token not in self.node_lookup:
+                    node = Node(moves_list)
+                    self.add_node_to_lookup(node)
+                    self.get_node_from_lookup(node.get_parent_moves_token()).add_child(node)
                 else:
                     
-                    ## legg til win/tap/draw på eksiterende node
-                    
-                    self.get_node_from_lookup(new_moves_token).increase_count()
-            
     
-    def visualize_tree(self):
+    def visualize_tree_in_terminal(self):
         for pre, _, node in RenderTree(self.root_node):
             print(f"{pre}{node.moves_token}")
     
+    def visualize_tree_in_png(self):
+        dot = Digraph()
+        for pre, _, node in RenderTree(self.root_node):
+            dot.node(node.get_moves_token(), label=node.get_label())  
+            if node.get_moves_token() != "":
+                dot.edge(node.get_parent_moves_token(), node.get_moves_token())
+     
+        dot.render('tree', format='png')
+        
 
 def main():
     start_time = time.time()
     pgn = PGNDatabase("sample.pgn")
     
     tree = Tree(pgn)
-    tree.create_white_tree(20)
-    tree.visualize_tree()
+    tree.create_white_tree(20) #TODO; list out of index
+    #tree.visualize_tree_in_terminal()
+    tree.visualize_tree_in_png()
     
-    #print(len(tree.get_node_from_lookup("").get_all_children()))
-    #print(len(tree.get_node_from_lookup("e4 c5 Nf3 ").get_all_children()))
-    #print(len(tree.get_node_from_lookup("e4 c5 Nf3 d6 ").get_all_children()))
-    #print(len(tree.get_node_from_lookup("e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Nbd7 Qf3 Qc7 O-O-O b5 ").get_all_children()))
-    
-    
+
     print(f"Time: {time.time() - start_time}")
 
 
