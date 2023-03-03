@@ -529,14 +529,16 @@ def test():
 
 def main():
     start_time = time.time()
-    pgn = PGNDatabase("./databases/sample.pgn")
+    # pgn = PGNDatabase("./databases/sample.pgn")
+    pgn = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+
     all_games = pgn.statistics["all_games"]
     games_where_stockfish_is_white = pgn.statistics["stockfish_white"]
     games_where_stockfish_is_black = pgn.statistics["stockfish_black"]
     list_of_games = all_games
     
     one = pgn.get_openings_that_occurred_at_least_n_times(all_games, 1)
-    print(one)
+    # print(one)
 
     
     fig, ax = plt.subplots()
