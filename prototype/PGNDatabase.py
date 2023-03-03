@@ -20,15 +20,16 @@ class PGNDatabase:
     def __init__(self, path):
         self.games = self.parse(path)  
         self.path = path
-        self.statistics = self.get_statistics()
+        self.dictionary_of_games = self.get_filtered_games()
 
     # def get_games(self):
     #     return self.games
     
-    def get_statistics(self):
+    def get_filtered_games(self):
         '''
         Get statistics of the database.
         '''
+        amount_of_games = 0
         amount_of_stockfish_wins = 0
         amount_of_stockfish_loses = 0
         amount_of_stockfish_draws = 0
@@ -54,11 +55,13 @@ class PGNDatabase:
         
         for game in self.games:
             all_games.append(game)
+            amount_of_games += 1
             if "Stockfish" in game.lookup_meta_data('White'):
                 stockfish_white.append(game)
                 if game.lookup_meta_data('Result') == '1-0':
                     amount_of_stockfish_wins += 1
                     amount_of_stockfish_is_white_and_wins += 1
+                    
                     stockfish_wins.append(game)
                     stockfish_is_white_and_wins.append(game)
                 elif game.lookup_meta_data('Result') == '0-1':
@@ -89,7 +92,7 @@ class PGNDatabase:
                     stockfish_draws.append(game)
                     stockfish_is_black_and_draws.append(game)
 
-        statistics = {
+        dictionary_of_games = {
             "all_games": all_games,
             "stockfish_white": stockfish_white,
             "stockfish_black": stockfish_black,
@@ -101,18 +104,25 @@ class PGNDatabase:
             "stockfish_is_white_and_loses": stockfish_is_white_and_loses,
             "stockfish_is_black_and_loses": stockfish_is_black_and_loses,
             "stockfish_is_white_and_draws": stockfish_is_white_and_draws,
-            "stockfish_is_black_and_draws": stockfish_is_black_and_draws,
+            "stockfish_is_black_and_draws": stockfish_is_black_and_draws
+        }
+
+        results = {
+            "amount_of_games": amount_of_games,
             "amount_of_stockfish_wins": amount_of_stockfish_wins,
             "amount_of_stockfish_loses": amount_of_stockfish_loses,
             "amount_of_stockfish_draws": amount_of_stockfish_draws,
+            "amount_of_white_wins": amount_of_stockfish_is_white_and_wins + amount_of_stockfish_is_black_and_loses,
+            "amount_of_black_wins": amount_of_stockfish_is_black_and_wins + amount_of_stockfish_is_white_and_loses,
             "amount_of_stockfish_is_white_and_wins": amount_of_stockfish_is_white_and_wins,
             "amount_of_stockfish_is_black_and_wins": amount_of_stockfish_is_black_and_wins,
             "amount_of_stockfish_is_white_and_loses": amount_of_stockfish_is_white_and_loses,
             "amount_of_stockfish_is_black_and_loses": amount_of_stockfish_is_black_and_loses,
             "amount_of_stockfish_is_white_and_draws": amount_of_stockfish_is_white_and_draws,
-            "amount_of_stockfish_is_black_and_draws": amount_of_stockfish_is_black_and_draws,
+            "amount_of_stockfish_is_black_and_draws": amount_of_stockfish_is_black_and_draws
         }
-        return statistics
+
+        return dictionary_of_games, results
             
 
 
