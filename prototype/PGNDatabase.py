@@ -434,12 +434,16 @@ def test():
             
 
 def main():
-    pgn = PGNDatabase("sample.pgn")
+    time_start = time.time()
+    pgn = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    
+    print(f"Time: {time.time() - time_start} seconds")
+
     list_of_games = pgn.get_games()
     
     
     one = pgn.get_openings_that_occurred_at_least_n_times(60)
-    print(one)
+    # print(one)
 
     
     # sequence_of_moves = ["d4", "Nf6", "c4", "g6"]
@@ -465,13 +469,14 @@ def main():
     pgn.plot_plycount_distribution(list_of_games)
     
     
+    print(f"Time: {time.time() - time_start}")
     
     
 
 
 
 if __name__ == "__main__":
-    #main()
+    main()
     pass
     
 
