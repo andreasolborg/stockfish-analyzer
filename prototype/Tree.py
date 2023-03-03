@@ -50,7 +50,6 @@ class TreeNode:
         return self.move_number
         
 class OpeningTree:
-    
     def __init__(self, list_of_games):
         self.list_of_games = list_of_games
         self.root = TreeNode(None, None)
@@ -58,7 +57,6 @@ class OpeningTree:
 
     def create_tree(self):
         for game in self.list_of_games:
-            
             result = game.get_result()
             moves = game.get_moves_without_comments()
             
@@ -125,7 +123,7 @@ def main():
     
     # You can either do this
     eco = database.get_eco_that_occurred_at_least_n_times(60)
-    save_mulitple_trees_from_openings(database, eco, 20, "eco")
+    save_mulitple_trees_from_openings(database, eco, 5, "eco")
     
     # Or this
     # openings = database.get_openings_that_occurred_at_least_n_times(60)

@@ -20,31 +20,125 @@ class PGNDatabase:
     def __init__(self, path):
         self.games = self.parse(path)  
         self.path = path
+        self.statistics = self.get_statistics()
 
-    def get_games(self):
-        return self.games
+    # def get_games(self):
+    #     return self.games
     
-    
-    def get_white_wins(self):
-        white_wins = []
+    def get_statistics(self):
+        '''
+        Get statistics of the database.
+        '''
+        amount_of_stockfish_wins = 0
+        amount_of_stockfish_loses = 0
+        amount_of_stockfish_draws = 0
+        amount_of_stockfish_is_white_and_wins = 0
+        amount_of_stockfish_is_black_and_wins = 0
+        amount_of_stockfish_is_white_and_loses = 0
+        amount_of_stockfish_is_black_and_loses = 0
+        amount_of_stockfish_is_white_and_draws = 0
+        amount_of_stockfish_is_black_and_draws = 0
+
+        all_games = []
+        stockfish_white = []
+        stockfish_black = []
+        stockfish_draws = []
+        stockfish_wins = []
+        stockfish_loses = []
+        stockfish_is_white_and_wins = []
+        stockfish_is_black_and_wins = []
+        stockfish_is_white_and_loses = []
+        stockfish_is_black_and_loses = []
+        stockfish_is_white_and_draws = []
+        stockfish_is_black_and_draws = []
+        
         for game in self.games:
-            if game.lookup_meta_data('Result') == '1-0':
-                white_wins.append(game)
-        return white_wins
+            all_games.append(game)
+            if "Stockfish" in game.lookup_meta_data('White'):
+                stockfish_white.append(game)
+                if game.lookup_meta_data('Result') == '1-0':
+                    amount_of_stockfish_wins += 1
+                    amount_of_stockfish_is_white_and_wins += 1
+                    stockfish_wins.append(game)
+                    stockfish_is_white_and_wins.append(game)
+                elif game.lookup_meta_data('Result') == '0-1':
+                    amount_of_stockfish_loses += 1
+                    amount_of_stockfish_is_white_and_loses += 1
+                    stockfish_loses.append(game)
+                    stockfish_is_white_and_loses.append(game)
+                elif game.lookup_meta_data('Result') == '1/2-1/2':
+                    amount_of_stockfish_draws += 1
+                    amount_of_stockfish_is_white_and_draws += 1
+                    stockfish_draws.append(game)
+                    stockfish_is_white_and_draws.append(game)
+            elif "Stockfish" in game.lookup_meta_data('Black'):
+                stockfish_black.append(game)
+                if game.lookup_meta_data('Result') == '1-0':
+                    amount_of_stockfish_wins += 1
+                    amount_of_stockfish_is_black_and_wins += 1
+                    stockfish_wins.append(game)
+                    stockfish_is_black_and_wins.append(game)
+                elif game.lookup_meta_data('Result') == '0-1':
+                    amount_of_stockfish_loses += 1
+                    amount_of_stockfish_is_black_and_loses += 1
+                    stockfish_loses.append(game)
+                    stockfish_is_black_and_loses.append(game)
+                elif game.lookup_meta_data('Result') == '1/2-1/2':
+                    amount_of_stockfish_draws += 1
+                    amount_of_stockfish_is_black_and_draws += 1
+                    stockfish_draws.append(game)
+                    stockfish_is_black_and_draws.append(game)
+
+        statistics = {
+            "all_games": all_games,
+            "stockfish_white": stockfish_white,
+            "stockfish_black": stockfish_black,
+            "stockfish_draws": stockfish_draws,
+            "stockfish_wins": stockfish_wins,
+            "stockfish_loses": stockfish_loses,
+            "stockfish_is_white_and_wins": stockfish_is_white_and_wins,
+            "stockfish_is_black_and_wins": stockfish_is_black_and_wins,
+            "stockfish_is_white_and_loses": stockfish_is_white_and_loses,
+            "stockfish_is_black_and_loses": stockfish_is_black_and_loses,
+            "stockfish_is_white_and_draws": stockfish_is_white_and_draws,
+            "stockfish_is_black_and_draws": stockfish_is_black_and_draws,
+            "amount_of_stockfish_wins": amount_of_stockfish_wins,
+            "amount_of_stockfish_loses": amount_of_stockfish_loses,
+            "amount_of_stockfish_draws": amount_of_stockfish_draws,
+            "amount_of_stockfish_is_white_and_wins": amount_of_stockfish_is_white_and_wins,
+            "amount_of_stockfish_is_black_and_wins": amount_of_stockfish_is_black_and_wins,
+            "amount_of_stockfish_is_white_and_loses": amount_of_stockfish_is_white_and_loses,
+            "amount_of_stockfish_is_black_and_loses": amount_of_stockfish_is_black_and_loses,
+            "amount_of_stockfish_is_white_and_draws": amount_of_stockfish_is_white_and_draws,
+            "amount_of_stockfish_is_black_and_draws": amount_of_stockfish_is_black_and_draws,
+        }
+        return statistics
+            
+
+
+
+    # def get_white_wins(self):
+    #     white_wins = []
+    #     for game in self.games:
+    #         if game.lookup_meta_data('Result') == '1-0':
+    #             white_wins.append(game)
+    #     return white_wins
     
-    def get_black_wins(self):
-        black_wins = []
-        for game in self.games:
-            if game.lookup_meta_data('Result') == '0-1':
-                black_wins.append(game)
-        return black_wins
+    # def get_black_wins(self):
+    #     black_wins = []
+    #     for game in self.games:
+    #         if game.lookup_meta_data('Result') == '0-1':
+    #             black_wins.append(game)
+    #     return black_wins
     
-    def get_draws(self):
-        draws = []
-        for game in self.games:
-            if game.lookup_meta_data('Result') == '1/2-1/2':
-                draws.append(game)
-        return draws
+    # def get_draws(self):
+    #     draws = []
+    #     for game in self.games:
+    #         if game.lookup_meta_data('Result') == '1/2-1/2':
+    #             draws.append(game)
+    #     return draws
+    
+
     
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []
@@ -66,9 +160,9 @@ class PGNDatabase:
                 games_with_opening.append(game)
         return games_with_opening
     
-    def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
+    def get_statistics_on_openings(self, list_of_games): #Returns a dictionary with keys being openings and values being the number of games with that opening
         openings = {}
-        for game in self.games:
+        for game in list_of_games:
             opening = game.lookup_meta_data('Opening')
             if opening in openings:
                 openings[opening] += 1      #If the opening is already in the dictionary, increment its value by 1
@@ -76,15 +170,14 @@ class PGNDatabase:
                 openings[opening] = 1       #If the opening is not in the dictionary, add it with a value of 1
         return openings
     
-    def get_openings_that_occurred_at_least_n_times(self, n):
-        openings = self.get_statistics_on_openings()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
+    def get_openings_that_occurred_at_least_n_times(self, list_of_games, n):
+        openings = self.get_statistics_on_openings(list_of_games)                                    #Get a dictionary with keys being openings and values being the number of games with that opening
         openings_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
         for opening in openings:                            
             if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
                 openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
         return openings_that_occurred_at_least_n_times
-    
-    
+        
 
     def get_eco_that_occurred_at_least_n_times(self, n):
         openings = self.get_statistics_on_eco()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
@@ -125,24 +218,25 @@ class PGNDatabase:
         for game in self.games:
             if "Stockfish" in game.lookup_meta_data('Black'):
                 stockfish_black.append(game)
-        return stockfish_black
+        return stockfish_black        
     
-    
-    def get_stockfish_draws(self, list_of_drawed_games):
-        stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
-        stockfish_draws_as_black = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('Black')]
-        return stockfish_draws_as_white, stockfish_draws_as_black
 
-    #IF game.lookup_meta_data('White') includes "Stockfish"
-    def get_stockfish_wins(self, list_of_games):
-        stockfish_wins_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '1-0']
-        stockfish_wins_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '0-1']
-        return stockfish_wins_as_white, stockfish_wins_as_black
 
-    def get_stockfish_losses(self, list_of_games):
-        stockfish_losses_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '0-1']
-        stockfish_losses_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '1-0']
-        return stockfish_losses_as_white, stockfish_losses_as_black
+    # def get_stockfish_draws(self, list_of_drawed_games):
+    #     stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
+    #     stockfish_draws_as_black = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('Black')]
+    #     return stockfish_draws_as_white, stockfish_draws_as_black
+
+    # #IF game.lookup_meta_data('White') includes "Stockfish"
+    # def get_stockfish_wins(self, list_of_games):
+    #     stockfish_wins_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '1-0']
+    #     stockfish_wins_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '0-1']
+    #     return stockfish_wins_as_white, stockfish_wins_as_black
+
+    # def get_stockfish_losses(self, list_of_games):
+    #     stockfish_losses_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '0-1']
+    #     stockfish_losses_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '1-0']
+    #     return stockfish_losses_as_white, stockfish_losses_as_black
 
 
 
@@ -169,9 +263,9 @@ class PGNDatabase:
                 move_count_distribution[move_count] = 1
         return move_count_distribution
 
-    def get_plycount_distribution(self):
+    def get_plycount_distribution(self, list_of_games):
         plycount_distribution = {}
-        for game in self.games:
+        for game in list_of_games:
             plycount = int(game.lookup_meta_data('PlyCount'))
             if plycount in plycount_distribution:
                 plycount_distribution[plycount] += 1
@@ -434,35 +528,30 @@ def test():
             
 
 def main():
-    pgn = PGNDatabase("sample.pgn")
-    list_of_games = pgn.get_games()
+    start_time = time.time()
+    pgn = PGNDatabase("./databases/sample.pgn")
+    all_games = pgn.statistics["all_games"]
+    games_where_stockfish_is_white = pgn.statistics["stockfish_white"]
+    games_where_stockfish_is_black = pgn.statistics["stockfish_black"]
+    list_of_games = all_games
     
-    
-    one = pgn.get_openings_that_occurred_at_least_n_times(60)
+    one = pgn.get_openings_that_occurred_at_least_n_times(all_games, 1)
     print(one)
 
-    
-    # sequence_of_moves = ["d4", "Nf6", "c4", "g6"]
-    # list_of_games_with_sequence = pgn.get_games_with_move_sequence(sequence_of_moves)
-    # for game in list_of_games_with_sequence:
-    #     print(game.get_moves_without_comments())
-    # print(len(list_of_games_with_sequence))
-    
-    # for game in list_of_games:
-    #     print(game.get_moves_without_comments())
-    games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
-    games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
     fig, ax = plt.subplots()
     fig.set_size_inches(10,5)
     
-    pgn.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
+    pgn.plot_move_count_histogram_cumulative(all_games, "All games", axis=ax)
     pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_white, "Games where Stockfish is white", axis=ax)
     pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
 
     plt.legend()
+    # plt.show()
     
     pgn.plot_plycount_distribution(list_of_games)
+
+    print(f"Time: {time.time() - start_time}")
     
     
     
@@ -471,7 +560,7 @@ def main():
 
 
 if __name__ == "__main__":
-    #main()
+    main()
     pass
     
 

@@ -13,8 +13,7 @@ class PGNDocument:
     def __init__(self, database):
         self.database = database
         self.document = Document()
-        self.list_of_games = self.database.get_games()
-        self.list_of_drawed_games = self.database.get_draws()
+        self.game_statistics = self.database.get_game_statistics()
 
 
     def create_document(self):
@@ -36,7 +35,7 @@ class PGNDocument:
         list_of_drawed_games = self.list_of_drawed_games
         list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
         list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
-        
+
         # Todo --> get_stockfish_wins should not return two lists (or should it?)
         list_of_games_where_stockfish_wins_as_white, list_of_games_where_stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
         list_of_games_where_stockfish_losses_as_white, list_of_games_where_stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
@@ -165,7 +164,6 @@ class PGNDocument:
         self.database.plot_plycount_distribution(list_of_games)
         self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
 
-
     def create_document_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
         self.document.add_heading('2.4 Moves distribution', level=2)
         self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
@@ -183,8 +181,6 @@ class PGNDocument:
         self.database.plot_multiple_move_count_histogram_cumulative(dict)
         plt.savefig(filename)
         self.document.add_picture(filename, width=Inches(6))
-        
-
 
     ### This is the old version of the function above, which only plots one list of games at a time ###
     def create_document_cumulative_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
@@ -232,7 +228,7 @@ class PGNDocument:
 
 def main():
     start_time = time.time()
-    database = PGNDatabase("./databases/big_database.pgn")
+    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     document = PGNDocument(database)
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
     document.create_document()
