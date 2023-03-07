@@ -8,5 +8,5 @@ setup(
    description='Analyze chess games',
    author='Andreas Olborg and Jon Grendstad',
    packages=['chess-assignment'],  #same as name
-   install_requires=['docx', 'openpyxl'], #external packages as dependencies
+   install_requires=['docx', 'openpyxl', 'graphviz'], #external packages as dependencies
 )

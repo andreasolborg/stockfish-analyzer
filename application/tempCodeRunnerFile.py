@@ -1,0 +1,1 @@
+white_wins, black_wins, draws
