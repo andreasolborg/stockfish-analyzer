@@ -92,23 +92,23 @@ class OpeningTree:
 
     def save_tree(self, depth, filename):
         print("Saving tree to file {}".format(filename)) # print to console
-        if os.path.exists("./graphs/{}.dot".format(filename)): # if file already exists, delete it
-            os.remove("./graphs/{}.dot".format(filename))
-        if os.path.exists("./graphs/{}.png".format(filename)): # if file already exists, delete it
-            os.remove("./graphs/{}.png".format(filename))
-        with open("./graphs/{}.dot".format(filename), "w") as dot_file: 
+        if os.path.exists("../graphs/{}.dot".format(filename)): # if file already exists, delete it
+            os.remove("../graphs/{}.dot".format(filename))
+        if os.path.exists("../graphs/{}.png".format(filename)): # if file already exists, delete it
+            os.remove("../graphs/{}.png".format(filename))
+        with open("../graphs/{}.dot".format(filename), "w") as dot_file: 
             dot_file.write("digraph G {\n")
             dot_file.write('rankdir=LR;\ncenter=true;\n') 
             self.print_node(self.root, depth, 0, dot_file) # recursive call to print nodes
             dot_file.write("}\n")
-        os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
+        os.system("dot -Tpng ../graphs/{}.dot -o ../graphs/{}.png".format(filename, filename)) # create png from dot file
 
 
 def save_tree_to_file(tree, depth, filename):
-    if os.path.exists("./graphs/{}.dot".format(filename)):
-        os.remove("./graphs/{}.dot".format(filename))
-    if os.path.exists("./graphs/{}.png".format(filename)):
-        os.remove("./graphs/{}.png".format(filename))
+    if os.path.exists("../graphs/{}.dot".format(filename)):
+        os.remove("../graphs/{}.dot".format(filename))
+    if os.path.exists("../graphs/{}.png".format(filename)):
+        os.remove("../graphs/{}.png".format(filename))
     tree.save_tree(depth, filename)
 
 
