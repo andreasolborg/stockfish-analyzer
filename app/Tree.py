@@ -20,7 +20,7 @@ class TreeNode:
         return self.move
 
     def get_result(self):
-        return "1-0: {}\nDraw: {}\n0-1: {}".format(self.results["1-0"], self.results["1/2-1/2"], self.results["0-1"])
+        return "White: {}\nDraw: {}\nBlack: {}".format(self.results["1-0"], self.results["1/2-1/2"], self.results["0-1"])
 
     def get_children(self):
         return self.children
@@ -143,32 +143,29 @@ def main():
 
 
     # You can either do this
-    eco = database.get_eco_that_occurred_at_least_n_times(60)
-    for e in eco:
-        if eco[e] < 30:
-            depth = 5
+    #eco = database.get_eco_that_occurred_at_least_n_times(20)
+    #for e in eco:
+    #    if eco[e] < 30:
+    #        depth = 5
+    #    else:
+    #        depth = 10
+    #
+    #    list_of_games = database.get_games_with_eco(e)
+    #    save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(e))
+
+
+
+    # or this
+    openings = database.get_openings_that_occurred_at_least_n_times(100) # get openings that occurred at least 60 times as a dictionary
+    print(openings)
+    for opening in openings:
+        if openings[opening] < 200:
+            depth = 4
         else:
-            depth = 10
+            depth = 8
+        list_of_games = database.get_games_with_opening(opening)
+        save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
 
-        list_of_games = database.get_games_with_eco(e)
-        save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(e))
-
-
-
-    #  or this
-    # openings = database.get_openings_that_occurred_at_least_n_times(100) # get openings that occurred at least 60 times as a dictionary
-    # print(openings)
-    # for opening in openings:
-    #     if openings[opening] < 200:
-    #         depth = 4
-    #     else:
-    #         depth = 8
-    #     list_of_games = database.get_games_with_opening(opening)
-    #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
-
-    
-
-    
     
 if __name__ == "__main__":
     main()
