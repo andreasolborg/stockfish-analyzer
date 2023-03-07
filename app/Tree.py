@@ -143,6 +143,12 @@ def main():
 
 
     # You can either do this
+<<<<<<< HEAD:prototype/Tree.py
+    eco = database.get_eco_that_occurred_at_least_n_times(60)
+    for e in eco:
+        if eco[e] < 30:
+            depth = 5
+=======
     #eco = database.get_eco_that_occurred_at_least_n_times(20)
     #for e in eco:
     #    if eco[e] < 30:
@@ -161,6 +167,7 @@ def main():
     for opening in openings:
         if openings[opening] < 200:
             depth = 4
+>>>>>>> 5356412e8fa2178d33db25bf4faf8e0f5028322f:app/Tree.py
         else:
             depth = 8
         list_of_games = database.get_games_with_opening(opening)

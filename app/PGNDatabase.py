@@ -24,24 +24,23 @@ class PGNDatabase:
     def get_games(self):
         return self.games
     
-    
-    def get_white_wins(self):
+    def get_white_wins(self, games):
         white_wins = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '1-0':
                 white_wins.append(game)
         return white_wins
     
-    def get_black_wins(self):
+    def get_black_wins(self, games):
         black_wins = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '0-1':
                 black_wins.append(game)
         return black_wins
     
-    def get_draws(self):
+    def get_draws(self, games):
         draws = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '1/2-1/2':
                 draws.append(game)
         return draws
@@ -124,6 +123,7 @@ class PGNDatabase:
             if "Stockfish" in game.lookup_meta_data('Black'):
                 stockfish_black.append(game)
         return stockfish_black
+    
     
     def get_stockfish_draws(self, list_of_drawed_games):
         stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
@@ -213,7 +213,6 @@ class PGNDatabase:
         plt.fill_between(x, y, color='blue', alpha=0.5)
         plt.savefig('./plots/move_count_distribution.png')
 
-
     def plot_move_count_histogram_cumulative(self, list_of_games, textinfo, axis=None):
         move_count_distribution = self.get_move_count_distribution(list_of_games)
         move_count_distribution = self.sort_dict(move_count_distribution)
@@ -243,7 +242,6 @@ class PGNDatabase:
 
     def save_histogram(self, path):
         plt.savefig(path)
-
 
     def clear_plot(self):
         plt.clf()
@@ -389,51 +387,13 @@ class PGNDatabase:
             game_list.append(chessgame)
 
         return game_list
-            
-def test():
-    start_time = time.time()
-    pgn = PGNDatabase("./databases/sample.pgn")
-    print(pgn.games)
-    for i, g in enumerate(pgn.get_games()):
-        pass
-        print("-----------------" + str(i) + "-----------------")
-        print(g.meta_data)
-        print("")
-        for m in g.moves:
-            pass
-            print(m)
-    
-    
-    pgn.games = []
-    
-    print(pgn.games)
-    
-
-    
-    #pgn.compose_to_excel()
-    pgn.parse_from_excel()
-
-    for i, g in enumerate(pgn.get_games()):
-        pass
-        print("-----------------" + str(i) + "-----------------")
-        print(g.meta_data)
-        print("")
-        for m in g.moves:
-            pass
-            print(m)
-    
-    print(f"Time: {time.time() - start_time}")
-
-#test()
-            
-            
 
 def main():
     time_start = time.time()
-    pgn = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    pgn = PGNDatabase("../databases/Stockfish_15_64-bit.commented.[2600].pgn")
     
     print(f"Time: {time.time() - time_start} seconds")
-
+    
     list_of_games = pgn.get_games()
     
     
@@ -467,9 +427,6 @@ def main():
     print(f"Time: {time.time() - time_start}")
     
     
-
-
-
 if __name__ == "__main__":
     main()
     pass

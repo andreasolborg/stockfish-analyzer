@@ -1,0 +1,928 @@
+digraph G {
+rankdir=LR;
+center=true;
+2664416168208 [label="1-0: 0
+Draw: 0
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664416168208 -> 2664421537824 [label="e4"];
+2664421537824 [label="1-0: 38
+Draw: 70
+0-1: 10", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537824 -> 2664421537680 [label="e6"];
+2664421537680 [label="1-0: 37
+Draw: 67
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537680 -> 2664421537152 [label="d4"];
+2664421537152 [label="1-0: 35
+Draw: 61
+0-1: 10", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537152 -> 2664421537344 [label="d5"];
+2664421537344 [label="1-0: 35
+Draw: 61
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 -> 2664421537248 [label="Nc3"];
+2664421537248 [label="1-0: 20
+Draw: 34
+0-1: 5", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537248 -> 2664421537440 [label="Bb4"];
+2664421537440 [label="1-0: 11
+Draw: 13
+0-1: 3", fillcolor="white", fontcolor="black", style="filled"];
+2664421537440 -> 2664421537296 [label="a3"];
+2664421537296 [label="1-0: 0
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537296 -> 2664421537536 [label="Bxc3+"];
+2664421537536 [label="1-0: 0
+Draw: 1
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421537536 -> 2664421537392 [label="bxc3"];
+2664421537392 [label="1-0: 0
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537392 -> 2664421537632 [label="dxe4"];
+2664421537632 [label="1-0: 0
+Draw: 1
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421537440 [label="1-0: 11
+Draw: 13
+0-1: 3", fillcolor="white", fontcolor="black", style="filled"];
+2664421537440 -> 2664422234608 [label="e5"];
+2664422234608 [label="1-0: 10
+Draw: 11
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422234608 -> 2664422234656 [label="c5"];
+2664422234656 [label="1-0: 10
+Draw: 8
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664422234656 -> 2664422234704 [label="a3"];
+2664422234704 [label="1-0: 10
+Draw: 8
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422234704 -> 2664422234752 [label="Bxc3+"];
+2664422234752 [label="1-0: 10
+Draw: 8
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664422234608 [label="1-0: 10
+Draw: 11
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422234608 -> 2664360720128 [label="Ne7"];
+2664360720128 [label="1-0: 0
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360720128 -> 2664360720176 [label="a3"];
+2664360720176 [label="1-0: 0
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360720176 -> 2664360720224 [label="Bxc3+"];
+2664360720224 [label="1-0: 0
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537440 [label="1-0: 11
+Draw: 13
+0-1: 3", fillcolor="white", fontcolor="black", style="filled"];
+2664421537440 -> 2664361442752 [label="Bd2"];
+2664361442752 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361442752 -> 2664361442800 [label="Ne7"];
+2664361442800 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664361442800 -> 2664361442848 [label="a3"];
+2664361442848 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361442848 -> 2664361442896 [label="Bxc3"];
+2664361442896 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537248 [label="1-0: 20
+Draw: 34
+0-1: 5", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537248 -> 2664421677888 [label="Nf6"];
+2664421677888 [label="1-0: 6
+Draw: 17
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421677888 -> 2664421677936 [label="Bg5"];
+2664421677936 [label="1-0: 2
+Draw: 6
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421677936 -> 2664421677984 [label="dxe4"];
+2664421677984 [label="1-0: 1
+Draw: 5
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421677984 -> 2664421678032 [label="Nxe4"];
+2664421678032 [label="1-0: 1
+Draw: 5
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421678032 -> 2664421678080 [label="Be7"];
+2664421678080 [label="1-0: 1
+Draw: 5
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421677936 [label="1-0: 2
+Draw: 6
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421677936 -> 2664358374816 [label="Bb4"];
+2664358374816 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358374816 -> 2664358374864 [label="exd5"];
+2664358374864 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358374864 -> 2664358374912 [label="Qxd5"];
+2664358374912 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421677888 [label="1-0: 6
+Draw: 17
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421677888 -> 2664421886992 [label="e5"];
+2664421886992 [label="1-0: 4
+Draw: 11
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421886992 -> 2664421887040 [label="Nfd7"];
+2664421887040 [label="1-0: 4
+Draw: 11
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421887040 -> 2664421887088 [label="f4"];
+2664421887088 [label="1-0: 4
+Draw: 11
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421887088 -> 2664421887136 [label="c5"];
+2664421887136 [label="1-0: 4
+Draw: 9
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421887088 [label="1-0: 4
+Draw: 11
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421887088 -> 2664360349264 [label="a6"];
+2664360349264 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537248 [label="1-0: 20
+Draw: 34
+0-1: 5", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537248 -> 2664356919376 [label="Be7"];
+2664356919376 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664356919376 -> 2664356919424 [label="Bd3"];
+2664356919424 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356919424 -> 2664356919472 [label="dxe4"];
+2664356919472 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664356919472 -> 2664356919520 [label="Nxe4"];
+2664356919520 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356919520 -> 2664356919568 [label="Nf6"];
+2664356919568 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664421537248 [label="1-0: 20
+Draw: 34
+0-1: 5", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537248 -> 2664359094560 [label="dxe4"];
+2664359094560 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359094560 -> 2664359094608 [label="Nxe4"];
+2664359094608 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359094608 -> 2664359094656 [label="Nd7"];
+2664359094656 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359094656 -> 2664359094704 [label="Nf3"];
+2664359094704 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359094704 -> 2664359094752 [label="Ngf6"];
+2664359094752 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537248 [label="1-0: 20
+Draw: 34
+0-1: 5", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537248 -> 2664413493808 [label="Nc6"];
+2664413493808 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413493808 -> 2664413493760 [label="e5"];
+2664413493760 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413493760 -> 2664413493712 [label="Bd7"];
+2664413493712 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413493712 -> 2664413493664 [label="Nf3"];
+2664413493664 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413493664 -> 2664413493616 [label="a6"];
+2664413493616 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 [label="1-0: 35
+Draw: 61
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 -> 2664422076288 [label="Nd2"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664422076336 [label="c5"];
+2664422076336 [label="1-0: 6
+Draw: 9
+0-1: 3", fillcolor="white", fontcolor="black", style="filled"];
+2664422076336 -> 2664422076384 [label="exd5"];
+2664422076384 [label="1-0: 2
+Draw: 5
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076384 -> 2664422076432 [label="Qxd5"];
+2664422076432 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076432 -> 2664422076480 [label="Ngf3"];
+2664422076480 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076480 -> 2664422076528 [label="cxd4"];
+2664422076528 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076384 [label="1-0: 2
+Draw: 5
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076384 -> 2664357825360 [label="exd5"];
+2664357825360 [label="1-0: 2
+Draw: 3
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357825360 -> 2664357825408 [label="Ngf3"];
+2664357825408 [label="1-0: 2
+Draw: 3
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357825408 -> 2664357825456 [label="Nc6"];
+2664357825456 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664357825408 [label="1-0: 2
+Draw: 3
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357825408 -> 2664358544192 [label="a6"];
+2664358544192 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664422076336 [label="1-0: 6
+Draw: 9
+0-1: 3", fillcolor="white", fontcolor="black", style="filled"];
+2664422076336 -> 2664360176816 [label="Ngf3"];
+2664360176816 [label="1-0: 4
+Draw: 4
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360176816 -> 2664360176864 [label="Nf6"];
+2664360176864 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360176864 -> 2664360176912 [label="e5"];
+2664360176912 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360176912 -> 2664360176960 [label="Nfd7"];
+2664360176960 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360176816 [label="1-0: 4
+Draw: 4
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360176816 -> 2664360539472 [label="cxd4"];
+2664360539472 [label="1-0: 3
+Draw: 3
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664360539472 -> 2664360539520 [label="Nxd4"];
+2664360539520 [label="1-0: 2
+Draw: 2
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360539520 -> 2664360539568 [label="a6"];
+2664360539568 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360539520 [label="1-0: 2
+Draw: 2
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360539520 -> 2664361074624 [label="Nf6"];
+2664361074624 [label="1-0: 1
+Draw: 1
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664360539472 [label="1-0: 3
+Draw: 3
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664360539472 -> 2664361082112 [label="exd5"];
+2664361082112 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361082112 -> 2664361082160 [label="Qxd5"];
+2664361082160 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664358557488 [label="Nc6"];
+2664358557488 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358557488 -> 2664358557536 [label="Ngf3"];
+2664358557536 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358557536 -> 2664358557584 [label="Nf6"];
+2664358557584 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358557584 -> 2664358557632 [label="e5"];
+2664358557632 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358557632 -> 2664358557680 [label="Nd7"];
+2664358557680 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664359628512 [label="Nf6"];
+2664359628512 [label="1-0: 1
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359628512 -> 2664359628560 [label="e5"];
+2664359628560 [label="1-0: 1
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359628560 -> 2664359628608 [label="Nfd7"];
+2664359628608 [label="1-0: 1
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359628608 -> 2664359628656 [label="Bd3"];
+2664359628656 [label="1-0: 1
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359628656 -> 2664359628704 [label="c5"];
+2664359628704 [label="1-0: 1
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664359993568 [label="a6"];
+2664359993568 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359993568 -> 2664359993616 [label="Ngf3"];
+2664359993616 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359993616 -> 2664359993664 [label="c5"];
+2664359993664 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359993664 -> 2664359993712 [label="exd5"];
+2664359993712 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359993712 -> 2664359993760 [label="exd5"];
+2664359993760 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359993568 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359993568 -> 2664360709520 [label="Bd3"];
+2664360709520 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360709520 -> 2664360709568 [label="c5"];
+2664360709568 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360709568 -> 2664360709616 [label="dxc5"];
+2664360709616 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360709616 -> 2664360709664 [label="Bxc5"];
+2664360709664 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664422597264 [label="dxe4"];
+2664422597264 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422597264 -> 2664422597312 [label="Nxe4"];
+2664422597312 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422597312 -> 2664422597360 [label="Nd7"];
+2664422597360 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422597360 -> 2664422597408 [label="Nf3"];
+2664422597408 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422597408 -> 2664422597456 [label="Ngf6"];
+2664422597456 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422076288 [label="1-0: 10
+Draw: 18
+0-1: 3", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422076288 -> 2664422771056 [label="b6"];
+2664422771056 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422771056 -> 2664422771104 [label="exd5"];
+2664422771104 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422771104 -> 2664422771152 [label="Qxd5"];
+2664422771152 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422771152 -> 2664422771200 [label="Ngf3"];
+2664422771200 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422771200 -> 2664422771248 [label="Nf6"];
+2664422771248 [label="1-0: 1
+Draw: 0
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422771200 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422771200 -> 2664422777152 [label="Bb7"];
+2664422777152 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 [label="1-0: 35
+Draw: 61
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 -> 2664422241712 [label="e5"];
+2664422241712 [label="1-0: 4
+Draw: 8
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422241712 -> 2664422241760 [label="c5"];
+2664422241760 [label="1-0: 4
+Draw: 8
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664422241760 -> 2664422241808 [label="c3"];
+2664422241808 [label="1-0: 4
+Draw: 8
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422241808 -> 2664422241856 [label="Nc6"];
+2664422241856 [label="1-0: 3
+Draw: 7
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664422241856 -> 2664422241904 [label="Nf3"];
+2664422241904 [label="1-0: 2
+Draw: 7
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422241904 -> 2664422241952 [label="Qb6"];
+2664422241952 [label="1-0: 2
+Draw: 3
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664422241904 [label="1-0: 2
+Draw: 7
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422241904 -> 2664360168464 [label="Bd7"];
+2664360168464 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664422241856 [label="1-0: 3
+Draw: 7
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664422241856 -> 2664358364688 [label="Ne2"];
+2664358364688 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358364688 -> 2664358364736 [label="Nh6"];
+2664358364736 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664422241808 [label="1-0: 4
+Draw: 8
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664422241808 -> 2664361794752 [label="Qb6"];
+2664361794752 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664361794752 -> 2664361794800 [label="Nf3"];
+2664361794800 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361794800 -> 2664361794848 [label="Nc6"];
+2664361794848 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 [label="1-0: 35
+Draw: 61
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537344 -> 2664421534032 [label="exd5"];
+2664421534032 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421534032 -> 2664421533984 [label="exd5"];
+2664421533984 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421533984 -> 2664421533936 [label="Nf3"];
+2664421533936 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421533936 -> 2664421533888 [label="Nd7"];
+2664421533888 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421533888 -> 2664421533840 [label="c4"];
+2664421533840 [label="1-0: 1
+Draw: 0
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421533840 -> 2664421533792 [label="Bb4+"];
+2664421533792 [label="1-0: 1
+Draw: 0
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421533888 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421533888 -> 2664421526544 [label="Bd3"];
+2664421526544 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421526544 -> 2664421526496 [label="Bd6"];
+2664421526496 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537680 [label="1-0: 37
+Draw: 67
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537680 -> 2664421899952 [label="Qe2"];
+2664421899952 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421899952 -> 2664421900000 [label="c5"];
+2664421900000 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421900000 -> 2664421900048 [label="Nf3"];
+2664421900048 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421900048 -> 2664421900096 [label="Nc6"];
+2664421900096 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421900096 -> 2664421900144 [label="g3"];
+2664421900144 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421900144 -> 2664421900192 [label="g6"];
+2664421900192 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421900192 -> 2664421900240 [label="Bg2"];
+2664421900240 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421900240 -> 2664422064192 [label="Bg7"];
+2664422064192 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421900000 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421900000 -> 2664415849984 [label="g3"];
+2664415849984 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664415849984 -> 2664415849696 [label="Nc6"];
+2664415849696 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664415849696 -> 2664415850704 [label="Bg2"];
+2664415850704 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664415850704 -> 2664415849792 [label="d5"];
+2664415849792 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664415849792 -> 2664415846288 [label="d3"];
+2664415846288 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664415846288 -> 2664415850416 [label="Nf6"];
+2664415850416 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664415846288 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664415846288 -> 2664415596496 [label="Bd6"];
+2664415596496 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537680 [label="1-0: 37
+Draw: 67
+0-1: 10", fillcolor="white", fontcolor="black", style="filled"];
+2664421537680 -> 2664356909776 [label="Nc3"];
+2664356909776 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356909776 -> 2664356909824 [label="d5"];
+2664356909824 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664356909824 -> 2664356909872 [label="d4"];
+2664356909872 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356909872 -> 2664356909920 [label="Nf6"];
+2664356909920 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664356909920 -> 2664356909968 [label="e5"];
+2664356909968 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356909968 -> 2664356910016 [label="Nfd7"];
+2664356910016 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664356910016 -> 2664356910064 [label="Nce2"];
+2664356910064 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664356910064 -> 2664356910112 [label="c5"];
+2664356910112 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537824 [label="1-0: 38
+Draw: 70
+0-1: 10", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537824 -> 2664358904352 [label="Nf6"];
+2664358904352 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358904352 -> 2664358904400 [label="Nc3"];
+2664358904400 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358904400 -> 2664358904448 [label="d5"];
+2664358904448 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358904448 -> 2664358904496 [label="e5"];
+2664358904496 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358904496 -> 2664358904544 [label="Nfd7"];
+2664358904544 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358904544 -> 2664358904592 [label="f4"];
+2664358904592 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358904592 -> 2664358904640 [label="e6"];
+2664358904640 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358904640 -> 2664358904688 [label="Nf3"];
+2664358904688 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358904688 -> 2664358904736 [label="c5"];
+2664358904736 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421537824 [label="1-0: 38
+Draw: 70
+0-1: 10", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421537824 -> 2664359815552 [label="d5"];
+2664359815552 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359815552 -> 2664359815600 [label="exd5"];
+2664359815600 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359815600 -> 2664359815648 [label="e6"];
+2664359815648 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359815648 -> 2664359815696 [label="d4"];
+2664359815696 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359815696 -> 2664359815744 [label="exd5"];
+2664359815744 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359815744 -> 2664359815792 [label="Nf3"];
+2664359815792 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359815792 -> 2664359815840 [label="Nf6"];
+2664359815840 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359815840 -> 2664359815888 [label="Bd3"];
+2664359815888 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359815888 -> 2664359815936 [label="Nc6"];
+2664359815936 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664416168208 [label="1-0: 0
+Draw: 0
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664416168208 -> 2664357446080 [label="d4"];
+2664357446080 [label="1-0: 4
+Draw: 7
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446080 -> 2664357446128 [label="e6"];
+2664357446128 [label="1-0: 3
+Draw: 4
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446128 -> 2664357446176 [label="e4"];
+2664357446176 [label="1-0: 3
+Draw: 4
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446176 -> 2664357446224 [label="d5"];
+2664357446224 [label="1-0: 3
+Draw: 4
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446224 -> 2664357446272 [label="Nc3"];
+2664357446272 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446272 -> 2664357446320 [label="Nf6"];
+2664357446320 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446320 -> 2664357446368 [label="Bg5"];
+2664357446368 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446368 -> 2664357446416 [label="Bb4"];
+2664357446416 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446416 -> 2664357446464 [label="e5"];
+2664357446464 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446464 -> 2664357446512 [label="h6"];
+2664357446512 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446224 [label="1-0: 3
+Draw: 4
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446224 -> 2664360526896 [label="e5"];
+2664360526896 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360526896 -> 2664360526944 [label="c5"];
+2664360526944 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360526944 -> 2664360526992 [label="c3"];
+2664360526992 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360526992 -> 2664360527040 [label="Nc6"];
+2664360527040 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664360527040 -> 2664360527088 [label="Nf3"];
+2664360527088 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664360527088 -> 2664360527136 [label="cxd4"];
+2664360527136 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664357446224 [label="1-0: 3
+Draw: 4
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664357446224 -> 2664361434688 [label="Nd2"];
+2664361434688 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361434688 -> 2664361434736 [label="c5"];
+2664361434736 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664361434736 -> 2664361434784 [label="Ngf3"];
+2664361434784 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361434784 -> 2664361434832 [label="Nc6"];
+2664361434832 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664361434832 -> 2664361434880 [label="exd5"];
+2664361434880 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664361434880 -> 2664361434928 [label="exd5"];
+2664361434928 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664357446080 [label="1-0: 4
+Draw: 7
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664357446080 -> 2664358915632 [label="d5"];
+2664358915632 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915632 -> 2664358915680 [label="e4"];
+2664358915680 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358915680 -> 2664358915728 [label="e6"];
+2664358915728 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915728 -> 2664358915776 [label="Nd2"];
+2664358915776 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358915776 -> 2664358915824 [label="Be7"];
+2664358915824 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915824 -> 2664358915872 [label="Bd3"];
+2664358915872 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358915872 -> 2664358915920 [label="c5"];
+2664358915920 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915920 -> 2664358915968 [label="dxc5"];
+2664358915968 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664358915968 -> 2664358916016 [label="Nf6"];
+2664358916016 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915632 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664358915632 -> 2664359450400 [label="Nc3"];
+2664359450400 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359450400 -> 2664359450448 [label="e6"];
+2664359450448 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359450448 -> 2664359450496 [label="e4"];
+2664359450496 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359450496 -> 2664359450544 [label="Bb4"];
+2664359450544 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359450544 -> 2664359450592 [label="e5"];
+2664359450592 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359450592 -> 2664359450640 [label="c5"];
+2664359450640 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664359450640 -> 2664359450688 [label="dxc5"];
+2664359450688 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664359450688 -> 2664359450736 [label="Ne7"];
+2664359450736 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664416168208 [label="Opening: French
+ Number of games: 130", fillcolor="white", fontcolor="black", style="filled"];
+}

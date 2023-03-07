@@ -1,0 +1,398 @@
+digraph G {
+rankdir=LR;
+center=true;
+2664413379840 [label="1-0: 0
+Draw: 0
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379840 -> 2664413379600 [label="e4"];
+2664413379600 [label="1-0: 13
+Draw: 19
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413379600 -> 2664413379648 [label="c5"];
+2664413379648 [label="1-0: 13
+Draw: 19
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664413379648 -> 2664413379696 [label="Nf3"];
+2664413379696 [label="1-0: 12
+Draw: 14
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413379696 -> 2664413379936 [label="Nc6"];
+2664413379936 [label="1-0: 7
+Draw: 8
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 -> 2664413379984 [label="d4"];
+2664413379984 [label="1-0: 2
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413379984 -> 2664413380032 [label="cxd4"];
+2664413380032 [label="1-0: 2
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413380032 -> 2664413380080 [label="Nxd4"];
+2664413380080 [label="1-0: 2
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413380080 -> 2664413380128 [label="d6"];
+2664413380128 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413380128 -> 2664413380176 [label="c4"];
+2664413380176 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413380176 -> 2664413380224 [label="g6"];
+2664413380224 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413380080 [label="1-0: 2
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413380080 -> 2664413839760 [label="Nf6"];
+2664413839760 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413839760 -> 2664413839808 [label="Nc3"];
+2664413839808 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413839808 -> 2664413839856 [label="g6"];
+2664413839856 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413839808 [label="1-0: 1
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413839808 -> 2664420810496 [label="Qb6"];
+2664420810496 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 [label="1-0: 7
+Draw: 8
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 -> 2664413663664 [label="Bc4"];
+2664413663664 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413663664 -> 2664413663712 [label="e6"];
+2664413663712 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413663712 -> 2664413663760 [label="Nc3"];
+2664413663760 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413663760 -> 2664413663808 [label="Nf6"];
+2664413663808 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413663808 -> 2664413663856 [label="d4"];
+2664413663856 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413663856 -> 2664413663904 [label="d5"];
+2664413663904 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 [label="1-0: 7
+Draw: 8
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 -> 2664414009552 [label="Nc3"];
+2664414009552 [label="1-0: 3
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664414009552 -> 2664414009600 [label="e5"];
+2664414009600 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664414009600 -> 2664414009648 [label="Bc4"];
+2664414009648 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664414009648 -> 2664414009696 [label="Be7"];
+2664414009696 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664414009696 -> 2664414009744 [label="d3"];
+2664414009744 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664414009744 -> 2664414009792 [label="d6"];
+2664414009792 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664414009552 [label="1-0: 3
+Draw: 3
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664414009552 -> 2664421529328 [label="Nf6"];
+2664421529328 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421529328 -> 2664421529376 [label="Bb5"];
+2664421529376 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421529376 -> 2664421529424 [label="Qc7"];
+2664421529424 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421529424 -> 2664421529472 [label="O-O"];
+2664421529472 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421529472 -> 2664421529520 [label="Nd4"];
+2664421529520 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 [label="1-0: 7
+Draw: 8
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413379936 -> 2664420611488 [label="b3"];
+2664420611488 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420611488 -> 2664420611536 [label="d6"];
+2664420611536 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420611536 -> 2664420611584 [label="Bb2"];
+2664420611584 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420611584 -> 2664420611632 [label="Nf6"];
+2664420611632 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420611632 -> 2664420611680 [label="Nc3"];
+2664420611680 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420611680 -> 2664420611728 [label="g6"];
+2664420611728 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379696 [label="1-0: 12
+Draw: 14
+0-1: 2", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413379696 -> 2664413850848 [label="e6"];
+2664413850848 [label="1-0: 5
+Draw: 6
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 -> 2664413850896 [label="Nc3"];
+2664413850896 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413850896 -> 2664413850944 [label="Nc6"];
+2664413850944 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413850944 -> 2664413850992 [label="Bb5"];
+2664413850992 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413850992 -> 2664413851040 [label="Nd4"];
+2664413851040 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413851040 -> 2664413851088 [label="O-O"];
+2664413851088 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413851088 -> 2664413851136 [label="a6"];
+2664413851136 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413850896 [label="1-0: 2
+Draw: 1
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413850896 -> 2664420438080 [label="a6"];
+2664420438080 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664420438080 -> 2664420438128 [label="g3"];
+2664420438128 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420438128 -> 2664420438176 [label="b5"];
+2664420438176 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664420438176 -> 2664420438224 [label="Bg2"];
+2664420438224 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420438224 -> 2664420438272 [label="Bb7"];
+2664420438272 [label="1-0: 1
+Draw: 0
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 [label="1-0: 5
+Draw: 6
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 -> 2664420426848 [label="d3"];
+2664420426848 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420426848 -> 2664420426896 [label="Nc6"];
+2664420426896 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420426896 -> 2664420426944 [label="g3"];
+2664420426944 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420426944 -> 2664420426992 [label="d5"];
+2664420426992 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420426992 -> 2664420427040 [label="Nbd2"];
+2664420427040 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420427040 -> 2664420427088 [label="g6"];
+2664420427088 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420426992 [label="1-0: 2
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420426992 -> 2664420969680 [label="Qe2"];
+2664420969680 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420969680 -> 2664420969728 [label="Nge7"];
+2664420969728 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 [label="1-0: 5
+Draw: 6
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 -> 2664420976592 [label="g3"];
+2664420976592 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420976592 -> 2664420976640 [label="d5"];
+2664420976640 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420976640 -> 2664420976688 [label="exd5"];
+2664420976688 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420976688 -> 2664420976736 [label="exd5"];
+2664420976736 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664420976736 -> 2664420976784 [label="Bg2"];
+2664420976784 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664420976784 -> 2664420976832 [label="Nc6"];
+2664420976832 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 [label="1-0: 5
+Draw: 6
+0-1: 1", fillcolor="white", fontcolor="black", style="filled"];
+2664413850848 -> 2664421149712 [label="b3"];
+2664421149712 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421149712 -> 2664421149760 [label="b6"];
+2664421149760 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421149760 -> 2664421149808 [label="Bd3"];
+2664421149808 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421149808 -> 2664421149856 [label="d6"];
+2664421149856 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421149856 -> 2664421149904 [label="Bb5+"];
+2664421149904 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421149904 -> 2664421149952 [label="Nd7"];
+2664421149952 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421149904 [label="1-0: 0
+Draw: 2
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421149904 -> 2664421157152 [label="Bd7"];
+2664421157152 [label="1-0: 0
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379648 [label="1-0: 13
+Draw: 19
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664413379648 -> 2664413479840 [label="h3"];
+2664413479840 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413479840 -> 2664413479888 [label="Nc6"];
+2664413479888 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413479888 -> 2664413479936 [label="Nf3"];
+2664413479936 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413479936 -> 2664413479984 [label="g6"];
+2664413479984 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413479984 -> 2664413480032 [label="Bb5"];
+2664413480032 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413480032 -> 2664413480080 [label="Bg7"];
+2664413480080 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413480080 -> 2664413479168 [label="O-O"];
+2664413479168 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664413479168 -> 2664413479216 [label="e5"];
+2664413479216 [label="1-0: 0
+Draw: 4
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379648 [label="1-0: 13
+Draw: 19
+0-1: 2", fillcolor="white", fontcolor="black", style="filled"];
+2664413379648 -> 2664421327776 [label="d3"];
+2664421327776 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421327776 -> 2664421327824 [label="e6"];
+2664421327824 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421327824 -> 2664421327872 [label="f4"];
+2664421327872 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421327872 -> 2664421327920 [label="d5"];
+2664421327920 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421327920 -> 2664421327968 [label="Be2"];
+2664421327968 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421327968 -> 2664421328016 [label="Nc6"];
+2664421328016 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664421328016 -> 2664421328064 [label="Nf3"];
+2664421328064 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="#2c2c2c", fontcolor="white", style="filled"];
+2664421328064 -> 2664421328112 [label="Bd6"];
+2664421328112 [label="1-0: 1
+Draw: 1
+0-1: 0", fillcolor="white", fontcolor="black", style="filled"];
+2664413379840 [label="Opening: Sicilian defence
+ Number of games: 34", fillcolor="white", fontcolor="black", style="filled"];
+}
