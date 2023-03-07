@@ -125,13 +125,21 @@ class PGNDocument:
         self.document.add_heading('3 Tree plotting', level=1)
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
+        
+        self.document.add_heading('3.1 Sicilian defence', level=2)
         list_of_games = self.database.get_games_with_opening("Sicilian defence")
         save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
-        self.document.add_picture("./graphs/tree_Sicilian.png", width=Inches(6.0))
+        self.document.add_picture("./graphs/tree_Sicilian.png", width=Inches(8.0))
 
+        self.document.add_heading('3.2 French defence', level=2)
         list_of_games = self.database.get_games_with_opening("French")
         save_tree_from_list_of_games(list_of_games, 10, "tree_French")
-        self.document.add_picture("./graphs/tree_French.png", width=Inches(6.0), height=Inches(6.0))
+        self.document.add_picture("./graphs/tree_French.png", width=Inches(8.0))
+
+        self.document.add_heading('3.3 Birds opening', level=2)
+        list_of_games = self.database.get_games_with_opening("Bird's opening")
+        save_tree_from_list_of_games(list_of_games, 3, "tree_Bird")
+        self.document.add_picture("./graphs/tree_Bird.png", width=Inches(8.0))
 
 
 

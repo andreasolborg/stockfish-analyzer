@@ -34,13 +34,14 @@ class TreeNode:
     def set_color(self, number):
         if number != None:
             if number % 2 == 0:
-                self.color = "white"
-                self.text_color = "black"
-            else:
                 self.color = "#2c2c2c"
                 self.text_color = "white"
+            else:
+                self.color = "white"
+                self.text_color = "black"
         else:
             self.color = "white"
+            self.text_color = "black"
     
     def get_color(self):
         return self.color
@@ -135,43 +136,42 @@ def main():
     database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
     # list_of_games = database.get_games_with_eco("A03")
-    # list_of_games = database.get_games_with_opening("Sicilian")
-    # save_tree_from_list_of_games(list_of_games, 5, "tree_A03")
+    list_of_games = database.get_games_with_opening("Sicilian defence")
+    save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
+
+    list_of_games = database.get_games_with_opening("French")
+    save_tree_from_list_of_games(list_of_games, 10, "tree_French")
+
+    list_of_games = database.get_games_with_opening("Bird's opening")
+    save_tree_from_list_of_games(list_of_games, 3, "tree_Bird's")
 
     # save_trees_from_list_of_games(list_of_games, 4, "tree")
 
 
 
     # You can either do this
-<<<<<<< HEAD:prototype/Tree.py
-    eco = database.get_eco_that_occurred_at_least_n_times(60)
-    for e in eco:
-        if eco[e] < 30:
-            depth = 5
-=======
-    #eco = database.get_eco_that_occurred_at_least_n_times(20)
-    #for e in eco:
-    #    if eco[e] < 30:
-    #        depth = 5
-    #    else:
-    #        depth = 10
-    #
-    #    list_of_games = database.get_games_with_eco(e)
-    #    save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(e))
+    # eco = database.get_eco_that_occurred_at_least_n_times(60)
+    # for e in eco:
+    #     if eco[e] < 30:
+    #         depth = 5
+    #     else:
+    #         depth = 10
+
+    #     list_of_games = database.get_games_with_eco(e)
+    #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(e))
 
 
 
-    # or this
-    openings = database.get_openings_that_occurred_at_least_n_times(100) # get openings that occurred at least 60 times as a dictionary
-    print(openings)
-    for opening in openings:
-        if openings[opening] < 200:
-            depth = 4
->>>>>>> 5356412e8fa2178d33db25bf4faf8e0f5028322f:app/Tree.py
-        else:
-            depth = 8
-        list_of_games = database.get_games_with_opening(opening)
-        save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
+    #  or this
+    # openings = database.get_openings_that_occurred_at_least_n_times(100) # get openings that occurred at least 60 times as a dictionary
+    # print(openings)
+    # for opening in openings:
+    #     if openings[opening] < 200:
+    #         depth = 4
+    #     else:
+    #         depth = 8
+    #     list_of_games = database.get_games_with_opening(opening)
+    #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
 
     
 if __name__ == "__main__":
