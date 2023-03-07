@@ -83,11 +83,13 @@ class OpeningTree:
                 move_number += 1
 
     def print_tree(self, depth, filename):
-        with open("./graphs/{}.dot".format(filename), "w") as dot_file:
+        file_path = "../graphs/{}.dot".format(filename)
+        
+        with open(file_path, 'w') as dot_file:
             dot_file.write("digraph G {\n")
             self.print_node(self.root, depth, 0, dot_file)
             dot_file.write("}\n")
-        # os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
+        
 
     def print_node(self, node, depth, current_depth, dot_file):
         if current_depth < depth:
@@ -100,12 +102,13 @@ class OpeningTree:
             
     
 def save_tree_to_file(tree, depth, filename):
-    if os.path.exists("./graphs/{}.dot".format(filename)):
-        os.remove("./graphs/{}.dot".format(filename))
-    if os.path.exists("./graphs/{}.png".format(filename)):
-        os.remove("./graphs/{}.png".format(filename))
+    if os.path.exists("../graphs/{}.dot".format(filename)):
+        os.remove("../graphs/{}.dot".format(filename))
+    if os.path.exists("../graphs/{}.png".format(filename)):
+        os.remove("../graphs/{}.png".format(filename))
     tree.print_tree(depth, filename)
-    os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename))
+    
+    os.system("dot -Tpng ../graphs/{}.dot -o ../graphs/{}.png".format(filename, filename))
 
 
 def save_mulitple_trees_from_openings(database, openings, depth, filename):
@@ -117,21 +120,22 @@ def save_mulitple_trees_from_openings(database, openings, depth, filename):
         os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
              
 def main():
+
     # database = PGNDatabase("./databases/sample.pgn")
-    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    database = PGNDatabase("../databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
     list_of_games = database.get_games_with_eco("A03")
     print(len(list_of_games))
     
     # You can either do this
     eco = database.get_eco_that_occurred_at_least_n_times(60)
+    
     save_mulitple_trees_from_openings(database, eco, 20, "eco")
     
     # Or this
     # openings = database.get_openings_that_occurred_at_least_n_times(60)
     # save_mulitple_trees_from_openings(database, openings, 20, "tree")
 
-    
     
 if __name__ == "__main__":
     main()
