@@ -57,7 +57,6 @@ class PGNDatabase:
                         break
         return games_with_move_sequence
     
-    
     # Checks on "OPENING" metadata
     def get_games_with_opening(self, opening):
         games_with_opening = []
@@ -85,14 +84,13 @@ class PGNDatabase:
         return openings_that_occurred_at_least_n_times
     
     
-
     def get_eco_that_occurred_at_least_n_times(self, n):
-        openings = self.get_statistics_on_eco()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
-        openings_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
-        for opening in openings:                            
-            if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
-                openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
-        return openings_that_occurred_at_least_n_times
+        ecos = self.get_statistics_on_eco()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
+        ecos_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
+        for eco in ecos:
+            if ecos[eco] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
+                ecos_that_occurred_at_least_n_times[eco] = ecos[eco]
+        return ecos_that_occurred_at_least_n_times
     
     
     # Checks on "ECO" metadata
@@ -145,7 +143,6 @@ class PGNDatabase:
         return stockfish_losses_as_white, stockfish_losses_as_black
 
 
-
     ##### TASK 8 ########
     def get_standard_deviation_of_moves(self, list_of_games):
         amount_of_moves = []
@@ -182,7 +179,6 @@ class PGNDatabase:
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
-
     def plot_plycount_distribution(self, list_of_games):
         plycount_distribution = self.get_move_count_distribution(list_of_games)
         plycount_distribution = self.sort_dict(plycount_distribution)
