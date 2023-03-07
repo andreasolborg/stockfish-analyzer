@@ -4,17 +4,18 @@ import matplotlib.pyplot as plt
 from docx import Document
 from docx.shared import Inches
 from PGNDatabase import PGNDatabase
-
+from Tree import *
 
 class PGNDocument:
     '''
     Encapsulates a single PGN document
     '''
-    def __init__(self, database):
+    def __init__(self, database, opening_occurrences):
         self.database = database
         self.document = Document()
+        self.opening_occurrences = opening_occurrences
         self.list_of_games = self.database.get_games()
-        self.list_of_drawed_games = self.database.get_draws()
+        self.list_of_drawed_games = self.database.get_draws(self.list_of_games)
 
 
     def create_document(self):
@@ -37,7 +38,6 @@ class PGNDocument:
         list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
         list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
         
-        # Todo --> get_stockfish_wins should not return two lists (or should it?)
         list_of_games_where_stockfish_wins_as_white, list_of_games_where_stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
         list_of_games_where_stockfish_losses_as_white, list_of_games_where_stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
         
@@ -51,7 +51,6 @@ class PGNDocument:
         self.document.add_heading('2. Statistics', level=2)
         self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
         # self.create_document_subsection_for_all_games()
-        
 
         self.document.add_heading('2.1 General results', level=1)
         self.document.add_paragraph('The following table shows the results of games.')
@@ -89,11 +88,62 @@ class PGNDocument:
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "./plots/3rdMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_losses)
+
+
+        ################## Openings table. Opening name, number of games, white wins, black wins, draws ############################
+        self.document.add_heading('3.1 Openings', level=2)
+        self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.opening_occurrences) + ' times.')
+        openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
+        print(openings)
+        table = self.document.add_table(rows=1, cols=5)
+        table.style = 'Table Grid'
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = 'Opening'
+        hdr_cells[1].text = 'White wins'
+        hdr_cells[2].text = 'Draws'
+        hdr_cells[3].text = 'Black wins'
+        hdr_cells[4].text = 'Total games'
+        for opening in openings:
+            list_of_games = self.database.get_games_with_opening(opening)
+            white_wins = self.database.get_white_wins(list_of_games)
+            black_wins = self.database.get_black_wins(list_of_games)
+            draws = self.database.get_draws(list_of_games)
+            row_cells = table.add_row().cells
+            row_cells[0].text = opening
+            row_cells[1].text = str(len(white_wins))
+            row_cells[2].text = str(len(draws))
+            row_cells[3].text = str(len(black_wins))
+            row_cells[4].text = str(len(list_of_games))
+
+        self.create_document_section_for_tree_plotting()
+
+
+
+
+    ############ TREE PLOTTING ############################
+    def create_document_section_for_tree_plotting(self):
+        self.document.add_heading('3 Tree plotting', level=1)
+        self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
+        self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
+        list_of_games = self.database.get_games_with_opening("Sicilian defence")
+        save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
+        self.document.add_picture("./graphs/tree_Sicilian.png", width=Inches(6.0))
+
+        list_of_games = self.database.get_games_with_opening("French")
+        save_tree_from_list_of_games(list_of_games, 10, "tree_French")
+        self.document.add_picture("./graphs/tree_French.png", width=Inches(6.0), height=Inches(6.0))
+
+
+
+
+
+
+
         
-        self.document.add_heading('2.3 Plycount distribution', level=2)
-        self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
-        self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
-        self.add_picture_of_plycount_distribution()
+        # self.document.add_heading('2.3 Plycount distribution', level=2)
+        # self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
+        # self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
+        # self.add_picture_of_plycount_distribution()
 
 
 
@@ -106,9 +156,8 @@ class PGNDocument:
         return 
 
     def create_document_result_table_for_all_games(self, games, draws):
-        
-        black_wins = self.database.get_black_wins()
-        white_wins = self.database.get_white_wins()
+        black_wins = self.database.get_black_wins(games)
+        white_wins = self.database.get_white_wins(games)
         table = self.document.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -232,8 +281,12 @@ class PGNDocument:
 
 def main():
     start_time = time.time()
-    database = PGNDatabase("./databases/big_database.pgn")
-    document = PGNDocument(database)
+    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    opening_occurrences = 40
+    document = PGNDocument(database, opening_occurrences)
+    
+
+
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
     document.create_document()
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")

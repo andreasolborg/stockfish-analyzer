@@ -125,7 +125,6 @@ class PGNDatabase:
                 stockfish_black.append(game)
         return stockfish_black
     
-    
     def get_stockfish_draws(self, list_of_drawed_games):
         stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
         stockfish_draws_as_black = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('Black')]

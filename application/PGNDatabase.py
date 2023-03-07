@@ -24,23 +24,23 @@ class PGNDatabase:
     def get_games(self):
         return self.games
     
-    def get_white_wins(self):
+    def get_white_wins(self, games):
         white_wins = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '1-0':
                 white_wins.append(game)
         return white_wins
     
-    def get_black_wins(self):
+    def get_black_wins(self, games):
         black_wins = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '0-1':
                 black_wins.append(game)
         return black_wins
     
-    def get_draws(self):
+    def get_draws(self, games):
         draws = []
-        for game in self.games:
+        for game in games:
             if game.lookup_meta_data('Result') == '1/2-1/2':
                 draws.append(game)
         return draws
