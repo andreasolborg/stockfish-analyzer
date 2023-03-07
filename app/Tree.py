@@ -97,11 +97,11 @@ class OpeningTree:
 
     def save_tree(self, depth, filename):
         print("Saving tree to file {}".format(filename)) # print to console
-        if os.path.exists("../graphs/{}.dot".format(filename)): # if file already exists, delete it
-            os.remove("../graphs/{}.dot".format(filename))
-        if os.path.exists("../graphs/{}.png".format(filename)): # if file already exists, delete it
-            os.remove("../graphs/{}.png".format(filename))
-        with open("../graphs/{}.dot".format(filename), "w") as dot_file: 
+        if os.path.exists("./graphs/{}.dot".format(filename)): # if file already exists, delete it
+            os.remove("./graphs/{}.dot".format(filename))
+        if os.path.exists("./graphs/{}.png".format(filename)): # if file already exists, delete it
+            os.remove("./graphs/{}.png".format(filename))
+        with open("./graphs/{}.dot".format(filename), "w") as dot_file: 
             dot_file.write("digraph G {\n")
             dot_file.write('rankdir=LR;\ncenter=true;\n') 
             self.print_node(self.root, depth, 0, dot_file) # recursive call to print nodes
@@ -110,10 +110,10 @@ class OpeningTree:
 
 
 def save_tree_to_file(tree, depth, filename):
-    if os.path.exists("../graphs/{}.dot".format(filename)):
-        os.remove("../graphs/{}.dot".format(filename))
-    if os.path.exists("../graphs/{}.png".format(filename)):
-        os.remove("../graphs/{}.png".format(filename))
+    if os.path.exists("./graphs/{}.dot".format(filename)):
+        os.remove("./graphs/{}.dot".format(filename))
+    if os.path.exists("./graphs/{}.png".format(filename)):
+        os.remove("./graphs/{}.png".format(filename))
     tree.save_tree(depth, filename)
 
 
@@ -132,7 +132,7 @@ def save_mulitple_trees_from_openings(database, openings, depth, filename):
 def main():
 
     # database = PGNDatabase("./databases/sample.pgn")
-    database = PGNDatabase("../databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     # database = PGNDatabase("./databases/100_games.pgn")
     # list_of_games = database.get_games_with_eco("A03")
     # list_of_games = database.get_games_with_opening("Sicilian")
@@ -166,9 +166,6 @@ def main():
     #     list_of_games = database.get_games_with_opening(opening)
     #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
 
-    
-
-    
     
 if __name__ == "__main__":
     main()
