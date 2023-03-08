@@ -148,42 +148,26 @@ class PGNDocument:
 
         return hyperlink
 
-
     ############ TREE PLOTTING ############################
     def create_document_section_for_tree_plotting(self):
+        self.document.add_page_break()
         self.document.add_heading('3 Tree plotting', level=1)
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
         
-        self.document.add_heading('3.1 Sicilian defence', level=2)
-        list_of_games = self.database.get_games_with_opening("Sicilian defence")
-        save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
-        p = self.document.add_paragraph('')
-        self.add_hyperlink(p, 'open full picture', "./graphs/tree_Sicilian.png")
-        self.document.add_picture("./graphs/tree_Sicilian.png", width=Inches(8.0))
-
-        self.document.add_heading('3.2 French defence', level=2)
-        list_of_games = self.database.get_games_with_opening("French")
-        save_tree_from_list_of_games(list_of_games, 10, "tree_French")
-        self.document.add_picture("./graphs/tree_French.png", width=Inches(8.0))
-
-        self.document.add_heading('3.3 Birds opening', level=2)
-        list_of_games = self.database.get_games_with_opening("Bird's opening")
-        save_tree_from_list_of_games(list_of_games, 3, "tree_Bird")
-        self.document.add_picture("./graphs/tree_Bird.png", width=Inches(8.0))
-
-
-
-
-
-
-
+        openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
+        self.document.add_page_break()
         
-        # self.document.add_heading('2.3 Plycount distribution', level=2)
-        # self.document.add_paragraph('The following graph shows the distribution of plycount in the database.')
-        # self.document.add_paragraph('The x-axis shows the plycount, and the y-axis shows the number of games with that plycount.')
-        # self.add_picture_of_plycount_distribution()
-
+        for opening in openings: 
+            self.document.add_heading(opening, level=2)
+            list_of_games = self.database.get_games_with_opening(opening)
+            opening_filename = opening.lower().replace(" ", "_").replace("'", "")
+            save_tree_from_list_of_games(list_of_games, 10, opening_filename)
+            p = self.document.add_paragraph('')
+            print("./graphs/ " + opening_filename + ".png")
+            self.add_hyperlink(p, 'open full picture', "./graphs/" + opening_filename + ".png")
+            self.document.add_picture("./graphs/" + opening_filename + ".png", height=Inches(7.4), width=Inches(6.3))
+            self.document.add_page_break()
 
 
     def create_document_section_for_all_games(self):
