@@ -168,11 +168,11 @@ class PGNDocument:
             self.document.add_heading(opening, level=2)
             list_of_games = self.database.get_database_with_opening(opening)
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
-            save_tree_from_list_of_games(list_of_games, 10, opening_filename)
+            save_tree_from_list_of_games(list_of_games, 8, opening_filename)
             p = self.document.add_paragraph('')
             print("./graphs/ " + opening_filename + ".png")
             self.add_hyperlink(p, 'open full picture', "./graphs/" + opening_filename + ".png")
-            self.document.add_picture("./graphs/" + opening_filename + ".png", width=Inches(6.3))
+            self.document.add_picture("./graphs/" + opening_filename + ".png", width=Inches(6))
             self.document.add_page_break()
 
     def create_document_section_for_all_games(self):
@@ -323,13 +323,18 @@ class PGNDocument:
 
 
 def main():
+
+    ## Todo: tree depth as input parameter.
+    ## If no depth is specified, we need to check if the occurences of the opening is above a certain threshold. If it is, we need to go deeper in the tree. Fixed size
+    ## Make main file
+
     start_time = time.time()
     database = PGNDatabase()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    opening_occurrences = 40
+    opening_occurrences = 20
 
 
-    inlcude_openings = ["Nimzo-Indian", "Sicilian defence","Ruy Lopez", "King's Indian"]
+    inlcude_openings = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
 
 
     #document = PGNDocument(database, opening_occurrences, inlcude_openings)
