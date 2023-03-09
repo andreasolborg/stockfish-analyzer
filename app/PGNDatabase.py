@@ -62,12 +62,19 @@ class PGNDatabase:
     def get_precentage_of_draws(self):
         return round((len(self.get_list_of_draws()) / len(self.get_list_of_games()))*100,2)
 
+
+
+    # endre til setter
+    # lage en stor setter for alle
+    # lage getters for variablene
     def get_list_of_stockfish_wins_as_white(self):
         stockfish_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
                 stockfish_wins.append(game)
         return stockfish_wins
+    
+
     
     def get_list_of_stockfish_wins_as_black(self):
         stockfish_wins = []
@@ -126,8 +133,14 @@ class PGNDatabase:
                 stockfish_black.append(game)
         return stockfish_black
 
+    def get_database_of_games_where_stockfish_wins_or_draws(self):
+        return PGNDatabase(self.get_list_of_stockfish_wins() + self.get_list_of_draws())
+  
+    def get_database_of_games_where_stockfish_wins(self):
+        return PGNDatabase(self.get_list_of_stockfish_wins())
 
-
+    def get_database_of_games_where_stockfish_losses(self):
+        return PGNDatabase(self.get_list_of_stockfish_losses())
 
     ## GETTERS FOR OPENINGS ##
 
@@ -144,6 +157,7 @@ class PGNDatabase:
     
 
     def get_database_with_opening(self, opening):
+        # TODO liste
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
@@ -201,16 +215,15 @@ class PGNDatabase:
         return openings
     
 
-    
-    def get_standard_deviation_of_moves(self, list_of_games):
+    def get_standard_deviation_of_moves(self):
         amount_of_moves = []
-        for game in list_of_games:
+        for game in self.games:
             amount_of_moves.append(len(game.get_moves()))
         return np.std(amount_of_moves)
 
-    def get_mean_number_of_moves(self, list_of_games):
+    def get_mean_number_of_moves(self):
         amount_of_moves = []
-        for game in list_of_games:
+        for game in self.games:
             amount_of_moves.append(len(game.get_moves()))
         return np.mean(amount_of_moves)
     

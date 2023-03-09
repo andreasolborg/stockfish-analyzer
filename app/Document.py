@@ -14,11 +14,15 @@ class PGNDocument:
     Encapsulates a single PGN document
     '''
     def __init__(self, database, opening_occurrences, include_openings):
+        
+        
         self.database = database
         self.document = Document()
         self.opening_occurrences = opening_occurrences
         self.include_openings = include_openings
         self.list_of_games = self.database.get_list_of_games()
+
+        # TODO: skriv i dokumentet hvorfor vi iterer over games 12,13 ganger mer enn vi trenger
 
         self.list_of_games = self.database.get_list_of_games()
         self.list_of_drawed_games = self.database.get_list_of_draws()
@@ -38,14 +42,15 @@ class PGNDocument:
         self.white_wins = self.database.get_list_of_white_wins()
         self.draws = self.database.get_list_of_draws()
 
+        self.database_of_games_where_stockfish_wins_or_draws = self.database.get_database_of_games_where_stockfish_wins_or_draws()
+        self.database_of_games_where_stockfish_wins = self.database.get_database_of_games_where_stockfish_wins()
+        self.database_of_games_where_stockfish_losses = self.database.get_database_of_games_where_stockfish_losses()
+
     def create_document(self):
         self.create_document_heading()
         self.create_document_body()
         self.create_document_conclusion()
         self.save_document()
-
-
-
 
 
     ## MAIN COMPONENTS ##
@@ -79,7 +84,7 @@ class PGNDocument:
         dictionary_for_first_plot = {"All games": self.list_of_games, "Games where Stockfish is white": self.list_of_games_where_stockfish_is_white, "Games where Stockfish is black": self.list_of_games_where_stockfish_is_black}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "./plots/1stMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for all games')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database)
 
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
@@ -87,8 +92,9 @@ class PGNDocument:
         dictionary_for_second_plot = {"Games where Stockfish won": self.list_of_games_where_stockfish_wins, "Games that ended in draw": self.list_of_drawed_games}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "./plots/2ndMoveCountCDPlot.png")
         
+
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games_where_stockfish_wins + self.list_of_drawed_games)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_wins_or_draws)
         self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
                                     
         self.document.add_heading('2.2.3 Stockfish loses', level=3)
@@ -96,7 +102,7 @@ class PGNDocument:
         dictionary_for_third_plot = {"Games where Stockfish lost": self.list_of_games_where_stockfish_losses}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "./plots/3rdMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games_where_stockfish_losses)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_losses)
 
         self.create_openings_table()
 
@@ -110,12 +116,6 @@ class PGNDocument:
         if os.path.exists('ChessDatabase.docx'):
             os.remove('ChessDatabase.docx') # Remove the file if it already exists to avoid an error
         self.document.save('ChessDatabase.docx')
-
-
-
-
-
-
 
 
     ## SUBCOMPONENTS ##
@@ -156,6 +156,8 @@ class PGNDocument:
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
         
+        # TODO: legg til funksjonalitet at man
+
         openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
         self.document.add_page_break()
 
@@ -273,7 +275,7 @@ class PGNDocument:
         
     # TODO: denne følger fremdeles gamle struktur, må oppdateres
     
-    def add_table_of_mean_and_standard_deviation_of_moves(self, list_of_games):
+    def add_table_of_mean_and_standard_deviation_of_moves(self, database):
         table = self.document.add_table(rows=1, cols=3)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -282,8 +284,8 @@ class PGNDocument:
         hdr_cells[2].text = 'Standard Deviation'
         row_cells = table.add_row().cells
         row_cells[0].text = 'Number of moves'
-        row_cells[1].text = str(round(self.database.get_mean_number_of_moves(list_of_games), 2))
-        row_cells[2].text = str(round(self.database.get_standard_deviation_of_moves(list_of_games), 2))
+        row_cells[1].text = str(round(database.get_mean_number_of_moves(), 2))
+        row_cells[2].text = str(round(database.get_standard_deviation_of_moves(), 2))
         
 
     ## HELPER FUNCTIONS ##
@@ -327,9 +329,13 @@ def main():
     opening_occurrences = 40
 
 
-    inlcude_openings = ["Nimzo-Indian", "Sicilian","Ruy Lopez", "King's Indian"]
-    document = PGNDocument(database, opening_occurrences, inlcude_openings)
+    inlcude_openings = ["Nimzo-Indian", "Sicilian defence","Ruy Lopez", "King's Indian"]
 
+
+    #document = PGNDocument(database, opening_occurrences, inlcude_openings)
+    print("WWWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
+    document = PGNDocument(database, opening_occurrences, inlcude_openings)
+    print("WWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
 
 
     print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
