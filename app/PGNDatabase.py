@@ -19,10 +19,6 @@ class PGNDatabase:
     '''
     Encapsulate all games parsed from a PGN file.
     '''
-    #def __init__(self, games=None, path):
-#
-    #    self.games = self.parse(path)  
-    #    self.path = path
 
     def __init__(self, games=None):
         if games is not None:
@@ -31,6 +27,7 @@ class PGNDatabase:
             self.games = []
 
 
+    ## BASIC GETTERS ##
 
     def get_games(self):
         return self.games
@@ -136,6 +133,10 @@ class PGNDatabase:
         return stockfish_black
 
 
+
+
+    ## GETTERS FOR OPENINGS ##
+
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []
         for game in self.games:
@@ -147,8 +148,9 @@ class PGNDatabase:
                         break
         return games_with_move_sequence
     
-    # Checks on "OPENING" metadata
-    def get_games_with_opening(self, opening):
+
+
+    def get_database_with_opening(self, opening):
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
@@ -157,8 +159,8 @@ class PGNDatabase:
 
         return PGNDatabase(games_with_opening)
 
-    # get_statistics_on_openings
-    def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
+
+    def get_opening_counts(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
         openings = {}
         for game in self.games:
             opening = game.lookup_meta_data('Opening')
@@ -169,14 +171,12 @@ class PGNDatabase:
         return openings
     
     def get_openings_that_occurred_at_least_n_times(self, n):
-        openings = self.get_statistics_on_openings()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
+        openings = self.get_opening_counts()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
         openings_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
         for opening in openings:                            
             if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
                 openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
         
-
-
         return openings_that_occurred_at_least_n_times
     
     

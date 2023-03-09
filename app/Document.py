@@ -20,6 +20,24 @@ class PGNDocument:
         self.include_openings = include_openings
         self.list_of_games = self.database.get_games()
 
+        self.list_of_games = self.database.get_games()
+        self.list_of_drawed_games = self.database.get_draws()
+        self.list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
+        self.list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
+        self.list_of_games_where_stockfish_wins = self.database.get_stockfish_wins()
+        self.list_of_games_where_stockfish_losses = self.database.get_stockfish_losses()  
+
+        self.stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
+        self.stockfish_wins_as_black = self.database.get_stockfish_wins_as_black()
+        self.stockfish_losses_as_white = self.database.get_stockfish_losses_as_white()
+        self.stockfish_losses_as_black = self.database.get_stockfish_losses_as_black()
+        self.stockfish_draws_as_white = self.database.get_stockfish_draws_as_white()
+        self.stockfish_draws_as_black = self.database.get_stockfish_draws_as_black()
+
+        self.black_wins = self.database.get_black_wins()
+        self.white_wins = self.database.get_white_wins()
+        self.draws = self.database.get_draws()
+
     def create_document(self):
         self.create_document_heading()
         self.create_document_body()
@@ -33,26 +51,7 @@ class PGNDocument:
         self.document.add_heading('1. Introduction', level=1)
         self.document.add_paragraph('This document is a summary of the chess database.')
 
-    
     def create_document_body(self):
-        list_of_games = self.database.get_games()
-        list_of_drawed_games = self.database.get_draws()
-        list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
-        list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
-        list_of_games_where_stockfish_wins = self.database.get_stockfish_wins()
-        list_of_games_where_stockfish_losses = self.database.get_stockfish_losses()
-
-        #list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
-        #list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
-
-        #list_of_games_where_stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
-        #list_of_games_where_stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
-        #list_of_games_where_stockfish_losses_as_white 
-        #list_of_games_where_stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
-        
-
-
-
         self.create_document_introduction()
         # self.create_document_section_for_all_games()
         # Should include a table with game count for each player
@@ -62,7 +61,7 @@ class PGNDocument:
 
         self.document.add_heading('2.1 General results', level=1)
         self.document.add_paragraph('The following table shows the results of games.')
-        self.create_document_result_table_for_all_games(list_of_games, list_of_drawed_games)
+        self.create_document_result_table_for_all_games()
 
         self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
         self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
@@ -75,32 +74,32 @@ class PGNDocument:
         self.document.add_heading('2.2.1 All games', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
         # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black
-        dictionary_for_first_plot = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black}
+        dictionary_for_first_plot = {"All games": self.list_of_games, "Games where Stockfish is white": self.list_of_games_where_stockfish_is_white, "Games where Stockfish is black": self.list_of_games_where_stockfish_is_black}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "./plots/1stMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for all games')
-        self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games)
 
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
         # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
-        dictionary_for_second_plot = {"Games where Stockfish won": list_of_games_where_stockfish_wins, "Games that ended in draw": list_of_drawed_games}
+        dictionary_for_second_plot = {"Games where Stockfish won": self.list_of_games_where_stockfish_wins, "Games that ended in draw": self.list_of_drawed_games}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "./plots/2ndMoveCountCDPlot.png")
         
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
-        self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_wins + list_of_drawed_games)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games_where_stockfish_wins + self.list_of_drawed_games)
         self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
                                     
         self.document.add_heading('2.2.3 Stockfish loses', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish lost.')
-        dictionary_for_third_plot = {"Games where Stockfish lost": list_of_games_where_stockfish_losses}
+        dictionary_for_third_plot = {"Games where Stockfish lost": self.list_of_games_where_stockfish_losses}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "./plots/3rdMoveCountCDPlot.png")
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
-        self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_losses)
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.list_of_games_where_stockfish_losses)
 
-
+        self.create_openings_table()
 
         self.create_document_section_for_tree_plotting()
-        self.create_openings_table()
+        
 
     def create_openings_table(self):
         self.document.add_heading('3.1 Openings', level=2)
@@ -116,7 +115,7 @@ class PGNDocument:
         hdr_cells[3].text = 'Black wins'
         hdr_cells[4].text = 'Total games'
         for opening in openings:
-            opening_database = self.database.get_games_with_opening(opening)
+            opening_database = self.database.get_database_with_opening(opening)
             white_wins = opening_database.get_white_wins()
             black_wins = opening_database.get_black_wins()
             draws = opening_database.get_draws()
@@ -172,7 +171,7 @@ class PGNDocument:
                 continue
 
             self.document.add_heading(opening, level=2)
-            list_of_games = self.database.get_games_with_opening(opening)
+            list_of_games = self.database.get_database_with_opening(opening)
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
             save_tree_from_list_of_games(list_of_games, 10, opening_filename)
             p = self.document.add_paragraph('')
@@ -189,9 +188,7 @@ class PGNDocument:
     def create_document_subsection_for_all_games(self):
         return 
 
-    def create_document_result_table_for_all_games(self, games, draws):
-        black_wins = self.database.get_black_wins()
-        white_wins = self.database.get_white_wins()
+    def create_document_result_table_for_all_games(self):
         table = self.document.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -201,9 +198,9 @@ class PGNDocument:
         hdr_cells[3].text = 'Black wins'
         row_cells = table.add_row().cells
         row_cells[0].text = 'Total'
-        row_cells[1].text = str(len(white_wins))
-        row_cells[2].text = str(len(draws))
-        row_cells[3].text = str(len(black_wins))
+        row_cells[1].text = str(len(self.white_wins))
+        row_cells[2].text = str(len(self.draws))
+        row_cells[3].text = str(len(self.black_wins))
         row_cells = table.add_row().cells
         row_cells[0].text = 'Percentage'
         row_cells[1].text = str(self.database.get_precentage_of_white_wins()) + '%'
@@ -212,23 +209,6 @@ class PGNDocument:
 
 
     def create_document_result_table_with_stockfish(self):
-        stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
-        stockfish_wins_as_black = self.database.get_stockfish_wins_as_black()
-        stockfish_losses_as_white = self.database.get_stockfish_losses_as_white()
-        stockfish_losses_as_black = self.database.get_stockfish_losses_as_black()
-        stockfish_draws_as_white = self.database.get_stockfish_draws_as_white()
-        stockfish_draws_as_black = self.database.get_stockfish_draws_as_black()
-
-        """  
-        print(stockfish_wins_as_white)
-        print(stockfish_wins_as_black)
-        print(stockfish_losses_as_white)
-        print(stockfish_losses_as_black)
-        print(stockfish_draws_as_white)
-        print(stockfish_draws_as_black) 
-        """
-
-
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -239,39 +219,35 @@ class PGNDocument:
         hdr_cells[4].text = 'Winning Percentage'
         row_cells = table.add_row().cells
         row_cells[0].text = 'Starts as white'
-        row_cells[1].text = str(len(stockfish_wins_as_white))
-        row_cells[2].text = str(len(stockfish_draws_as_white))
-        row_cells[3].text = str(len(stockfish_losses_as_white))
-        row_cells[4].text = str(round((len(stockfish_wins_as_white) / (len(stockfish_wins_as_white) + len(stockfish_draws_as_white) + len(stockfish_losses_as_white))) * 100, 2)) + '%'
+        row_cells[1].text = str(len(self.stockfish_wins_as_white))
+        row_cells[2].text = str(len(self.stockfish_draws_as_white))
+        row_cells[3].text = str(len(self.stockfish_losses_as_white))
+        row_cells[4].text = str(round((len(self.stockfish_wins_as_white) / (len(self.stockfish_wins_as_white) + len(self.stockfish_draws_as_white) + len(self.stockfish_losses_as_white))) * 100, 2)) + '%'
         row_cells = table.add_row().cells
         row_cells[0].text = 'Starts as black'
-        row_cells[1].text = str(len(stockfish_wins_as_black))
-        row_cells[2].text = str(len(stockfish_draws_as_black))
-        row_cells[3].text = str(len(stockfish_losses_as_black))
-        row_cells[4].text = str(round((len(stockfish_wins_as_black) / (len(stockfish_wins_as_black) + len(stockfish_draws_as_black) + len(stockfish_losses_as_black))) * 100, 2)) + '%'
+        row_cells[1].text = str(len(self.stockfish_wins_as_black))
+        row_cells[2].text = str(len(self.stockfish_draws_as_black))
+        row_cells[3].text = str(len(self.stockfish_losses_as_black))
+        row_cells[4].text = str(round((len(self.stockfish_wins_as_black) / (len(self.stockfish_wins_as_black) + len(self.stockfish_draws_as_black) + len(self.stockfish_losses_as_black))) * 100, 2)) + '%'
         row_cells = table.add_row().cells
         row_cells[0].text = 'Total'
-        row_cells[1].text = str(len(stockfish_wins_as_white) + len(stockfish_wins_as_black))
-        row_cells[2].text = str(len(stockfish_draws_as_white) + len(stockfish_draws_as_black))
-        row_cells[3].text = str(len(stockfish_losses_as_white) + len(stockfish_losses_as_black))
-        row_cells[4].text = str(round(((len(stockfish_wins_as_white) + len(stockfish_wins_as_black)) / len(self.list_of_games)) * 100, 2)) + '%'
-
+        row_cells[1].text = str(len(self.stockfish_wins_as_white) + len(self.stockfish_wins_as_black))
+        row_cells[2].text = str(len(self.stockfish_draws_as_white) + len(self.stockfish_draws_as_black))
+        row_cells[3].text = str(len(self.stockfish_losses_as_white) + len(self.stockfish_losses_as_black))
+        row_cells[4].text = str(round(((len(self.stockfish_wins_as_white) + len(self.stockfish_wins_as_black)) / len(self.list_of_games)) * 100, 2)) + '%'
 
     def add_picture_of_plycount_distribution(self):
-        list_of_games = self.database.get_games()
-        self.database.plot_plycount_distribution(list_of_games)
+        self.database.plot_plycount_distribution(self.list_of_games)
         self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
 
-
-    def create_document_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
+    def create_document_moves_distribution(self):
         self.document.add_heading('2.4 Moves distribution', level=2)
         self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
         self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-        self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_white, "Stockfish as white")
-        self.database.plot_move_count_distribution(list_of_games_where_stockfish_is_black, "Stockfish as black")
-        self.database.plot_move_count_distribution(list_of_games, "All games")
+        self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_white, "Stockfish as white")
+        self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_black, "Stockfish as black")
+        self.database.plot_move_count_distribution(self.list_of_games, "All games")
         self.document.add_picture('./plots/move_count_distribution.png', width=Inches(6))
-
 
     def add_picture_of_cumulative_moves_distribution_for_multiple_games(self, dict, filename): # dict is a dictionary with the key being the name of the list of games, and the value being the list of games
         fig, ax = plt.subplots()
@@ -281,10 +257,8 @@ class PGNDocument:
         plt.savefig(filename)
         self.document.add_picture(filename, width=Inches(6))
         
-
-
     ### This is the old version of the function above, which only plots one list of games at a time ###
-    def create_document_cumulative_moves_distribution(self, list_of_games, list_of_games_where_stockfish_is_white, list_of_games_where_stockfish_is_black):
+    def create_document_cumulative_moves_distribution(self):
         # self.database.clear_plot()
         self.document.add_heading('2.4 Moves distribution', level=2)
         self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
@@ -292,9 +266,9 @@ class PGNDocument:
         fig, ax = plt.subplots()
         fig.set_size_inches(10,5)
         
-        self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_white, "Stockfish as white", axis=ax)
-        self.database.plot_move_count_histogram_cumulative(list_of_games_where_stockfish_is_black, "Stockfish as black", axis=ax)
-        self.database.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
+        self.database.plot_move_count_histogram_cumulative(self.list_of_games_where_stockfish_is_white, "Stockfish as white", axis=ax)
+        self.database.plot_move_count_histogram_cumulative(self.list_of_games_where_stockfish_is_black, "Stockfish as black", axis=ax)
+        self.database.plot_move_count_histogram_cumulative(self.list_of_games, "All games", axis=ax)
         plt.legend()
         self.database.save_histogram('move_count_distribution.png')
         self.document.add_picture('move_count_distribution.png', width=Inches(6))
@@ -316,11 +290,9 @@ class PGNDocument:
         row_cells[1].text = str(round(self.database.get_mean_number_of_moves(list_of_games), 2))
         row_cells[2].text = str(round(self.database.get_standard_deviation_of_moves(list_of_games), 2))
         
-
     def create_document_conclusion(self):
         self.document.add_heading('3. Conclusion', level=1)
         self.document.add_paragraph('This document is a summary of the chess database.')
-
 
     def save_document(self):
         if os.path.exists('ChessDatabase.docx'):
