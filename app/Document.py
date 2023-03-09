@@ -8,6 +8,7 @@ from Tree import *
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
 
+
 class PGNDocument:
     '''
     Encapsulates a single PGN document
@@ -18,8 +19,6 @@ class PGNDocument:
         self.opening_occurrences = opening_occurrences
         self.include_openings = include_openings
         self.list_of_games = self.database.get_games()
-        self.list_of_drawed_games = self.database.get_draws(self.list_of_games)
-
 
     def create_document(self):
         self.create_document_heading()
@@ -36,16 +35,22 @@ class PGNDocument:
 
     
     def create_document_body(self):
-        list_of_games = self.list_of_games
-        list_of_drawed_games = self.list_of_drawed_games
+        list_of_games = self.database.get_games()
+        list_of_drawed_games = self.database.get_draws()
         list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
         list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
+        list_of_games_where_stockfish_wins = self.database.get_stockfish_wins()
+        list_of_games_where_stockfish_losses = self.database.get_stockfish_losses()
 
-        list_of_games_where_stockfish_wins_as_white, list_of_games_where_stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
-        list_of_games_where_stockfish_losses_as_white, list_of_games_where_stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
+        #list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
+        #list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
+
+        #list_of_games_where_stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
+        #list_of_games_where_stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
+        #list_of_games_where_stockfish_losses_as_white 
+        #list_of_games_where_stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
         
-        list_of_games_where_stockfish_wins = list_of_games_where_stockfish_wins_as_white + list_of_games_where_stockfish_wins_as_black
-        list_of_games_where_stockfish_losses = list_of_games_where_stockfish_losses_as_white + list_of_games_where_stockfish_losses_as_black
+
 
 
         self.create_document_introduction()
@@ -62,7 +67,7 @@ class PGNDocument:
         self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
         self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
         self.document.add_paragraph("def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):")
-        self.create_document_result_table_with_stockfish(list_of_games, list_of_drawed_games)
+        self.create_document_result_table_with_stockfish()
 
         self.document.add_heading('2.2 Move count distributions', level=2)
         self.document.add_paragraph('The following graphs shows the distribution of the amount moves in the given set of games.')
@@ -82,7 +87,7 @@ class PGNDocument:
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "./plots/2ndMoveCountCDPlot.png")
         
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
-        self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_wins)
+        self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_wins + list_of_drawed_games)
         self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
                                     
         self.document.add_heading('2.2.3 Stockfish loses', level=3)
@@ -93,11 +98,15 @@ class PGNDocument:
         self.add_table_of_mean_and_standard_deviation_of_moves(list_of_games_where_stockfish_losses)
 
 
-        ################## Openings table. Opening name, number of games, white wins, black wins, draws ############################
+
+        self.create_document_section_for_tree_plotting()
+        self.create_openings_table()
+
+    def create_openings_table(self):
         self.document.add_heading('3.1 Openings', level=2)
         self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.opening_occurrences) + ' times.')
         openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
-        print(openings)
+
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -107,18 +116,17 @@ class PGNDocument:
         hdr_cells[3].text = 'Black wins'
         hdr_cells[4].text = 'Total games'
         for opening in openings:
-            list_of_games = self.database.get_games_with_opening(opening)
-            white_wins = self.database.get_white_wins(list_of_games)
-            black_wins = self.database.get_black_wins(list_of_games)
-            draws = self.database.get_draws(list_of_games)
+            opening_database = self.database.get_games_with_opening(opening)
+            white_wins = opening_database.get_white_wins()
+            black_wins = opening_database.get_black_wins()
+            draws = opening_database.get_draws()
+            list_of_games = opening_database.get_games()
             row_cells = table.add_row().cells
             row_cells[0].text = opening
             row_cells[1].text = str(len(white_wins))
             row_cells[2].text = str(len(draws))
             row_cells[3].text = str(len(black_wins))
             row_cells[4].text = str(len(list_of_games))
-
-        self.create_document_section_for_tree_plotting()
 
     def add_hyperlink(self, paragraph, text, url):
     # This gets access to the document.xml.rels file and gets a new relation id value
@@ -170,7 +178,7 @@ class PGNDocument:
             p = self.document.add_paragraph('')
             print("./graphs/ " + opening_filename + ".png")
             self.add_hyperlink(p, 'open full picture', "./graphs/" + opening_filename + ".png")
-            self.document.add_picture("./graphs/" + opening_filename + ".png", height=Inches(7.4), width=Inches(6.3))
+            self.document.add_picture("./graphs/" + opening_filename + ".png", width=Inches(6.3))
             self.document.add_page_break()
 
     def create_document_section_for_all_games(self):
@@ -182,8 +190,8 @@ class PGNDocument:
         return 
 
     def create_document_result_table_for_all_games(self, games, draws):
-        black_wins = self.database.get_black_wins(games)
-        white_wins = self.database.get_white_wins(games)
+        black_wins = self.database.get_black_wins()
+        white_wins = self.database.get_white_wins()
         table = self.document.add_table(rows=1, cols=4)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -198,15 +206,29 @@ class PGNDocument:
         row_cells[3].text = str(len(black_wins))
         row_cells = table.add_row().cells
         row_cells[0].text = 'Percentage'
-        row_cells[1].text = str(round((len(white_wins) / len(games)) * 100, 2)) + '%'
-        row_cells[2].text = str(round((len(draws) / len(games)) * 100, 2)) + '%'
-        row_cells[3].text = str(round((len(black_wins) / len(games)) * 100, 2)) + '%'
+        row_cells[1].text = str(self.database.get_precentage_of_white_wins()) + '%'
+        row_cells[2].text = str(self.database.get_precentage_of_draws()) + '%'
+        row_cells[3].text = str(self.database.get_precentage_of_black_wins()) + '%'
 
 
-    def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):
-        stockfish_wins_as_white, stockfish_wins_as_black = self.database.get_stockfish_wins(list_of_games)
-        stockfish_losses_as_white, stockfish_losses_as_black = self.database.get_stockfish_losses(list_of_games)
-        stockfish_draws_as_white, stockfish_draws_as_black = self.database.get_stockfish_draws(list_of_drawed_games)
+    def create_document_result_table_with_stockfish(self):
+        stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
+        stockfish_wins_as_black = self.database.get_stockfish_wins_as_black()
+        stockfish_losses_as_white = self.database.get_stockfish_losses_as_white()
+        stockfish_losses_as_black = self.database.get_stockfish_losses_as_black()
+        stockfish_draws_as_white = self.database.get_stockfish_draws_as_white()
+        stockfish_draws_as_black = self.database.get_stockfish_draws_as_black()
+
+        """  
+        print(stockfish_wins_as_white)
+        print(stockfish_wins_as_black)
+        print(stockfish_losses_as_white)
+        print(stockfish_losses_as_black)
+        print(stockfish_draws_as_white)
+        print(stockfish_draws_as_black) 
+        """
+
+
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -232,7 +254,7 @@ class PGNDocument:
         row_cells[1].text = str(len(stockfish_wins_as_white) + len(stockfish_wins_as_black))
         row_cells[2].text = str(len(stockfish_draws_as_white) + len(stockfish_draws_as_black))
         row_cells[3].text = str(len(stockfish_losses_as_white) + len(stockfish_losses_as_black))
-        row_cells[4].text = str(round(((len(stockfish_wins_as_white) + len(stockfish_wins_as_black)) / len(list_of_games)) * 100, 2)) + '%'
+        row_cells[4].text = str(round(((len(stockfish_wins_as_white) + len(stockfish_wins_as_black)) / len(self.list_of_games)) * 100, 2)) + '%'
 
 
     def add_picture_of_plycount_distribution(self):
@@ -307,10 +329,12 @@ class PGNDocument:
 
 def main():
     start_time = time.time()
-    database = PGNDatabase("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    
+    database = PGNDatabase()
+    database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     opening_occurrences = 40
-    inlcude_openings = ["Nimzo-Indian", "Ruy Lopez", "King's Indian"]
+
+
+    inlcude_openings = ["Nimzo-Indian", "Sicilian","Ruy Lopez", "King's Indian"]
     document = PGNDocument(database, opening_occurrences, inlcude_openings)
 
 

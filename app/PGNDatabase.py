@@ -13,38 +13,129 @@ import matplotlib.pyplot as plt
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
+# ikke denne løsningen egt
+
 class PGNDatabase:
     '''
     Encapsulate all games parsed from a PGN file.
     '''
-    def __init__(self, path):
-        self.games = self.parse(path)  
-        self.path = path
+    #def __init__(self, games=None, path):
+#
+    #    self.games = self.parse(path)  
+    #    self.path = path
+
+    def __init__(self, games=None):
+        if games is not None:
+            self.games = games
+        else: 
+            self.games = []
+
+
 
     def get_games(self):
         return self.games
     
-    def get_white_wins(self, games):
+    def get_white_wins(self):
         white_wins = []
-        for game in games:
+        for game in self.games:
             if game.lookup_meta_data('Result') == '1-0':
                 white_wins.append(game)
         return white_wins
     
-    def get_black_wins(self, games):
+    def get_black_wins(self):
         black_wins = []
-        for game in games:
+        for game in self.games:
             if game.lookup_meta_data('Result') == '0-1':
                 black_wins.append(game)
         return black_wins
     
-    def get_draws(self, games):
+    def get_draws(self):
         draws = []
-        for game in games:
+        for game in self.games:
             if game.lookup_meta_data('Result') == '1/2-1/2':
                 draws.append(game)
         return draws
     
+    def get_precentage_of_black_wins(self):
+        return round((len(self.get_black_wins()) / len(self.get_games()))*100,2)
+    
+    def get_precentage_of_white_wins(self):
+        return round((len(self.get_white_wins()) / len(self.get_games()))*100,2)
+    
+    def get_precentage_of_draws(self):
+        return round((len(self.get_draws()) / len(self.get_games()))*100,2)
+
+    def get_stockfish_wins_as_white(self):
+        stockfish_wins = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+                stockfish_wins.append(game)
+        return stockfish_wins
+    
+    def get_stockfish_wins_as_black(self):
+        stockfish_wins = []
+        for game in self.games:
+    
+            if game.lookup_meta_data('Result') == '0-1' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+                stockfish_wins.append(game)
+        return stockfish_wins
+    
+    def get_stockfish_losses_as_white(self):
+        stockfish_wins = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '0-1' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+                stockfish_wins.append(game)
+        return stockfish_wins
+    
+    def get_stockfish_losses_as_black(self):
+        stockfish_wins = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+                stockfish_wins.append(game)
+        return stockfish_wins
+    
+    def get_stockfish_draws_as_white(self):
+        stockfish_draws = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+                stockfish_draws.append(game)
+        return stockfish_draws
+    
+    def get_stockfish_draws_as_black(self):
+        stockfish_draws = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+                stockfish_draws.append(game)
+        return stockfish_draws
+    
+    def get_stockfish_wins(self):
+        return self.get_stockfish_wins_as_black() + self.get_stockfish_wins_as_white()  
+    
+    def get_stockfish_losses(self):
+        return self.get_stockfish_losses_as_black() + self.get_stockfish_losses_as_white()
+    
+    def get_stockfish_draws(self):
+        stockfish_draws = []
+        for game in self.games:
+            if game.lookup_meta_data('Result') == '1/2-1/2':
+                stockfish_draws.append(game)
+        return stockfish_draws
+
+    def get_games_where_stockfish_is_white(self):
+        stockfish_white = []
+        for game in self.games:
+            if "Stockfish" in game.lookup_meta_data('White'): 
+                stockfish_white.append(game)
+        return stockfish_white
+    
+    def get_games_where_stockfish_is_black(self):
+        stockfish_black = []
+        for game in self.games:
+            if "Stockfish" in game.lookup_meta_data('Black'):
+                stockfish_black.append(game)
+        return stockfish_black
+
+
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []
         for game in self.games:
@@ -61,9 +152,12 @@ class PGNDatabase:
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
+
                 games_with_opening.append(game)
-        return games_with_opening
-    
+
+        return PGNDatabase(games_with_opening)
+
+    # get_statistics_on_openings
     def get_statistics_on_openings(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
         openings = {}
         for game in self.games:
@@ -80,6 +174,9 @@ class PGNDatabase:
         for opening in openings:                            
             if openings[opening] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
                 openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
+        
+
+
         return openings_that_occurred_at_least_n_times
     
     
@@ -110,36 +207,8 @@ class PGNDatabase:
                 openings[opening] = 1       #If the opening is not in the dictionary, add it with a value of 1
         return openings
     
-    def get_games_where_stockfish_is_white(self):
-        stockfish_white = []
-        for game in self.games:
-            if "Stockfish" in game.lookup_meta_data('White'): #Uses regex to check if "Stockfish" is in the string, so we can test for Stockfish 15 64-bit, Stockfish 15 32-bit, etc.
-                stockfish_white.append(game)
-        return stockfish_white
-    
-    def get_games_where_stockfish_is_black(self):
-        stockfish_black = []
-        for game in self.games:
-            if "Stockfish" in game.lookup_meta_data('Black'):
-                stockfish_black.append(game)
-        return stockfish_black
-    
-    
-    def get_stockfish_draws(self, list_of_drawed_games):
-        stockfish_draws_as_white = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('White')]
-        stockfish_draws_as_black = [game for game in list_of_drawed_games if "Stockfish" in game.lookup_meta_data('Black')]
-        return stockfish_draws_as_white, stockfish_draws_as_black
 
-    #IF game.lookup_meta_data('White') includes "Stockfish"
-    def get_stockfish_wins(self, list_of_games):
-        stockfish_wins_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '1-0']
-        stockfish_wins_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '0-1']
-        return stockfish_wins_as_white, stockfish_wins_as_black
-
-    def get_stockfish_losses(self, list_of_games):
-        stockfish_losses_as_white = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('White') and game.lookup_meta_data('Result') == '0-1']
-        stockfish_losses_as_black = [game for game in list_of_games if "Stockfish" in game.lookup_meta_data('Black') and game.lookup_meta_data('Result') == '1-0']
-        return stockfish_losses_as_white, stockfish_losses_as_black
+    
 
 
     ##### TASK 8 ########
@@ -308,8 +377,9 @@ class PGNDatabase:
                 phase = 0
                 continue
 
-    def compose(self):
-        # TODO fix correct linebreak in the moves
+    def compose_to_pgn(self):
+        # TODO fix correct linebreak in the moves, split at space at ca 80 chars, as pgn standards
+
         
         pgn_data = ""
         for game in self.games:
@@ -343,7 +413,8 @@ class PGNDatabase:
         pgn_file.write(pgn_data)
         pgn_file.close()
     
-    def parse(self,path):
+    # TODO; chage
+    def parse_from_pgn(self,path):
         file = open(path, 'r')
         pgn_data = file.read()
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
@@ -386,29 +457,18 @@ class PGNDatabase:
                     print("No match---------------------")
             game_list.append(chessgame)
 
-        return game_list
+        self.games = game_list
 
 def main():
-    time_start = time.time()
-    pgn = PGNDatabase("../databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    #time_start = time.time()
+    pgn = PGNDatabase()
+    pgn.parse_from_pgn("./databases/100_games.pgn")
     
-    print(f"Time: {time.time() - time_start} seconds")
+    #print(f"Time: {time.time() - time_start} seconds")
     
     list_of_games = pgn.get_games()
-    
-    
-    one = pgn.get_openings_that_occurred_at_least_n_times(60)
-    # print(one)
 
     
-    # sequence_of_moves = ["d4", "Nf6", "c4", "g6"]
-    # list_of_games_with_sequence = pgn.get_games_with_move_sequence(sequence_of_moves)
-    # for game in list_of_games_with_sequence:
-    #     print(game.get_moves_without_comments())
-    # print(len(list_of_games_with_sequence))
-    
-    # for game in list_of_games:
-    #     print(game.get_moves_without_comments())
     games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
     games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
     
@@ -424,7 +484,7 @@ def main():
     pgn.plot_plycount_distribution(list_of_games)
     
     
-    print(f"Time: {time.time() - time_start}")
+    #print(f"Time: {time.time() - time_start}")
     
     
 if __name__ == "__main__":
