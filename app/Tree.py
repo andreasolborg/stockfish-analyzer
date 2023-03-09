@@ -58,13 +58,13 @@ class OpeningTree:
         self.database = database
         self.root = TreeNode(None, None)
         self.create_tree()
-        self.root_label = "Opening: " + self.database.get_games()[0].lookup_meta_data("Opening") + "\n" + "Number of games: " + str(len(self.database.get_games()))
+        self.root_label = "Opening: " + self.database.get_list_of_games()[0].lookup_meta_data("Opening") + "\n" + "Number of games: " + str(len(self.database.get_list_of_games()))
 
     # def get_root(self):
     #     return self.root
 
     def create_tree(self):
-        for game in self.database.get_games():
+        for game in self.database.get_list_of_games():
             result = game.get_result()
             moves = game.get_moves_without_comments()
             current_node = self.root

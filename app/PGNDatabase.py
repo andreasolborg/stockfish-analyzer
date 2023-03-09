@@ -29,24 +29,24 @@ class PGNDatabase:
 
     ## BASIC GETTERS ##
 
-    def get_games(self):
+    def get_list_of_games(self):
         return self.games
     
-    def get_white_wins(self):
+    def get_list_of_white_wins(self):
         white_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1-0':
                 white_wins.append(game)
         return white_wins
     
-    def get_black_wins(self):
+    def get_list_of_black_wins(self):
         black_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '0-1':
                 black_wins.append(game)
         return black_wins
     
-    def get_draws(self):
+    def get_list_of_draws(self):
         draws = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1/2-1/2':
@@ -54,22 +54,22 @@ class PGNDatabase:
         return draws
     
     def get_precentage_of_black_wins(self):
-        return round((len(self.get_black_wins()) / len(self.get_games()))*100,2)
+        return round((len(self.get_list_of_black_wins()) / len(self.get_list_of_games()))*100,2)
     
     def get_precentage_of_white_wins(self):
-        return round((len(self.get_white_wins()) / len(self.get_games()))*100,2)
+        return round((len(self.get_list_of_white_wins()) / len(self.get_list_of_games()))*100,2)
     
     def get_precentage_of_draws(self):
-        return round((len(self.get_draws()) / len(self.get_games()))*100,2)
+        return round((len(self.get_list_of_draws()) / len(self.get_list_of_games()))*100,2)
 
-    def get_stockfish_wins_as_white(self):
+    def get_list_of_stockfish_wins_as_white(self):
         stockfish_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
                 stockfish_wins.append(game)
         return stockfish_wins
     
-    def get_stockfish_wins_as_black(self):
+    def get_list_of_stockfish_wins_as_black(self):
         stockfish_wins = []
         for game in self.games:
     
@@ -77,55 +77,49 @@ class PGNDatabase:
                 stockfish_wins.append(game)
         return stockfish_wins
     
-    def get_stockfish_losses_as_white(self):
+    def get_list_of_stockfish_losses_as_white(self):
         stockfish_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '0-1' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
                 stockfish_wins.append(game)
         return stockfish_wins
     
-    def get_stockfish_losses_as_black(self):
+    def get_list_of_stockfish_losses_as_black(self):
         stockfish_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
                 stockfish_wins.append(game)
         return stockfish_wins
     
-    def get_stockfish_draws_as_white(self):
+    def get_list_of_stockfish_draws_as_white(self):
         stockfish_draws = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
                 stockfish_draws.append(game)
         return stockfish_draws
     
-    def get_stockfish_draws_as_black(self):
+    def get_list_of_stockfish_draws_as_black(self):
         stockfish_draws = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
                 stockfish_draws.append(game)
         return stockfish_draws
     
-    def get_stockfish_wins(self):
-        return self.get_stockfish_wins_as_black() + self.get_stockfish_wins_as_white()  
+    def get_list_of_stockfish_wins(self):
+        return self.get_list_of_stockfish_wins_as_black() + self.get_list_of_stockfish_wins_as_white()  
     
-    def get_stockfish_losses(self):
-        return self.get_stockfish_losses_as_black() + self.get_stockfish_losses_as_white()
+    def get_list_of_stockfish_losses(self):
+        return self.get_list_of_stockfish_losses_as_black() + self.get_list_of_stockfish_losses_as_white()
     
-    def get_stockfish_draws(self):
-        stockfish_draws = []
-        for game in self.games:
-            if game.lookup_meta_data('Result') == '1/2-1/2':
-                stockfish_draws.append(game)
-        return stockfish_draws
 
-    def get_games_where_stockfish_is_white(self):
+    def get_list_of_games_where_stockfish_is_white(self):
         stockfish_white = []
         for game in self.games:
             if "Stockfish" in game.lookup_meta_data('White'): 
                 stockfish_white.append(game)
         return stockfish_white
     
-    def get_games_where_stockfish_is_black(self):
+    def get_list_of_games_where_stockfish_is_black(self):
         stockfish_black = []
         for game in self.games:
             if "Stockfish" in game.lookup_meta_data('Black'):
@@ -148,7 +142,6 @@ class PGNDatabase:
                         break
         return games_with_move_sequence
     
-
 
     def get_database_with_opening(self, opening):
         games_with_opening = []
@@ -209,9 +202,6 @@ class PGNDatabase:
     
 
     
-
-
-    ##### TASK 8 ########
     def get_standard_deviation_of_moves(self, list_of_games):
         amount_of_moves = []
         for game in list_of_games:
@@ -234,9 +224,9 @@ class PGNDatabase:
                 move_count_distribution[move_count] = 1
         return move_count_distribution
 
-    def get_plycount_distribution(self):
+    def get_plycount_distribution(self, list_of_games):
         plycount_distribution = {}
-        for game in self.games:
+        for game in list_of_games:
             plycount = int(game.lookup_meta_data('PlyCount'))
             if plycount in plycount_distribution:
                 plycount_distribution[plycount] += 1

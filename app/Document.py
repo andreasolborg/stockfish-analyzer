@@ -18,25 +18,25 @@ class PGNDocument:
         self.document = Document()
         self.opening_occurrences = opening_occurrences
         self.include_openings = include_openings
-        self.list_of_games = self.database.get_games()
+        self.list_of_games = self.database.get_list_of_games()
 
-        self.list_of_games = self.database.get_games()
-        self.list_of_drawed_games = self.database.get_draws()
-        self.list_of_games_where_stockfish_is_white = self.database.get_games_where_stockfish_is_white()
-        self.list_of_games_where_stockfish_is_black = self.database.get_games_where_stockfish_is_black()
-        self.list_of_games_where_stockfish_wins = self.database.get_stockfish_wins()
-        self.list_of_games_where_stockfish_losses = self.database.get_stockfish_losses()  
+        self.list_of_games = self.database.get_list_of_games()
+        self.list_of_drawed_games = self.database.get_list_of_draws()
+        self.list_of_games_where_stockfish_is_white = self.database.get_list_of_games_where_stockfish_is_white()
+        self.list_of_games_where_stockfish_is_black = self.database.get_list_of_games_where_stockfish_is_black()
+        self.list_of_games_where_stockfish_wins = self.database.get_list_of_stockfish_wins()
+        self.list_of_games_where_stockfish_losses = self.database.get_list_of_stockfish_losses()  
 
-        self.stockfish_wins_as_white = self.database.get_stockfish_wins_as_white()
-        self.stockfish_wins_as_black = self.database.get_stockfish_wins_as_black()
-        self.stockfish_losses_as_white = self.database.get_stockfish_losses_as_white()
-        self.stockfish_losses_as_black = self.database.get_stockfish_losses_as_black()
-        self.stockfish_draws_as_white = self.database.get_stockfish_draws_as_white()
-        self.stockfish_draws_as_black = self.database.get_stockfish_draws_as_black()
+        self.stockfish_wins_as_white = self.database.get_list_of_stockfish_wins_as_white()
+        self.stockfish_wins_as_black = self.database.get_list_of_stockfish_wins_as_black()
+        self.stockfish_losses_as_white = self.database.get_list_of_stockfish_losses_as_white()
+        self.stockfish_losses_as_black = self.database.get_list_of_stockfish_losses_as_black()
+        self.stockfish_draws_as_white = self.database.get_list_of_stockfish_draws_as_white()
+        self.stockfish_draws_as_black = self.database.get_list_of_stockfish_draws_as_black()
 
-        self.black_wins = self.database.get_black_wins()
-        self.white_wins = self.database.get_white_wins()
-        self.draws = self.database.get_draws()
+        self.black_wins = self.database.get_list_of_black_wins()
+        self.white_wins = self.database.get_list_of_white_wins()
+        self.draws = self.database.get_list_of_draws()
 
     def create_document(self):
         self.create_document_heading()
@@ -44,20 +44,20 @@ class PGNDocument:
         self.create_document_conclusion()
         self.save_document()
 
+
+
+
+
+    ## MAIN COMPONENTS ##
+
     def create_document_heading(self):
         self.document.add_heading('Chess Database', 0)
 
-    def create_document_introduction(self):
-        self.document.add_heading('1. Introduction', level=1)
-        self.document.add_paragraph('This document is a summary of the chess database.')
-
     def create_document_body(self):
         self.create_document_introduction()
-        # self.create_document_section_for_all_games()
-        # Should include a table with game count for each player
+
         self.document.add_heading('2. Statistics', level=2)
-        self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
-        # self.create_document_subsection_for_all_games()
+        self.document.add_paragraph('The database contains ' + str(len(self.list_of_games)) + ' games. The following sections describe the games in more detail.')
 
         self.document.add_heading('2.1 General results', level=1)
         self.document.add_paragraph('The following table shows the results of games.')
@@ -65,7 +65,6 @@ class PGNDocument:
 
         self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
         self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
-        self.document.add_paragraph("def create_document_result_table_with_stockfish(self, list_of_games, list_of_drawed_games):")
         self.create_document_result_table_with_stockfish()
 
         self.document.add_heading('2.2 Move count distributions', level=2)
@@ -73,6 +72,9 @@ class PGNDocument:
                 
         self.document.add_heading('2.2.1 All games', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
+
+
+
         # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black
         dictionary_for_first_plot = {"All games": self.list_of_games, "Games where Stockfish is white": self.list_of_games_where_stockfish_is_white, "Games where Stockfish is black": self.list_of_games_where_stockfish_is_black}
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "./plots/1stMoveCountCDPlot.png")
@@ -99,7 +101,28 @@ class PGNDocument:
         self.create_openings_table()
 
         self.create_document_section_for_tree_plotting()
-        
+    
+    def create_document_conclusion(self):
+        self.document.add_heading('3. Conclusion', level=1)
+        self.document.add_paragraph('This document is a summary of the chess database.')
+
+    def save_document(self):
+        if os.path.exists('ChessDatabase.docx'):
+            os.remove('ChessDatabase.docx') # Remove the file if it already exists to avoid an error
+        self.document.save('ChessDatabase.docx')
+
+
+
+
+
+
+
+
+    ## SUBCOMPONENTS ##
+
+    def create_document_introduction(self):
+        self.document.add_heading('1. Introduction', level=1)
+        self.document.add_paragraph('This document is a summary of the chess database.')
 
     def create_openings_table(self):
         self.document.add_heading('3.1 Openings', level=2)
@@ -116,10 +139,10 @@ class PGNDocument:
         hdr_cells[4].text = 'Total games'
         for opening in openings:
             opening_database = self.database.get_database_with_opening(opening)
-            white_wins = opening_database.get_white_wins()
-            black_wins = opening_database.get_black_wins()
-            draws = opening_database.get_draws()
-            list_of_games = opening_database.get_games()
+            white_wins = opening_database.get_list_of_white_wins()
+            black_wins = opening_database.get_list_of_black_wins()
+            draws = opening_database.get_list_of_draws()
+            list_of_games = opening_database.get_list_of_games()
             row_cells = table.add_row().cells
             row_cells[0].text = opening
             row_cells[1].text = str(len(white_wins))
@@ -127,36 +150,6 @@ class PGNDocument:
             row_cells[3].text = str(len(black_wins))
             row_cells[4].text = str(len(list_of_games))
 
-    def add_hyperlink(self, paragraph, text, url):
-    # This gets access to the document.xml.rels file and gets a new relation id value
-        part = paragraph.part
-        r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
-
-        # Create the w:hyperlink tag and add needed values
-        hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
-        hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
-
-        # Create a w:r element and a new w:rPr element
-        new_run = docx.oxml.shared.OxmlElement('w:r')
-        rPr = docx.oxml.shared.OxmlElement('w:rPr')
-
-        # Join all the xml elements together add add the required text to the w:r element
-        new_run.append(rPr)
-        new_run.text = text
-        hyperlink.append(new_run)
-
-        # Create a new Run object and add the hyperlink into it
-        r = paragraph.add_run ()
-        r._r.append (hyperlink)
-
-        # A workaround for the lack of a hyperlink style (doesn't go purple after using the link)
-        # Delete this if using a template that has the hyperlink style in it
-        r.font.color.theme_color = MSO_THEME_COLOR_INDEX.HYPERLINK
-        r.font.underline = True
-
-        return hyperlink
-
-    ############ TREE PLOTTING ############################
     def create_document_section_for_tree_plotting(self):
         self.document.add_page_break()
         self.document.add_heading('3 Tree plotting', level=1)
@@ -207,7 +200,6 @@ class PGNDocument:
         row_cells[2].text = str(self.database.get_precentage_of_draws()) + '%'
         row_cells[3].text = str(self.database.get_precentage_of_black_wins()) + '%'
 
-
     def create_document_result_table_with_stockfish(self):
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
@@ -257,6 +249,8 @@ class PGNDocument:
         plt.savefig(filename)
         self.document.add_picture(filename, width=Inches(6))
         
+    # TODO: fjerne eller beholde denne funksjonen?
+
     ### This is the old version of the function above, which only plots one list of games at a time ###
     def create_document_cumulative_moves_distribution(self):
         # self.database.clear_plot()
@@ -277,7 +271,8 @@ class PGNDocument:
         self.document.add_heading('2.4.1 Moves table', level=2)
         self.document.add_paragraph('The following table shows the mean and standard deviation of the number of moves in the database.')
         
-
+    # TODO: denne følger fremdeles gamle struktur, må oppdateres
+    
     def add_table_of_mean_and_standard_deviation_of_moves(self, list_of_games):
         table = self.document.add_table(rows=1, cols=3)
         table.style = 'Table Grid'
@@ -290,14 +285,40 @@ class PGNDocument:
         row_cells[1].text = str(round(self.database.get_mean_number_of_moves(list_of_games), 2))
         row_cells[2].text = str(round(self.database.get_standard_deviation_of_moves(list_of_games), 2))
         
-    def create_document_conclusion(self):
-        self.document.add_heading('3. Conclusion', level=1)
-        self.document.add_paragraph('This document is a summary of the chess database.')
 
-    def save_document(self):
-        if os.path.exists('ChessDatabase.docx'):
-            os.remove('ChessDatabase.docx') # Remove the file if it already exists to avoid an error
-        self.document.save('ChessDatabase.docx')
+    ## HELPER FUNCTIONS ##
+    
+    # TODO, vise kilde til denne?
+
+    def add_hyperlink(self, paragraph, text, url):
+    # This gets access to the document.xml.rels file and gets a new relation id value
+        part = paragraph.part
+        r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
+
+        # Create the w:hyperlink tag and add needed values
+        hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
+        hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
+
+        # Create a w:r element and a new w:rPr element
+        new_run = docx.oxml.shared.OxmlElement('w:r')
+        rPr = docx.oxml.shared.OxmlElement('w:rPr')
+
+        # Join all the xml elements together add add the required text to the w:r element
+        new_run.append(rPr)
+        new_run.text = text
+        hyperlink.append(new_run)
+
+        # Create a new Run object and add the hyperlink into it
+        r = paragraph.add_run ()
+        r._r.append (hyperlink)
+
+        # A workaround for the lack of a hyperlink style (doesn't go purple after using the link)
+        # Delete this if using a template that has the hyperlink style in it
+        r.font.color.theme_color = MSO_THEME_COLOR_INDEX.HYPERLINK
+        r.font.underline = True
+
+        return hyperlink
+
 
 def main():
     start_time = time.time()
