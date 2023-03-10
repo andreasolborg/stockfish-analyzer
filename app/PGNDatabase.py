@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from openpyxl import Workbook
 from openpyxl import load_workbook
 
-# ikke denne løsningen egt
+import textwrap
 
 class PGNDatabase:
     '''
@@ -185,35 +185,6 @@ class PGNDatabase:
                 openings_that_occurred_at_least_n_times[opening] = openings[opening]    #The value of the new dictionary is the number of games with that opening
         
         return openings_that_occurred_at_least_n_times
-    
-    
-    def get_eco_that_occurred_at_least_n_times(self, n):
-        ecos = self.get_statistics_on_eco()                                    #Get a dictionary with keys being openings and values being the number of games with that opening
-        ecos_that_occurred_at_least_n_times = {}                                    #Create a new dictionary to store the openings that occurred at least n times
-        for eco in ecos:
-            if ecos[eco] >= n:                                                  #If the opening occurred at least n times, add it to the new dictionary
-                ecos_that_occurred_at_least_n_times[eco] = ecos[eco]
-        return ecos_that_occurred_at_least_n_times
-    
-    
-    # Checks on "ECO" metadata
-    def get_games_with_eco(self, opening):
-        games_with_opening = []
-        for game in self.games:
-            if game.lookup_meta_data('ECO') == opening:
-                games_with_opening.append(game)
-        return games_with_opening
-    
-    def get_statistics_on_eco(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
-        openings = {}
-        for game in self.games:
-            opening = game.lookup_meta_data('ECO')
-            if opening in openings:
-                openings[opening] += 1      #If the opening is already in the dictionary, increment its value by 1
-            else:
-                openings[opening] = 1       #If the opening is not in the dictionary, add it with a value of 1
-        return openings
-    
 
     def get_standard_deviation_of_moves(self):
         amount_of_moves = []
@@ -247,6 +218,7 @@ class PGNDatabase:
                 plycount_distribution[plycount] = 1
         return plycount_distribution
 
+    
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
@@ -382,8 +354,6 @@ class PGNDatabase:
 
     def compose_to_pgn(self):
         # TODO fix correct linebreak in the moves, split at space at ca 80 chars, as pgn standards
-
-        
         pgn_data = ""
         for game in self.games:
             meta_data = ""
@@ -392,6 +362,8 @@ class PGNDatabase:
                 meta_data = meta_data + line + "\n"
             
             pgn_data += meta_data + "\n"
+
+            
 
             moves = ""
             for move in game.get_moves(): 
@@ -409,6 +381,9 @@ class PGNDatabase:
                 if move.get_black_comment() is not None:
                     moves += move.get_black_comment() + " "
             
+            # add linebreaks to moves every 80 chars    
+            
+            moves = textwrap.fill(moves, width=80)
             score = game.get_meta_data()["Result"]
             pgn_data += moves + score + "\n\n"
         
@@ -463,36 +438,18 @@ class PGNDatabase:
         self.games = game_list
 
 def main():
-    #time_start = time.time()
+    time_start = time.time()
+
     pgn = PGNDatabase()
     pgn.parse_from_pgn("./databases/100_games.pgn")
-    
-    #print(f"Time: {time.time() - time_start} seconds")
-    
-    list_of_games = pgn.get_games()
+    pgn.compose_to_pgn()
 
     
-    games_where_stockfish_is_white = pgn.get_games_where_stockfish_is_white()
-    games_where_stockfish_is_black = pgn.get_games_where_stockfish_is_black()
-    
-    fig, ax = plt.subplots()
-    fig.set_size_inches(10,5)
-    
-    pgn.plot_move_count_histogram_cumulative(list_of_games, "All games", axis=ax)
-    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_white, "Games where Stockfish is white", axis=ax)
-    pgn.plot_move_count_histogram_cumulative(games_where_stockfish_is_black, "Games where Stockfish is black", axis=ax)
-
-    plt.legend()
-    
-    pgn.plot_plycount_distribution(list_of_games)
-    
-    
-    #print(f"Time: {time.time() - time_start}")
+    print(f"Time: {time.time() - time_start}")
     
     
 if __name__ == "__main__":
     main()
-    pass
     
 
     
