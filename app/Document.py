@@ -19,7 +19,6 @@ class PGNDocument:
         self.database = database
         self.document = Document()
 
-        # Parameters that the user can play with and adjust
         self.minimum_opening_occurences_to_add_to_table = minimum_opening_occurences_to_add_to_table
         self.include_openings = include_openings
         self.max_tree_depth = max_tree_depth
@@ -276,20 +275,21 @@ class PGNDocument:
 
 
 def main():
-    start_time = time.time()
+    time_start = time.time()
 
     database = Database()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     
-    # parametere til Document 
+    # Parameters that the user can play with and adjust
     minimum_opening_occurences_to_add_to_table = 30
     max_tree_depth = 15
     minimum_games_on_node_to_keep_going_on_a_branch = 4
-
     inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening"]
 
     document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()
+
+    print(f"Time: {time.time() - time_start}")
 
 if __name__ == "__main__":
     main()

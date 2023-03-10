@@ -19,6 +19,8 @@ class Database:
         else: 
             self.games = []
 
+
+
     ## GETTERS ##
 
     def get_list_of_games(self):
@@ -171,6 +173,8 @@ class Database:
             amount_of_moves.append(len(game.get_moves()))
         return np.mean(amount_of_moves)
 
+
+
     ## PARSE AND COMPOSE FOR PGN AND EXCEL ##
 
     def compose_to_excel(self, path, sheet_name):
@@ -316,15 +320,19 @@ class Database:
 def main():
     time_start = time.time()
 
-    pgn = Database()
+    database = Database()
 
-    pgn.parse_from_pgn("./databases/100_games.pgn")
-    pgn.compose_to_pgn("./databases/100_games_composed.pgn")
-    pgn.compose_to_excel("./databases/100_games_composed.xlsx", "Sheet1")
-    pgn.parse_from_excel("./databases/100_games_composed.xlsx", "Sheet1")
+    # Parsing from pgn file
+    database.parse_from_pgn("./databases/2600_games.pgn")
+
+    # Composing from Database instance to pgn and excel format
+    database.compose_to_pgn("./databases/2600_games_composed.pgn")
+    database.compose_to_excel("./databases/2600_games_composed.xlsx", "Sheet1")
+
+    # Paring from excel file
+    database.parse_from_excel("./databases/2600_games_composed.xlsx", "Sheet1")
     
     print(f"Time: {time.time() - time_start}")
-    
     
 if __name__ == "__main__":
     main()

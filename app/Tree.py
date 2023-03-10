@@ -114,6 +114,7 @@ class OpeningTree:
         os.system("dot -Tpng -Gdpi=500 ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
              
 def main():
+    time_start = time.time()
 
     database = Database()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
@@ -121,12 +122,14 @@ def main():
     
     tree = OpeningTree(sicilian_list)
 
-    # parametere til Tree
+    # Parameters that the user can play with and adjust
     max_tree_depth = 15
     minimum_games_on_node_to_continue_on_branch = 4
     filename = "tree_Sicilian"
 
     tree.save_tree(max_tree_depth, minimum_games_on_node_to_continue_on_branch, filename)
+
+    print(f"Time: {time.time() - time_start}")
 
 if __name__ == "__main__":
     main()
