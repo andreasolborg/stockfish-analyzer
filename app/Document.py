@@ -1,6 +1,6 @@
 import os
 import time
-from docx import Document
+from docx import Document as docx_document
 from docx.shared import Inches
 from Database import Database
 from Tree import *
@@ -8,16 +8,14 @@ import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
 from Plot import *
 
-class PGNDocument:
+class Document:
     '''
     Encapsulates a single PGN document
     '''
     def __init__(self, database, minimum_opening_occurences_to_add_to_table, include_openings, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
-        
-        # TODO: jeg vil rename klassen til Document egt, men det kan vi ikke, hva gjør vi?
 
         self.database = database
-        self.document = Document()
+        self.document = docx_document()
 
         self.minimum_opening_occurences_to_add_to_table = minimum_opening_occurences_to_add_to_table
         self.include_openings = include_openings
@@ -114,10 +112,10 @@ class PGNDocument:
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_games_where_stockfish_wins_or_draws, "./plots/2ndMoveCountCDPlot.png")
-        
+
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
         self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_wins_or_draws)
-        self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
+        self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws. This may be due to the fact that Stockfish is programmed to draw when it is in a position where it cannot win, or game adjudication is used.")
         
         # Plot Cumulative Moves Distribution for games where Stockfish lost
         dictionary_of_games_where_stockfish_losses = {"Games where Stockfish lost": self.list_of_games_where_stockfish_losses}                            
@@ -252,8 +250,6 @@ class PGNDocument:
         row_cells[0].text = 'Number of moves'
         row_cells[1].text = str(round(database.get_mean_number_of_moves(), 2))
         row_cells[2].text = str(round(database.get_standard_deviation_of_moves(), 2))
-        
-
 
     ## HELPER FUNCTIONS ##
     
@@ -288,7 +284,7 @@ def main():
     minimum_games_on_node_to_keep_going_on_a_branch = 4
     inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening"]
 
-    document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
+    document = Document(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()
 
     print(f"Time: {time.time() - time_start}")
