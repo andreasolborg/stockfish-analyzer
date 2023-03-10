@@ -2,11 +2,6 @@
 /prototype/.ipynb_checkpoints
 /.vscode
 /.ipynb_checkpoints
-/graphs/.ipynb_checkpoints
-/application/__pycache__
-/application/.ipynb_checkpoints
-/plots/1stMoveCountCDPlot.png
-/plots/2ndMoveCountCDPlot.png
-/plots/3rdMoveCountCDPlot.png
-/plots/plycount_distribution.png
-/assignment2/graphs
+/graphs
+/plots
+/documents
