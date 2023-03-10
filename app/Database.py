@@ -21,9 +21,6 @@ class Database:
 
     ## GETTERS ##
 
-
-
-
     def get_list_of_games(self):
         return self.games
     
@@ -106,6 +103,9 @@ class Database:
     def get_list_of_stockfish_losses(self):
         return self.get_list_of_stockfish_losses_as_black() + self.get_list_of_stockfish_losses_as_white()
     
+    def get_list_of_games_where_stockfish_wins_or_draws(self):
+        return self.get_list_of_stockfish_wins() + self.get_list_of_draws()
+    
     def get_list_of_games_where_stockfish_is_white(self):
         stockfish_white = []
         for game in self.games:
@@ -119,17 +119,6 @@ class Database:
             if "Stockfish" in game.lookup_meta_data('Black'):
                 stockfish_black.append(game)
         return stockfish_black
-
-    ## -------------------------------TODO--------------------------------- ##
-    def get_list_of_games_where_stockfish_wins_or_draws(self):
-        return self.get_list_of_stockfish_wins() + self.get_list_of_draws()
-  
-    def get_database_of_games_where_stockfish_wins(self):
-        return self.get_list_of_stockfish_wins()
-
-    def get_database_of_games_where_stockfish_losses(self):
-        return self.get_list_of_stockfish_losses()
-    ## -------------------------------TODO--------------------------------- ##
 
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []

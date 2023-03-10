@@ -123,7 +123,6 @@ class PGNDocument:
 
 
     ## SUBCOMPONENTS ##
-
     def create_document_introduction(self):
         self.document.add_heading('1. Introduction', level=1)
         self.document.add_paragraph('This document is a summary of the chess database.')
@@ -141,7 +140,7 @@ class PGNDocument:
         hdr_cells[3].text = 'Black wins'
         hdr_cells[4].text = 'Total games'
         for opening in openings:
-            opening_list = self.database.get_database_with_opening(opening)
+            opening_list = self.database.get_list_with_opening(opening)
             opening_database = Database(opening_list)
             white_wins = opening_database.get_list_of_white_wins()
             black_wins = opening_database.get_list_of_black_wins()
@@ -170,7 +169,7 @@ class PGNDocument:
                 continue
 
             self.document.add_heading(opening, level=2)
-            list_of_games = self.database.get_database_with_opening(opening)
+            list_of_games = self.database.get_list_with_opening(opening)
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
             
             tree = OpeningTree(list_of_games)
