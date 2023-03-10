@@ -1,4 +1,4 @@
-from PGNDatabase import PGNDatabase
+from Database import *
 import os
 
 class TreeNode:
@@ -56,14 +56,14 @@ class TreeNode:
         return str(self.move)
     
 class OpeningTree:  
-    def __init__(self, database):
-        self.database = database
+    def __init__(self, list_of_games):
+        self.list_of_games = list_of_games
         self.root = TreeNode(None, None)
         self.create_tree()
-        self.root_label = "Opening: " + self.database.get_list_of_games()[0].lookup_meta_data("Opening") + "\n" + "Number of games: " + str(len(self.database.get_list_of_games()))
+        self.root_label = "Opening: " + self.list_of_games[0].lookup_meta_data("Opening") + "\n" + "Number of games: " + str(len(self.list_of_games))
 
     def create_tree(self):
-        for game in self.database.get_list_of_games():
+        for game in self.list_of_games:
             result = game.get_result()
             moves = game.get_moves_without_comments()
             current_node = self.root
@@ -115,7 +115,7 @@ class OpeningTree:
              
 def main():
 
-    database = PGNDatabase()
+    database = Database()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     sicilian_database = database.get_database_with_opening("Sicilian")
     

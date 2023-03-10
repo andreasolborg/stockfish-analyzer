@@ -3,7 +3,7 @@ import time
 import matplotlib.pyplot as plt
 from docx import Document
 from docx.shared import Inches
-from PGNDatabase import PGNDatabase
+from Database import Database
 from Tree import *
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
@@ -32,6 +32,7 @@ class PGNDocument:
         self.list_of_games_where_stockfish_is_black = self.database.get_list_of_games_where_stockfish_is_black()
         self.list_of_games_where_stockfish_wins = self.database.get_list_of_stockfish_wins()
         self.list_of_games_where_stockfish_losses = self.database.get_list_of_stockfish_losses()  
+        self.list_of_games_where_stockfish_wins_or_draws = self.database.get_list_of_games_where_stockfish_wins_or_draws()
 
         self.stockfish_wins_as_white = self.database.get_list_of_stockfish_wins_as_white()
         self.stockfish_wins_as_black = self.database.get_list_of_stockfish_wins_as_black()
@@ -39,14 +40,15 @@ class PGNDocument:
         self.stockfish_losses_as_black = self.database.get_list_of_stockfish_losses_as_black()
         self.stockfish_draws_as_white = self.database.get_list_of_stockfish_draws_as_white()
         self.stockfish_draws_as_black = self.database.get_list_of_stockfish_draws_as_black()
+        
 
         self.black_wins = self.database.get_list_of_black_wins()
         self.white_wins = self.database.get_list_of_white_wins()
         self.draws = self.database.get_list_of_draws()
 
-        self.database_of_games_where_stockfish_wins_or_draws = self.database.get_database_of_games_where_stockfish_wins_or_draws()
-        self.database_of_games_where_stockfish_wins = self.database.get_database_of_games_where_stockfish_wins()
-        self.database_of_games_where_stockfish_losses = self.database.get_database_of_games_where_stockfish_losses()
+        self.database_of_games_where_stockfish_wins_or_draws = Database(self.list_of_games_where_stockfish_wins_or_draws)
+        self.database_of_games_where_stockfish_wins = Database(self.list_of_games_where_stockfish_wins)
+        self.database_of_games_where_stockfish_losses = Database(self.list_of_games_where_stockfish_losses)
 
     def create_document(self):
         self.create_document_heading()
@@ -139,7 +141,8 @@ class PGNDocument:
         hdr_cells[3].text = 'Black wins'
         hdr_cells[4].text = 'Total games'
         for opening in openings:
-            opening_database = self.database.get_database_with_opening(opening)
+            opening_list = self.database.get_database_with_opening(opening)
+            opening_database = Database(opening_list)
             white_wins = opening_database.get_list_of_white_wins()
             black_wins = opening_database.get_list_of_black_wins()
             draws = opening_database.get_list_of_draws()
@@ -328,7 +331,7 @@ class PGNDocument:
 def main():
     start_time = time.time()
 
-    database = PGNDatabase()
+    database = Database()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
     
     # parametere til Document 
