@@ -86,17 +86,17 @@ class OpeningTree:
                 move_number += 1
 
     def print_node(self, node, depth, current_depth, dot_file):
-        if node.get_number_of_games() < 4 and node.get_parent() is not None: # if number of games inside the node is less than 5, we do not want to plot any children. But we should label the node
-            dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), node.get_result(), node.get_color(), node.get_text_color())) # write node
+        if node.get_number_of_games() <= 4 and node.get_parent() is not None: # if number of games inside the node is less than 5, we do not want to plot any children. But we should label the node
+            dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
             return # return from function
         if current_depth < depth: # not leaf node and not at max depth
             for child in node.get_children():
                 # if number of games inside the node is less than given threshold, we do not want to plot any children
-                dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()), node.get_color(), node.get_text_color())) # write node
-                dot_file.write('{} -> {} [label="{}" fontsize="80pt" arrowsize="3"];\n'.format(str(id(node)), str(id(child)), child.get_move())) # write edge 
+                dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
+                dot_file.write('{} -> {} [label="{}" fontsize="60pt" arrowsize="3"];\n'.format(str(id(node)), str(id(child)), child.get_move())) # write edge 
                 self.print_node(child, depth, current_depth + 1, dot_file) # recursive call to print child nodes
         else: # leaf node
-            dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), node.get_result(), node.get_color(), node.get_text_color())) # write node
+            dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
         if node.get_parent() is None: # if node is root node
             dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), self.root_label, node.get_color(), node.get_text_color())) # write root node
 
@@ -109,7 +109,7 @@ class OpeningTree:
             os.remove("./graphs/{}.png".format(filename))
         with open("./graphs/{}.dot".format(filename), "w") as dot_file: 
             dot_file.write("digraph G {\n")
-            dot_file.write('rankdir=LR;\ncenter=true;\nsize="7,10"\n')
+            dot_file.write('rankdir=LR;\ncenter=true;\nsize="10,7"\n')
             self.print_node(self.root, depth, 0, dot_file) # recursive call to print nodes
             dot_file.write("}\n")
         os.system("dot -Tpng -Gdpi=500 ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
@@ -135,7 +135,7 @@ def main():
     sicilian_database = database.get_database_with_opening("Sicilian")
     
     tree = OpeningTree(sicilian_database)
-    tree.save_tree(10, "tree_Sicilian")
+    tree.save_tree(15, "tree_Sicilian")
 
 
 
@@ -154,37 +154,6 @@ def main():
 
     ## parameter til Document
     # - minimum_opening_occurences_to_add_to_table
-
-
-
-
-    # save_trees_from_list_of_games(list_of_games, 4, "tree")
-
-
-
-    # You can either do this
-    # eco = database.get_eco_that_occurred_at_least_n_times(60)
-    # for e in eco:
-    #     if eco[e] < 30:
-    #         depth = 5
-    #     else:
-    #         depth = 10
-
-    #     list_of_games = database.get_games_with_eco(e)
-    #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(e))
-
-
-
-    #  or this
-    # openings = database.get_openings_that_occurred_at_least_n_times(100) # get openings that occurred at least 60 times as a dictionary
-    # print(openings)
-    # for opening in openings:
-    #     if openings[opening] < 200:
-    #         depth = 4
-    #     else:
-    #         depth = 8
-    #     list_of_games = database.get_games_with_opening(opening)
-    #     save_tree_from_list_of_games(list_of_games, depth, "tree_{}".format(opening.replace(" ", "_")))
 
     
 if __name__ == "__main__":
