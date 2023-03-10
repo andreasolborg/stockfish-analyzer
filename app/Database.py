@@ -181,16 +181,6 @@ class Database:
                 move_count_distribution[move_count] = 1
         return move_count_distribution
 
-    def get_plycount_distribution(self, list_of_games):
-        plycount_distribution = {}
-        for game in list_of_games:
-            plycount = int(game.lookup_meta_data('PlyCount'))
-            if plycount in plycount_distribution:
-                plycount_distribution[plycount] += 1
-            else:
-                plycount_distribution[plycount] = 1
-        return plycount_distribution
-
     # TODO; splitt dette ut fra Database på en måte
 
     def sort_dict(self, dict):
