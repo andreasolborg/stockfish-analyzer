@@ -3,10 +3,10 @@ import time
 from docx import Document
 from docx.shared import Inches
 from Database import Database
-from Tree import *
+from Tree import OpeningTree, TreeNode
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
-from Plot import *
+from Plot import Plot
 
 class PGNDocument:
     '''
@@ -66,17 +66,18 @@ class PGNDocument:
         self.create_document_introduction()
         self.statistics()
         self.plots()
-        self.create_openings_table()
         self.create_document_section_for_tree_plotting()
+        self.create_openings_table()
+        
     
     def create_document_conclusion(self):
         self.document.add_heading('3. Conclusion', level=1)
         self.document.add_paragraph('This document is a summary of the chess database.')
 
     def save_document(self):
-        if os.path.exists('ChessReport.docx'):
-            os.remove('ChessReport.docx') # Remove the file if it already exists to avoid an error
-        self.document.save('ChessReport.docx')
+        if os.path.exists('documents/ChessReport.docx'):
+            os.remove('documents/ChessReport.docx') # Remove the file if it already exists to avoid an error
+        self.document.save('documents/ChessReport.docx')
 
 
     ## SUBCOMPONENTS ##
@@ -175,9 +176,9 @@ class PGNDocument:
             tree.save_tree(self.max_tree_depth, self.minimum_games_on_node_to_keep_going_on_a_branch ,opening_filename)
 
             p = self.document.add_paragraph('')
-            print("./graphs/ " + opening_filename + ".png")
-            self.add_hyperlink(p, 'open full picture', "./graphs/" + opening_filename + ".png")
-            self.document.add_picture("./graphs/" + opening_filename + ".png", width=Inches(6))
+            print("graphs/ " + opening_filename + ".png")
+            self.add_hyperlink(p, 'open full picture', "graphs/" + opening_filename + ".png")
+            self.document.add_picture("graphs/" + opening_filename + ".png", width=Inches(6))
             self.document.add_page_break()
 
     def create_document_section_for_all_games(self):
@@ -280,13 +281,13 @@ def main():
     time_start = time.time()
 
     database = Database()
-    database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    database.parse_from_pgn("databases/Stockfish_15_64-bit.commented.[2600].pgn")
     
     # Parameters that the user can play with and adjust
     minimum_opening_occurences_to_add_to_table = 30
     max_tree_depth = 15
     minimum_games_on_node_to_keep_going_on_a_branch = 4
-    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening"]
+    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening", "33525235"]
 
     document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()

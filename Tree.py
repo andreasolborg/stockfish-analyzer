@@ -102,22 +102,22 @@ class OpeningTree:
 
     def save_tree(self, max_tree_depth, minimum_games_on_node_to_continue_on_branch, filename):
         print("Saving tree to file {}".format(filename)) # print to console
-        if os.path.exists("./graphs/{}.dot".format(filename)): # if file already exists, delete it
-            os.remove("./graphs/{}.dot".format(filename))
-        if os.path.exists("./graphs/{}.png".format(filename)): # if file already exists, delete it
-            os.remove("./graphs/{}.png".format(filename))
-        with open("./graphs/{}.dot".format(filename), "w") as dot_file: 
+        if os.path.exists("graphs/{}.dot".format(filename)): # if file already exists, delete it
+            os.remove("graphs/{}.dot".format(filename))
+        if os.path.exists("graphs/{}.png".format(filename)): # if file already exists, delete it
+            os.remove("graphs/{}.png".format(filename))
+        with open("graphs/{}.dot".format(filename), "w") as dot_file: 
             dot_file.write("digraph G {\n")
             dot_file.write('rankdir=LR;\ncenter=true;\nsize="10,7"\n')
             self.print_node(self.root, max_tree_depth, minimum_games_on_node_to_continue_on_branch, 0, dot_file) # recursive call to print nodes
             dot_file.write("}\n")
-        os.system("dot -Tpng -Gdpi=500 ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
+        os.system("dot -Tpng -Gdpi=500 graphs/{}.dot -o graphs/{}.png".format(filename, filename)) # create png from dot file
              
 def main():
     time_start = time.time()
 
     database = Database()
-    database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    database.parse_from_pgn("databases/Stockfish_15_64-bit.commented.[2600].pgn")
     sicilian_list = database.get_list_with_opening("Sicilian")
     
     tree = OpeningTree(sicilian_list)

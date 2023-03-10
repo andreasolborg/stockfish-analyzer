@@ -1,75 +1,49 @@
-import re
+from Move import *
 
 
 class Game:
-    def __init__(self):
-        self.meta_data = {}
-        self.moves = []
-    
-    def add_move(self, move) -> None:
-        self.moves.append(move)
+    '''
+    Describes a single chess game from PGN format.
+    '''
+    def __init__(self, meta_data, moves):  
+        self.meta_data = meta_data
+        self.moves = moves
+
+    def add_move(self, Move) -> None:
+        self.moves.append(Move)
 
     def add_meta_data(self, key, value) -> None:
         self.meta_data[key] = value
+
+    def get_meta_data(self) -> dict:
+        return self.meta_data
     
     def get_moves(self) -> list:
         return self.moves
     
+    def get_moves_without_comments(self) -> list:
+        moves = []
+        for move in self.moves:
+            if move.get_white_move() is not None:
+                moves.append(move.get_white_move())
+            if move.get_black_move() is not None:
+                moves.append(move.get_black_move())
+        return moves
+    
     def get_last_move(self):
         return self.moves[-1]
     
-    def export_to_file(self, filename):
+    def get_move(self, move_number):
+        return self.moves[move_number]
     
-        return 
-
-@staticmethod
-def import_from_file(filename):
-    game = Game()
-    step = 1
-    file = open(filename, "r")
-    line = file.readline().rstrip()
-    if line == "":
-        return None
-    while True:
-        if step==1: # Read a game
-            if line==None: # End of file
-                break # Exit the loop
-            else:
-                step = 2
-        elif step==2: # Read meta-data
-            if re.match("\[", line):
-                match = re.search("\[([a-zA-Z]+)", line)
-                if match:
-                    key = match.group(1) # key = Event, White, Black, etc.
-                match = re.search(r'"([^"]+)"', line)
-                if match:
-                    value = match.group(1) # value = "World Championship 2018"
-                game.add_meta_data(key, value)
-                line = file.readline().rstrip()
-                if line==None:
-                    break
-            else:
-                step = 3
-        elif step==3: # read moves
-            if line==None:
-                break
-            line = file.readline().rstrip()
-            # Split at each move indicated by "1., 2., 3., etc."
-            moves = re.split("\d+\.", line) 
-            print(moves)
-            for move in moves:
-                game.add_move(move)
-            if re.match("\[", line):
-                step = 2
-                
-
-    file.close()
-    return game
+    def get_result(self):
+        return self.meta_data["Result"]
+    
+    def lookup_meta_data(self, key):
+        return self.meta_data[key]
+    
+    def __str__(self):
+        return str(self.meta_data)
 
 
 
-
-def main():
-    game = import_from_file("./2005-12.commented.[534].pgn")
-    print(game.get_moves())
-main()
