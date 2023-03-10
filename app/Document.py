@@ -1,6 +1,5 @@
 import os
 import time
-import matplotlib.pyplot as plt
 from docx import Document
 from docx.shared import Inches
 from Database import Database
@@ -48,6 +47,7 @@ class PGNDocument:
         self.database_of_games_where_stockfish_wins_or_draws = Database(self.list_of_games_where_stockfish_wins_or_draws)
         self.database_of_games_where_stockfish_wins = Database(self.list_of_games_where_stockfish_wins)
         self.database_of_games_where_stockfish_losses = Database(self.list_of_games_where_stockfish_losses)
+
 
     ## DOCUMENT ##
 
@@ -158,10 +158,8 @@ class PGNDocument:
         self.document.add_heading('3 Tree plotting', level=1)
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
-        
-        # TODO: legg til funksjonalitet at man
 
-        openings = self.database.get_openings_that_occurred_at_least_n_times(self.minimum_opening_occurences_to_add_to_table)
+        openings = self.database.get_opening_counts()
         self.document.add_page_break()
 
         for opening in openings:
@@ -185,9 +183,6 @@ class PGNDocument:
         # Should include a table with game count for each player
         self.document.add_heading('2 Games', level=2)
         self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
-
-    def create_document_subsection_for_all_games(self):
-        return 
 
     def create_document_result_table_for_all_games(self):
         table = self.document.add_table(rows=1, cols=4)
@@ -245,7 +240,6 @@ class PGNDocument:
         self.document.add_heading('2.4.1 Moves table', level=2)
         self.document.add_paragraph('The following table shows the mean and standard deviation of the number of moves in the database.')
         
-    
     def add_table_of_mean_and_standard_deviation_of_moves(self, database):
         table = self.document.add_table(rows=1, cols=3)
         table.style = 'Table Grid'
@@ -259,38 +253,26 @@ class PGNDocument:
         row_cells[2].text = str(round(database.get_standard_deviation_of_moves(), 2))
         
 
+
     ## HELPER FUNCTIONS ##
     
-    # TODO, vise kilde til denne?
-
     def add_hyperlink(self, paragraph, text, url):
-    # This gets access to the document.xml.rels file and gets a new relation id value
         part = paragraph.part
         r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
-
-        # Create the w:hyperlink tag and add needed values
         hyperlink = docx.oxml.shared.OxmlElement('w:hyperlink')
         hyperlink.set(docx.oxml.shared.qn('r:id'), r_id, )
-
-        # Create a w:r element and a new w:rPr element
         new_run = docx.oxml.shared.OxmlElement('w:r')
         rPr = docx.oxml.shared.OxmlElement('w:rPr')
-
-        # Join all the xml elements together add add the required text to the w:r element
         new_run.append(rPr)
         new_run.text = text
         hyperlink.append(new_run)
-
-        # Create a new Run object and add the hyperlink into it
         r = paragraph.add_run ()
         r._r.append (hyperlink)
-
-        # A workaround for the lack of a hyperlink style (doesn't go purple after using the link)
-        # Delete this if using a template that has the hyperlink style in it
         r.font.color.theme_color = MSO_THEME_COLOR_INDEX.HYPERLINK
         r.font.underline = True
 
         return hyperlink
+
 
 
 def main():
@@ -304,7 +286,7 @@ def main():
     max_tree_depth = 15
     minimum_games_on_node_to_keep_going_on_a_branch = 4
 
-    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
+    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening"]
 
     document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()

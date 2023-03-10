@@ -1,4 +1,3 @@
-import numpy as np
 import matplotlib.pyplot as plt
 
 class Plot:
@@ -88,3 +87,11 @@ class Plot:
 
     def clear_plot(self):
         plt.clf()
+
+
+def main():
+    pass
+    
+if __name__ == "__main__":
+    main()
+    
