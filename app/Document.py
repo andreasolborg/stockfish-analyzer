@@ -13,18 +13,18 @@ class PGNDocument:
     '''
     Encapsulates a single PGN document
     '''
-    def __init__(self, database, opening_occurrences, include_openings, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
+    def __init__(self, database, minimum_opening_occurences_to_add_to_table, include_openings, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
         
-        
+        # TODO: jeg vil rename klassen til Document egt, men det kan vi ikke, hva gjør vi?
+
         self.database = database
         self.document = Document()
-        self.opening_occurrences = opening_occurrences
+
+        # Parameters that the user can play with and adjust
+        self.minimum_opening_occurences_to_add_to_table = minimum_opening_occurences_to_add_to_table
         self.include_openings = include_openings
         self.max_tree_depth = max_tree_depth
         self.minimum_games_on_node_to_keep_going_on_a_branch = minimum_games_on_node_to_keep_going_on_a_branch
-        self.list_of_games = self.database.get_list_of_games()
-
-        # TODO: skriv i dokumentet hvorfor vi iterer over games 12,13 ganger mer enn vi trenger
 
         self.list_of_games = self.database.get_list_of_games()
         self.list_of_drawed_games = self.database.get_list_of_draws()
@@ -41,7 +41,6 @@ class PGNDocument:
         self.stockfish_draws_as_white = self.database.get_list_of_stockfish_draws_as_white()
         self.stockfish_draws_as_black = self.database.get_list_of_stockfish_draws_as_black()
         
-
         self.black_wins = self.database.get_list_of_black_wins()
         self.white_wins = self.database.get_list_of_white_wins()
         self.draws = self.database.get_list_of_draws()
@@ -49,6 +48,8 @@ class PGNDocument:
         self.database_of_games_where_stockfish_wins_or_draws = Database(self.list_of_games_where_stockfish_wins_or_draws)
         self.database_of_games_where_stockfish_wins = Database(self.list_of_games_where_stockfish_wins)
         self.database_of_games_where_stockfish_losses = Database(self.list_of_games_where_stockfish_losses)
+
+    ## DOCUMENT ##
 
     def create_document(self):
         self.create_document_heading()
@@ -64,52 +65,9 @@ class PGNDocument:
 
     def create_document_body(self):
         self.create_document_introduction()
-
-        self.document.add_heading('2. Statistics', level=2)
-        self.document.add_paragraph('The database contains ' + str(len(self.list_of_games)) + ' games. The following sections describe the games in more detail.')
-
-        self.document.add_heading('2.1 General results', level=1)
-        self.document.add_paragraph('The following table shows the results of games.')
-        self.create_document_result_table_for_all_games()
-
-        self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
-        self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
-        self.create_document_result_table_with_stockfish()
-
-        self.document.add_heading('2.2 Move count distributions', level=2)
-        self.document.add_paragraph('The following graphs shows the distribution of the amount moves in the given set of games.')
-                
-        self.document.add_heading('2.2.1 All games', level=3)
-        self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
-
-
-
-        # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black
-        dictionary_for_first_plot = {"All games": self.list_of_games, "Games where Stockfish is white": self.list_of_games_where_stockfish_is_white, "Games where Stockfish is black": self.list_of_games_where_stockfish_is_black}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_first_plot, "./plots/1stMoveCountCDPlot.png")
-        self.document.add_paragraph('Mean and standard deviation table for all games')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.database)
-
-        self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
-        self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
-        # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
-        dictionary_for_second_plot = {"Games where Stockfish won": self.list_of_games_where_stockfish_wins, "Games that ended in draw": self.list_of_drawed_games}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_second_plot, "./plots/2ndMoveCountCDPlot.png")
-        
-
-        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_wins_or_draws)
-        self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
-                                    
-        self.document.add_heading('2.2.3 Stockfish loses', level=3)
-        self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish lost.')
-        dictionary_for_third_plot = {"Games where Stockfish lost": self.list_of_games_where_stockfish_losses}
-        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_for_third_plot, "./plots/3rdMoveCountCDPlot.png")
-        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
-        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_losses)
-
+        self.statistics()
+        self.plots()
         self.create_openings_table()
-
         self.create_document_section_for_tree_plotting()
     
     def create_document_conclusion(self):
@@ -123,14 +81,56 @@ class PGNDocument:
 
 
     ## SUBCOMPONENTS ##
+
+    def statistics(self):
+        self.document.add_heading('2. Statistics', level=2)
+        self.document.add_paragraph('The database contains ' + str(len(self.list_of_games)) + ' games. The following sections describe the games in more detail.')
+
+        self.document.add_heading('2.1 General results', level=1)
+        self.document.add_paragraph('The following table shows the results of games.')
+        self.create_document_result_table_for_all_games()
+
+        self.document.add_heading('2.1.1 Result table for Stockfish', level=2)
+        self.document.add_paragraph('The following table shows the results of games where Stockfish either won or lost, depending on Stockfish color')
+        self.create_document_result_table_with_stockfish()
+
+        self.document.add_heading('2.2 Move count distributions', level=2)
+        self.document.add_paragraph('The following graphs shows the distribution of the amount moves in the given set of games.')
+
+    def plots(self):
+        # Plot Cumulative Moves Distribution for all games, games where Stockfish is white and games where Stockfish is black    
+        dictionary_of_database = {"All games": self.list_of_games, "Games where Stockfish is white": self.list_of_games_where_stockfish_is_white, "Games where Stockfish is black": self.list_of_games_where_stockfish_is_black}   
+        self.document.add_heading('2.2.1 All games', level=3)
+        self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_database, "./plots/1stMoveCountCDPlot.png")
+        self.document.add_paragraph('Mean and standard deviation table for all games')
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database)
+        
+        # Plot Cumulative Moves Distribution for games where Stockfish won and games where Stockfish lost
+        dictionary_of_games_where_stockfish_wins_or_draws = {"Games where Stockfish won": self.list_of_games_where_stockfish_wins, "Games that ended in draw": self.list_of_drawed_games}
+        self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
+        self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_games_where_stockfish_wins_or_draws, "./plots/2ndMoveCountCDPlot.png")
+        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_wins_or_draws)
+        self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
+        
+        # Plot Cumulative Moves Distribution for games where Stockfish lost
+        dictionary_of_games_where_stockfish_losses = {"Games where Stockfish lost": self.list_of_games_where_stockfish_losses}                            
+        self.document.add_heading('2.2.3 Stockfish loses', level=3)
+        self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish lost.')
+        self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_games_where_stockfish_losses, "./plots/3rdMoveCountCDPlot.png")
+        self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
+        self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_losses)
+
     def create_document_introduction(self):
         self.document.add_heading('1. Introduction', level=1)
         self.document.add_paragraph('This document is a summary of the chess database.')
 
     def create_openings_table(self):
         self.document.add_heading('3.1 Openings', level=2)
-        self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.opening_occurrences) + ' times.')
-        openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
+        self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.minimum_opening_occurences_to_add_to_table) + ' times.')
+        openings = self.database.get_openings_that_occurred_at_least_n_times(self.minimum_opening_occurences_to_add_to_table)
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -161,7 +161,7 @@ class PGNDocument:
         
         # TODO: legg til funksjonalitet at man
 
-        openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
+        openings = self.database.get_openings_that_occurred_at_least_n_times(self.minimum_opening_occurences_to_add_to_table)
         self.document.add_page_break()
 
         for opening in openings:
