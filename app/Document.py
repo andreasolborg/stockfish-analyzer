@@ -335,21 +335,13 @@ def main():
     start_time = time.time()
     database = PGNDatabase()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    opening_occurrences = 20
+    
+    # parametere til Document 
+    minimum_opening_occurences_to_add_to_table = 20
+    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
 
-
-    inlcude_openings = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
-
-
-    #document = PGNDocument(database, opening_occurrences, inlcude_openings)
-    print("WWWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
-    document = PGNDocument(database, opening_occurrences, inlcude_openings)
-    print("WWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
-
-
-    print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
+    document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs)
     document.create_document()
-    print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
 
 
 
