@@ -9,16 +9,6 @@ class PGNGame:
         self.meta_data = meta_data
         self.moves = moves
 
-    # 0 will give you the first black ply
-    # 1 will give you the first white ply
-    # 2 will give you the second white ply
-    # etc ...
-    def get_half_move(self, number):
-        if number % 2 == 0:
-            return self.moves[number//2].get_white_move()
-        else: 
-            return self.moves[number//2].get_black_move()
-        
     def add_move(self, Move) -> None:
         self.moves.append(Move)
 
@@ -40,8 +30,6 @@ class PGNGame:
                 moves.append(move.get_black_move())
         return moves
     
-    
-    
     def get_last_move(self):
         return self.moves[-1]
     
@@ -51,7 +39,6 @@ class PGNGame:
     def get_result(self):
         return self.meta_data["Result"]
     
-
     def lookup_meta_data(self, key):
         return self.meta_data[key]
     

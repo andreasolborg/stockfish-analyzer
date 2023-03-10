@@ -63,9 +63,6 @@ class OpeningTree:
         self.create_tree()
         self.root_label = "Opening: " + self.database.get_list_of_games()[0].lookup_meta_data("Opening") + "\n" + "Number of games: " + str(len(self.database.get_list_of_games()))
 
-    # def get_root(self):
-    #     return self.root
-
     def create_tree(self):
         for game in self.database.get_list_of_games():
             result = game.get_result()
@@ -103,6 +100,7 @@ class OpeningTree:
         if node.get_parent() is None: # if node is root node
             dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), self.root_label, node.get_color(), node.get_text_color())) # write root node
 
+
     def save_tree(self, depth, filename):
         print("Saving tree to file {}".format(filename)) # print to console
         if os.path.exists("./graphs/{}.dot".format(filename)): # if file already exists, delete it
@@ -117,41 +115,48 @@ class OpeningTree:
         os.system("dot -Tpng -Gdpi=500 ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
 
 
-def save_tree_to_file(tree, depth, filename):
-    if os.path.exists("./graphs/{}.dot".format(filename)):
-        os.remove("./graphs/{}.dot".format(filename))
-    if os.path.exists("./graphs/{}.png".format(filename)):
-        os.remove("./graphs/{}.png".format(filename))
-    tree.save_tree(depth, filename)
+    def save_mulitple_trees_from_openings(self, database, openings, depth, filename):
+        for opening in openings:
+            print("Creating tree for {}".format(opening))
+            list_of_games = database.get_games_with_opening(opening)
+            tree = OpeningTree(list_of_games)
+            self.save_tree(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
+            os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
 
 
-def save_tree_from_list_of_games(list_of_games, depth, filename):
-    tree = OpeningTree(list_of_games)
-    tree.save_tree(depth, filename)
-
-def save_mulitple_trees_from_openings(database, openings, depth, filename):
-    for opening in openings:
-        print("Creating tree for {}".format(opening))
-        list_of_games = database.get_games_with_opening(opening)
-        tree = OpeningTree(list_of_games)
-        save_tree_to_file(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
-        os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
              
 def main():
 
     # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    # database = PGNDatabase("./databases/100_games.pgn")
-    # list_of_games = database.get_games_with_eco("A03")
-    list_of_games = database.get_database_with_opening("Sicilian")
-    save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian4")
 
-    list_of_games = database.get_database_with_opening("French")
-    save_tree_from_list_of_games(list_of_games, 10, "tree_French4")
 
-    list_of_games = database.get_database_with_opening("Bird's opening")
-    save_tree_from_list_of_games(list_of_games, 3, "tree_Bird's4")
+    sicilian_database = database.get_database_with_opening("Sicilian")
+    
+    tree = OpeningTree(sicilian_database)
+    tree.save_tree(10, "tree_Sicilian")
+
+
+
+    #save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
+
+    #list_of_games = database.get_database_with_opening("French")
+    #save_tree_from_list_of_games(list_of_games, 10, "tree_French2")
+
+    #list_of_games = database.get_database_with_opening("Bird's opening")
+    #save_tree_from_list_of_games(list_of_games, 3, "tree_Bird's2")
+
+
+    ## parametere til Tree
+    # - minimum_games_to_keep_going_on_a_branch
+    # - max_branch_depth
+
+    ## parameter til Document
+    # - minimum_opening_occurences_to_add_to_table
+
+
+
 
     # save_trees_from_list_of_games(list_of_games, 4, "tree")
 
