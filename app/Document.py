@@ -7,7 +7,7 @@ from Database import Database
 from Tree import *
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
-
+from Plot import *
 
 class PGNDocument:
     '''
@@ -236,44 +236,10 @@ class PGNDocument:
         row_cells[3].text = str(len(self.stockfish_losses_as_white) + len(self.stockfish_losses_as_black))
         row_cells[4].text = str(round(((len(self.stockfish_wins_as_white) + len(self.stockfish_wins_as_black)) / len(self.list_of_games)) * 100, 2)) + '%'
 
-    # def add_picture_of_plycount_distribution(self):
-    #     self.database.plot_plycount_distribution(self.list_of_games)
-    #     self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
-
-    # def create_document_moves_distribution(self):
-    #     self.document.add_heading('2.4 Moves dist2626ribution', level=2)
-    #     self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
-    #     self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-    #     self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_white, "Stockfish as white")
-    #     self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_black, "Stockfish as black")
-    #     self.database.plot_move_count_distribution(self.list_of_games, "All games")
-    #     self.document.add_picture('./plots/move_count_distribution.png', width=Inches(6))
-
     def add_picture_of_cumulative_moves_distribution_for_multiple_games(self, dict, filename): # dict is a dictionary with the key being the name of the list of games, and the value being the list of games
-        fig, ax = plt.subplots()
-        fig.set_size_inches(10,5)
-        # Iterate through the dictionary, and plot each list of games
-        self.database.plot_multiple_move_count_histogram_cumulative(dict)
-        plt.savefig(filename)
+        plot = Plot()
+        plot.plot_multiple_move_count_histogram_cumulative(dict, filename)
         self.document.add_picture(filename, width=Inches(6))
-        
-    # TODO: fjerne eller beholde denne funksjonen?
-
-    ### This is the old version of the function above, which only plots one list of games at a time ###
-    def create_document_cumulative_moves_distribution(self):
-        # self.database.clear_plot()
-        self.document.add_heading('2.4 Moves distribution', level=2)
-        self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
-        self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-        fig, ax = plt.subplots()
-        fig.set_size_inches(10,5)
-        
-        self.database.plot_move_count_histogram_cumulative(self.list_of_games_where_stockfish_is_white, "Stockfish as white", axis=ax)
-        self.database.plot_move_count_histogram_cumulative(self.list_of_games_where_stockfish_is_black, "Stockfish as black", axis=ax)
-        self.database.plot_move_count_histogram_cumulative(self.list_of_games, "All games", axis=ax)
-        plt.legend()
-        self.database.save_histogram('move_count_distribution.png')
-        self.document.add_picture('move_count_distribution.png', width=Inches(6))
 
     def create_document_moves_table_mean_and_standard_deviation(self):
         self.document.add_heading('2.4.1 Moves table', level=2)
