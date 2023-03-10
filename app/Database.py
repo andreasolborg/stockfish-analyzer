@@ -1,5 +1,5 @@
-from PGNGame import *
-from PGNMove import *
+from Game import *
+from Move import *
 import re
 import time
 import numpy as np
@@ -330,10 +330,10 @@ class Database:
                 black_move = row[3]
                 black_move_comment = row[4]
 
-                moves.append(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment))
+                moves.append(Move(number, white_move, white_move_comment, black_move, black_move_comment))
 
             if phase == 2:
-                self.games.append(PGNGame(meta_data, moves))
+                self.games.append(Game(meta_data, moves))
                 meta_data = {}
                 moves = []
                 phase = 0
@@ -381,7 +381,7 @@ class Database:
         game_list = []
         
         for game in games:
-            chessgame = PGNGame({}, [])            
+            chessgame = Game({}, [])            
             sections = list(filter(lambda x: len(x) > 0, game.split('\n\n'))) # Split on empty lines
             meta_data = sections[0]
             meta_data = meta_data.split('\n')
@@ -411,7 +411,7 @@ class Database:
                     white_move_comment = result.group(3)
                     black_move = result.group(4)
                     black_move_comment = result.group(5)
-                    chessgame.add_move(PGNMove(number, white_move, white_move_comment, black_move, black_move_comment)) # Add move to game
+                    chessgame.add_move(Move(number, white_move, white_move_comment, black_move, black_move_comment)) # Add move to game
                 else:
                     print("No match---------------------")
             game_list.append(chessgame)

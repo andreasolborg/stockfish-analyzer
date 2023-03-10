@@ -1,4 +1,4 @@
-class PGNMove:  
+class Move:  
     '''
     Describes a single chess move from PGN format.
     '''
@@ -48,14 +48,6 @@ class PGNMove:
         
         return number + " " + white_move + " " + white_comment  + " " + black_move + " " + black_comment
 
-    
-
-    def main():
-        pass
-
-
-if __name__ == '__main__':
-    main()
 
     
         

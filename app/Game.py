@@ -1,7 +1,7 @@
-from PGNMove import *
+from Move import *
 
 
-class PGNGame:
+class Game:
     '''
     Describes a single chess game from PGN format.
     '''
