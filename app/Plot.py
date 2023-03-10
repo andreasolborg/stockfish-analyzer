@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from Database import Database 
 
 class Plot:
     
@@ -90,7 +91,19 @@ class Plot:
 
 
 def main():
-    pass
+    
+    database = Database()
+    database.parse_from_pgn("./databases/2600_games.pgn")
+
+    list_of_games = database.get_list_of_games()
+    list_of_games_where_stockfish_is_white = database.get_list_of_games_where_stockfish_is_white()
+    list_of_games_where_stockfish_is_black = database.get_list_of_games_where_stockfish_is_black()
+
+    dictionary = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black} 
+
+    plot = Plot()
+    plot.plot_multiple_move_count_histogram_cumulative(dictionary, "./plots/test.png")
+
     
 if __name__ == "__main__":
     main()
