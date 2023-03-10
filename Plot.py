@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 from Database import Database 
 import os
-ROOT_DIR = os.path.dirname(os.path.abspath("top_level_file.txt"))
 
 class Plot:
     
@@ -63,7 +62,7 @@ class Plot:
         plt.plot(x, y)
         plt.xlim(15, 250)
         plt.ylim(0, 150)
-        plt.savefig(ROOT_DIR + '/plots/plycount_distribution.png')
+        plt.savefig('plots/plycount_distribution.png')
         # plt.show()
 
     def plot_move_count_distribution(self, list_of_games):
@@ -83,7 +82,7 @@ class Plot:
         plt.ylabel('Number of games')
         plt.plot(x, y)
         plt.fill_between(x, y, color='blue', alpha=0.5)
-        plt.savefig(ROOT_DIR + '/plots/move_count_distribution.png')
+        plt.savefig('plots/move_count_distribution.png')
 
     def save_histogram(self, path):
         plt.savefig(path)
@@ -95,7 +94,7 @@ class Plot:
 def main():
     
     database = Database()
-    database.parse_from_pgn(ROOT_DIR + "/databases/Stockfish_15_64-bit.commented.[2600].pgn")
+    database.parse_from_pgn("databases/Stockfish_15_64-bit.commented.[2600].pgn")
 
     list_of_games = database.get_list_of_games()
     list_of_games_where_stockfish_is_white = database.get_list_of_games_where_stockfish_is_white()
@@ -104,7 +103,7 @@ def main():
     dictionary = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black} 
 
     plot = Plot()
-    plot.plot_multiple_move_count_histogram_cumulative(dictionary, ROOT_DIR + "/plots/test.png")
+    plot.plot_multiple_move_count_histogram_cumulative(dictionary, "plots/test.png")
 
     
 if __name__ == "__main__":

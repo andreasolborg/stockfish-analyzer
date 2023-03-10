@@ -1,4 +1,4 @@
-from Move import *
+from Move import Move
 
 
 class Game:

@@ -1,60 +1,6 @@
-from Database import *
+from Database import Database
 import os
-
-class TreeNode:
-    def __init__(self, move, move_number):
-        self.move = move
-        self.move_number = move_number
-        self.parent = None
-        self.color = None
-        self.text_color = "black"
-        self.results = {"1-0": 0, "0-1": 0, "1/2-1/2": 0}
-        self.children = []
-        self.set_color(move_number)
-
-    def add_child(self, child):
-        child.parent = self
-        self.children.append(child)
-
-    def get_move(self):
-        return self.move
-
-    def get_result(self):
-        return "W:{} D:{} B:{}".format(self.results["1-0"], self.results["1/2-1/2"], self.results["0-1"])
-    
-    def get_number_of_games(self):
-        return self.results["1-0"] + self.results["1/2-1/2"] + self.results["0-1"]
-
-    def get_children(self):
-        return self.children
-
-    def get_parent(self):
-        return self.parent
-
-    def increment_result(self, result):
-        self.results[result] += 1
-        
-    def set_color(self, number):
-        if number != None:
-            if number % 2 == 0:
-                self.color = "#2c2c2c"
-                self.text_color = "white"
-            else:
-                self.color = "white"
-                self.text_color = "black"
-        else:
-            self.color = "white"
-            self.text_color = "black"
-    
-    def get_color(self):
-        return self.color
-
-    def get_text_color(self):
-        return self.text_color
-    
-    def __str__(self):
-        return str(self.move)
-    
+  
 class OpeningTree:  
     def __init__(self, list_of_games):
         self.list_of_games = list_of_games
@@ -113,6 +59,60 @@ class OpeningTree:
             dot_file.write("}\n")
         os.system("dot -Tpng -Gdpi=500 graphs/{}.dot -o graphs/{}.png".format(filename, filename)) # create png from dot file
              
+class TreeNode:
+    def __init__(self, move, move_number):
+        self.move = move
+        self.move_number = move_number
+        self.parent = None
+        self.color = None
+        self.text_color = "black"
+        self.results = {"1-0": 0, "0-1": 0, "1/2-1/2": 0}
+        self.children = []
+        self.set_color(move_number)
+
+    def add_child(self, child):
+        child.parent = self
+        self.children.append(child)
+
+    def get_move(self):
+        return self.move
+
+    def get_result(self):
+        return "W:{} D:{} B:{}".format(self.results["1-0"], self.results["1/2-1/2"], self.results["0-1"])
+    
+    def get_number_of_games(self):
+        return self.results["1-0"] + self.results["1/2-1/2"] + self.results["0-1"]
+
+    def get_children(self):
+        return self.children
+
+    def get_parent(self):
+        return self.parent
+
+    def increment_result(self, result):
+        self.results[result] += 1
+        
+    def set_color(self, number):
+        if number != None:
+            if number % 2 == 0:
+                self.color = "#2c2c2c"
+                self.text_color = "white"
+            else:
+                self.color = "white"
+                self.text_color = "black"
+        else:
+            self.color = "white"
+            self.text_color = "black"
+    
+    def get_color(self):
+        return self.color
+
+    def get_text_color(self):
+        return self.text_color
+    
+    def __str__(self):
+        return str(self.move)
+
 def main():
     time_start = time.time()
 
