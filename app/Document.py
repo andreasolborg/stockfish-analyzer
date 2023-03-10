@@ -168,7 +168,10 @@ class PGNDocument:
             self.document.add_heading(opening, level=2)
             list_of_games = self.database.get_database_with_opening(opening)
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
-            save_tree_from_list_of_games(list_of_games, 8, opening_filename)
+            
+            tree = OpeningTree(list_of_games)
+            tree.save_tree(8, opening_filename)
+
             p = self.document.add_paragraph('')
             print("./graphs/ " + opening_filename + ".png")
             self.add_hyperlink(p, 'open full picture', "./graphs/" + opening_filename + ".png")
