@@ -142,7 +142,7 @@ class Database:
                         break
         return games_with_move_sequence
     
-    def get_database_with_opening(self, opening):
+    def get_list_with_opening(self, opening):
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
