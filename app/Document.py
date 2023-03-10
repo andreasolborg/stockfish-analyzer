@@ -80,6 +80,9 @@ class PGNDocument:
 
 
     ## SUBCOMPONENTS ##
+    def create_document_introduction(self):
+        self.document.add_heading('1. Introduction', level=1)
+        self.document.add_paragraph('This document is a summary of the chess database.')
 
     def statistics(self):
         self.document.add_heading('2. Statistics', level=2)
@@ -102,6 +105,7 @@ class PGNDocument:
         self.document.add_heading('2.2.1 All games', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in all games.')
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_database, "./plots/1stMoveCountCDPlot.png")
+
         self.document.add_paragraph('Mean and standard deviation table for all games')
         self.add_table_of_mean_and_standard_deviation_of_moves(self.database)
         
@@ -110,6 +114,7 @@ class PGNDocument:
         self.document.add_heading('2.2.2 Either stockfish won or draws', level=3)
         self.document.add_paragraph('The following graph shows the distribution of the amount moves in games where Stockfish won.')
         self.add_picture_of_cumulative_moves_distribution_for_multiple_games(dictionary_of_games_where_stockfish_wins_or_draws, "./plots/2ndMoveCountCDPlot.png")
+        
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish won or drew')
         self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_wins_or_draws)
         self.document.add_paragraph("A noteworthy observation is that we get a spike in the distribution of moves when Stockfish draws.")
@@ -122,9 +127,6 @@ class PGNDocument:
         self.document.add_paragraph('Mean and standard deviation table for games where Stockfish lost')
         self.add_table_of_mean_and_standard_deviation_of_moves(self.database_of_games_where_stockfish_losses)
 
-    def create_document_introduction(self):
-        self.document.add_heading('1. Introduction', level=1)
-        self.document.add_paragraph('This document is a summary of the chess database.')
 
     def create_openings_table(self):
         self.document.add_heading('3.1 Openings', level=2)
