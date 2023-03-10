@@ -2,22 +2,15 @@ from PGNGame import *
 from PGNMove import *
 import re
 import time
-
-import os
-from docx import Document
-from docx.shared import Inches
-
 import numpy as np
 import matplotlib.pyplot as plt
-
 from openpyxl import Workbook
 from openpyxl import load_workbook
-
 import textwrap
 
 class PGNDatabase:
     '''
-    Encapsulate all games parsed from a PGN file.
+    Encapsulate all games parsed from a PGN file or a Excel file.
     '''
 
     def __init__(self, games=None):
@@ -26,8 +19,7 @@ class PGNDatabase:
         else: 
             self.games = []
 
-
-    ## BASIC GETTERS ##
+    ## GETTERS ##
 
     def get_list_of_games(self):
         return self.games
@@ -62,19 +54,12 @@ class PGNDatabase:
     def get_precentage_of_draws(self):
         return round((len(self.get_list_of_draws()) / len(self.get_list_of_games()))*100,2)
 
-
-
-    # endre til setter
-    # lage en stor setter for alle
-    # lage getters for variablene
     def get_list_of_stockfish_wins_as_white(self):
         stockfish_wins = []
         for game in self.games:
             if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
                 stockfish_wins.append(game)
         return stockfish_wins
-    
-
     
     def get_list_of_stockfish_wins_as_black(self):
         stockfish_wins = []
@@ -118,7 +103,6 @@ class PGNDatabase:
     def get_list_of_stockfish_losses(self):
         return self.get_list_of_stockfish_losses_as_black() + self.get_list_of_stockfish_losses_as_white()
     
-
     def get_list_of_games_where_stockfish_is_white(self):
         stockfish_white = []
         for game in self.games:
@@ -142,8 +126,6 @@ class PGNDatabase:
     def get_database_of_games_where_stockfish_losses(self):
         return PGNDatabase(self.get_list_of_stockfish_losses())
 
-    ## GETTERS FOR OPENINGS ##
-
     def get_games_with_move_sequence(self, move_sequence): #move_sequence is a list of moves (e.g. ['e4', 'e5', 'Nf3', 'Nc6'])
         games_with_move_sequence = []
         for game in self.games:
@@ -155,9 +137,7 @@ class PGNDatabase:
                         break
         return games_with_move_sequence
     
-
     def get_database_with_opening(self, opening):
-        # TODO liste
         games_with_opening = []
         for game in self.games:
             if game.lookup_meta_data('Opening') == opening:
@@ -165,7 +145,6 @@ class PGNDatabase:
                 games_with_opening.append(game)
 
         return PGNDatabase(games_with_opening)
-
 
     def get_opening_counts(self): #Returns a dictionary with keys being openings and values being the number of games with that opening
         openings = {}
@@ -218,7 +197,8 @@ class PGNDatabase:
                 plycount_distribution[plycount] = 1
         return plycount_distribution
 
-    
+    # TODO; splitt dette ut fra Database på en måte
+
     def sort_dict(self, dict):
         return sorted(dict.items(), key=lambda x: x[0])
     
@@ -290,10 +270,13 @@ class PGNDatabase:
     def clear_plot(self):
         plt.clf()
 
-    def compose_to_excel(self):
+
+    ## PARSE AND COMPOSE FOR PGN AND EXCEL ##
+
+    def compose_to_excel(self, path, sheet_name):
         workbook = Workbook()
         worksheet = workbook.active
-        worksheet.title = 'pgn_as_excel'
+        worksheet.title = sheet_name
 
         i = 1
         for game in self.games:
@@ -313,12 +296,11 @@ class PGNDatabase:
                 i += 1
 
             i += 1
-        workbook.save(filename='pgn_as_excel.xlsx')
+        workbook.save(filename=path)
 
-    def parse_from_excel(self):
-        workbook = load_workbook(filename='pgn_as_excel.xlsx')
-        worksheet = workbook['pgn_as_excel']
-        new_game=False
+    def parse_from_excel(self, path, sheet_name):
+        workbook = load_workbook(filename=path)
+        worksheet = workbook[sheet_name]
         phase = 0
         
         meta_data = {}
@@ -352,8 +334,7 @@ class PGNDatabase:
                 phase = 0
                 continue
 
-    def compose_to_pgn(self):
-        # TODO fix correct linebreak in the moves, split at space at ca 80 chars, as pgn standards
+    def compose_to_pgn(self , path):
         pgn_data = ""
         for game in self.games:
             meta_data = ""
@@ -362,8 +343,6 @@ class PGNDatabase:
                 meta_data = meta_data + line + "\n"
             
             pgn_data += meta_data + "\n"
-
-            
 
             moves = ""
             for move in game.get_moves(): 
@@ -379,20 +358,17 @@ class PGNDatabase:
                     moves += move.get_black_move() + " "
              
                 if move.get_black_comment() is not None:
-                    moves += move.get_black_comment() + " "
-            
-            # add linebreaks to moves every 80 chars    
+                    moves += move.get_black_comment() + " " 
             
             moves = textwrap.fill(moves, width=80)
             score = game.get_meta_data()["Result"]
             pgn_data += moves + score + "\n\n"
         
-        pgn_file = open("./databases/test.pgn","w")
+        pgn_file = open(path,"w")
         pgn_file.write(pgn_data)
         pgn_file.close()
     
-    # TODO; chage
-    def parse_from_pgn(self,path):
+    def parse_from_pgn(self, path):
         file = open(path, 'r')
         pgn_data = file.read()
         games = list(filter(lambda x: len(x) > 0, pgn_data.split('\n\n[')))
@@ -441,9 +417,11 @@ def main():
     time_start = time.time()
 
     pgn = PGNDatabase()
-    pgn.parse_from_pgn("./databases/100_games.pgn")
-    pgn.compose_to_pgn()
 
+    pgn.parse_from_pgn("./databases/100_games.pgn")
+    pgn.compose_to_pgn("./databases/100_games_composed.pgn")
+    pgn.compose_to_excel("./databases/100_games_composed.xlsx", "Sheet1")
+    pgn.parse_from_excel("./databases/100_games_composed.xlsx", "Sheet1")
     
     print(f"Time: {time.time() - time_start}")
     
