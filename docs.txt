@@ -1,0 +1,19 @@
+2.1 Games
+
+Task 1 is solved in the PGNGame class, where each game has a list of PGNMove objects. Each game has a dictionary of meta data, and a ordered list of moves
+Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and compose_to_pgn functions. We assume you mean design function to export a game TO a textfile, and not from a textfile.
+Task 4: PGNDatabase includes a list of games.... jon skriv mer
+Task 5: Solved in PGNDatabase with the compose_to_excel and parse_to_excel functions
+
+2.2 Statistics
+
+Task 6: The functionality for creating Word documents is in the Document.py using the python-docx package. 
+Task 7: Functions for extracting out a list of games based on color and/or results is in the Database class.
+	These functions are called upon initializing a Document object to ensure that these variables gets assigned to the Document object aswell.
+	The Document class has a function for making tables based upon what these variables contain.
+
+Task 8: To plot the porportion of still ongoing games after n moves, we choose to make a reverse cumulative histogram plot. 
+	The functionality for plotting takes place inside the Database class.
+	Calculations of mean and standard deviations of games are implemented in the Database object, while Table insertion belongs to the Document class. 
+	For plotting multiple histograms on the same figure, the plot_multiple_move_count_histogram_cumulative() function iterates over a dictionary {"List_name": list_of_games} plotting each value, with the key as the plot-label.
+	

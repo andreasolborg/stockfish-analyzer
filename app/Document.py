@@ -128,7 +128,6 @@ class PGNDocument:
         self.document.add_heading('3.1 Openings', level=2)
         self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.opening_occurrences) + ' times.')
         openings = self.database.get_openings_that_occurred_at_least_n_times(self.opening_occurrences)
-
         table = self.document.add_table(rows=1, cols=5)
         table.style = 'Table Grid'
         hdr_cells = table.rows[0].cells
@@ -233,18 +232,18 @@ class PGNDocument:
         row_cells[3].text = str(len(self.stockfish_losses_as_white) + len(self.stockfish_losses_as_black))
         row_cells[4].text = str(round(((len(self.stockfish_wins_as_white) + len(self.stockfish_wins_as_black)) / len(self.list_of_games)) * 100, 2)) + '%'
 
-    def add_picture_of_plycount_distribution(self):
-        self.database.plot_plycount_distribution(self.list_of_games)
-        self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
+    # def add_picture_of_plycount_distribution(self):
+    #     self.database.plot_plycount_distribution(self.list_of_games)
+    #     self.document.add_picture('./plots/plycount_distribution.png', width=Inches(6))
 
-    def create_document_moves_distribution(self):
-        self.document.add_heading('2.4 Moves distribution', level=2)
-        self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
-        self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
-        self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_white, "Stockfish as white")
-        self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_black, "Stockfish as black")
-        self.database.plot_move_count_distribution(self.list_of_games, "All games")
-        self.document.add_picture('./plots/move_count_distribution.png', width=Inches(6))
+    # def create_document_moves_distribution(self):
+    #     self.document.add_heading('2.4 Moves dist2626ribution', level=2)
+    #     self.document.add_paragraph('The following graph shows the distribution of moves in the database.')
+    #     self.document.add_paragraph('The x-axis shows the number of moves, and the y-axis shows the number of games with that number of moves.')
+    #     self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_white, "Stockfish as white")
+    #     self.database.plot_move_count_distribution(self.list_of_games_where_stockfish_is_black, "Stockfish as black")
+    #     self.database.plot_move_count_distribution(self.list_of_games, "All games")
+    #     self.document.add_picture('./plots/move_count_distribution.png', width=Inches(6))
 
     def add_picture_of_cumulative_moves_distribution_for_multiple_games(self, dict, filename): # dict is a dictionary with the key being the name of the list of games, and the value being the list of games
         fig, ax = plt.subplots()
@@ -276,7 +275,6 @@ class PGNDocument:
         self.document.add_heading('2.4.1 Moves table', level=2)
         self.document.add_paragraph('The following table shows the mean and standard deviation of the number of moves in the database.')
         
-    # TODO: denne følger fremdeles gamle struktur, må oppdateres
     
     def add_table_of_mean_and_standard_deviation_of_moves(self, database):
         table = self.document.add_table(rows=1, cols=3)
