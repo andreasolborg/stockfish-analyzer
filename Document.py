@@ -160,7 +160,6 @@ class Document:
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
 
         openings = self.database.get_opening_counts()
-        self.document.add_page_break()
 
         for opening in openings:
             if opening not in self.include_openings:

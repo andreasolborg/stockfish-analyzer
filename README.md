@@ -46,3 +46,12 @@ Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and comp
 
 **Task 12**: 	The user are required to give some input in order to generate the document report. This includes a list of desired openings to print trees for, and their desired max_tree_depth, and minimum_games_on_node_to_keep_going_on_a_branch. The latter serves as a threshold value, and restricts the visualisation of tree such that stop generating a branch when a nodes number of games reaches this value.
 	 		Lastly, the user must choose the minimum_opening_occurences_to_add_to_table, and this variable controls which openings that to store in the documents final table.
+
+
+**TODO:**
+- Legg til parameterne i Word filen og en intuituv beskrivelse til dem []
+- fix alle linebreaks på tree plotting [x]
+- Jon les over dokumentasjon []
+- Test alt i Spyder før vi leverer []
+- Fjern unødvenige databse filer i den mappa []
+- Få den til å lese alle stockfish navn så den funker på flere []
