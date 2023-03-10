@@ -153,9 +153,37 @@ class Document:
             row_cells[3].text = str(len(black_wins))
             row_cells[4].text = str(len(list_of_games))
 
+    def create_parameter_explanation_table(self):
+        self.document.add_heading('3.2 Parameter explanation', level=2)
+        self.document.add_paragraph('The following table shows the parameters used in the tree plotting.')
+        table = self.document.add_table(rows=1, cols=3)
+        table.style = 'Table Grid'
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = 'Parameter'
+        hdr_cells[1].text = 'Value'
+        hdr_cells[2].text = 'Explanation'
+        row_cells = table.add_row().cells
+        row_cells[0].text = 'max_tree_depth'
+        row_cells[1].text = str(self.max_tree_depth)
+        row_cells[2].text = 'The maximum depth of the tree.'
+        row_cells = table.add_row().cells
+        row_cells[0].text = 'minimum_games_on_node_to_keep_going_on_a_branch'
+        row_cells[1].text = str(self.minimum_games_on_node_to_keep_going_on_a_branch)
+        row_cells[2].text = 'The minimum amount of games on a node to keep going on a branch.'      
+        row_cells = table.add_row().cells
+        row_cells[0].text = 'minimum_opening_occurences_to_add_to_table'
+        row_cells[1].text = str(self.minimum_opening_occurences_to_add_to_table)
+        row_cells[2].text = 'The minimum amount of games on a node to keep going on a branch.'
+        row_cells = table.add_row().cells
+        row_cells[0].text = 'include_opening_graphs'
+        row_cells[1].text = str(self.include_openings)
+        row_cells[2].text = 'The openings for which graphs are included in the report.'
+
+
     def create_document_section_for_tree_plotting(self):
         self.document.add_page_break()
         self.document.add_heading('3 Tree plotting', level=1)
+        self.create_parameter_explanation_table()
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
 
