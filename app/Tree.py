@@ -117,9 +117,9 @@ def main():
 
     database = Database()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    sicilian_database = database.get_database_with_opening("Sicilian")
+    sicilian_list = database.get_list_with_opening("Sicilian")
     
-    tree = OpeningTree(sicilian_database)
+    tree = OpeningTree(sicilian_list)
 
     # parametere til Tree
     max_tree_depth = 15
