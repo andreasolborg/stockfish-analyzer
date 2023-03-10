@@ -55,7 +55,6 @@ class TreeNode:
     def __str__(self):
         return str(self.move)
     
-        
 class OpeningTree:  
     def __init__(self, database):
         self.database = database
@@ -85,23 +84,23 @@ class OpeningTree:
                 current_node = child_node
                 move_number += 1
 
-    def print_node(self, node, depth, current_depth, dot_file):
-        if node.get_number_of_games() <= 4 and node.get_parent() is not None: # if number of games inside the node is less than 5, we do not want to plot any children. But we should label the node
+    def print_node(self, node, max_tree_depth, minimum_games_on_node_to_continue_on_branch, current_depth, dot_file):
+        if node.get_number_of_games() <= minimum_games_on_node_to_continue_on_branch and node.get_parent() is not None: # if number of games inside the node is less than 5, we do not want to plot any children. But we should label the node
             dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
             return # return from function
-        if current_depth < depth: # not leaf node and not at max depth
+        if current_depth < max_tree_depth: # not leaf node and not at max depth
             for child in node.get_children():
                 # if number of games inside the node is less than given threshold, we do not want to plot any children
                 dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled", fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
                 dot_file.write('{} -> {} [label="{}" fontsize="60pt" arrowsize="3"];\n'.format(str(id(node)), str(id(child)), child.get_move())) # write edge 
-                self.print_node(child, depth, current_depth + 1, dot_file) # recursive call to print child nodes
+                self.print_node(child, max_tree_depth, minimum_games_on_node_to_continue_on_branch, current_depth + 1, dot_file) # recursive call to print child nodes
         else: # leaf node
             dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), "Games: " + str(node.get_number_of_games()) +"\n " + node.get_result(), node.get_color(), node.get_text_color())) # write node
         if node.get_parent() is None: # if node is root node
             dot_file.write('{} [label="{}", fillcolor="{}", fontcolor="{}", style="filled" fontsize="60pt"];\n'.format(str(id(node)), self.root_label, node.get_color(), node.get_text_color())) # write root node
 
 
-    def save_tree(self, depth, filename):
+    def save_tree(self, max_tree_depth, minimum_games_on_node_to_continue_on_branch, filename):
         print("Saving tree to file {}".format(filename)) # print to console
         if os.path.exists("./graphs/{}.dot".format(filename)): # if file already exists, delete it
             os.remove("./graphs/{}.dot".format(filename))
@@ -110,52 +109,25 @@ class OpeningTree:
         with open("./graphs/{}.dot".format(filename), "w") as dot_file: 
             dot_file.write("digraph G {\n")
             dot_file.write('rankdir=LR;\ncenter=true;\nsize="10,7"\n')
-            self.print_node(self.root, depth, 0, dot_file) # recursive call to print nodes
+            self.print_node(self.root, max_tree_depth, minimum_games_on_node_to_continue_on_branch, 0, dot_file) # recursive call to print nodes
             dot_file.write("}\n")
         os.system("dot -Tpng -Gdpi=500 ./graphs/{}.dot -o ./graphs/{}.png".format(filename, filename)) # create png from dot file
-
-
-    def save_mulitple_trees_from_openings(self, database, openings, depth, filename):
-        for opening in openings:
-            print("Creating tree for {}".format(opening))
-            list_of_games = database.get_games_with_opening(opening)
-            tree = OpeningTree(list_of_games)
-            self.save_tree(tree, depth, "{}_{}".format(filename, opening.replace(" ", "_")))
-            os.system("dot -Tpng ./graphs/{}.dot -o ./graphs/{}.png".format("{}_{}".format(filename, opening.replace(" ", "_")), "{}_{}".format(filename, opening.replace(" ", "_"))))
-
-
              
 def main():
 
-    # database = PGNDatabase("./databases/sample.pgn")
     database = PGNDatabase()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-
-
     sicilian_database = database.get_database_with_opening("Sicilian")
     
     tree = OpeningTree(sicilian_database)
-    tree.save_tree(15, "tree_Sicilian")
 
+    # parametere til Tree
+    max_tree_depth = 15
+    minimum_games_on_node_to_continue_on_branch = 4
+    filename = "tree_Sicilian"
 
+    tree.save_tree(max_tree_depth, minimum_games_on_node_to_continue_on_branch, filename)
 
-    #save_tree_from_list_of_games(list_of_games, 10, "tree_Sicilian")
-
-    #list_of_games = database.get_database_with_opening("French")
-    #save_tree_from_list_of_games(list_of_games, 10, "tree_French2")
-
-    #list_of_games = database.get_database_with_opening("Bird's opening")
-    #save_tree_from_list_of_games(list_of_games, 3, "tree_Bird's2")
-
-
-    ## parametere til Tree
-    # - minimum_games_to_keep_going_on_a_branch
-    # - max_branch_depth
-
-    ## parameter til Document
-    # - minimum_opening_occurences_to_add_to_table
-
-    
 if __name__ == "__main__":
     main()
     

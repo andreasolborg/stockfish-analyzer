@@ -13,13 +13,15 @@ class PGNDocument:
     '''
     Encapsulates a single PGN document
     '''
-    def __init__(self, database, opening_occurrences, include_openings):
+    def __init__(self, database, opening_occurrences, include_openings, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
         
         
         self.database = database
         self.document = Document()
         self.opening_occurrences = opening_occurrences
         self.include_openings = include_openings
+        self.max_tree_depth = max_tree_depth
+        self.minimum_games_on_node_to_keep_going_on_a_branch = minimum_games_on_node_to_keep_going_on_a_branch
         self.list_of_games = self.database.get_list_of_games()
 
         # TODO: skriv i dokumentet hvorfor vi iterer over games 12,13 ganger mer enn vi trenger
@@ -169,7 +171,7 @@ class PGNDocument:
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
             
             tree = OpeningTree(list_of_games)
-            tree.save_tree(8, opening_filename)
+            tree.save_tree(self.max_tree_depth, self.minimum_games_on_node_to_keep_going_on_a_branch ,opening_filename)
 
             p = self.document.add_paragraph('')
             print("./graphs/ " + opening_filename + ".png")
@@ -324,32 +326,20 @@ class PGNDocument:
 
 
 def main():
-
-    ## Todo: tree depth as input parameter.
-    ## If no depth is specified, we need to check if the occurences of the opening is above a certain threshold. If it is, we need to go deeper in the tree. Fixed size
-    ## Make main file
-    ## We need to be able plot trees even though they are under opening occurences threshold.
-
     start_time = time.time()
+
     database = PGNDatabase()
     database.parse_from_pgn("./databases/Stockfish_15_64-bit.commented.[2600].pgn")
-    opening_occurrences = 20
+    
+    # parametere til Document 
+    minimum_opening_occurences_to_add_to_table = 30
+    max_tree_depth = 15
+    minimum_games_on_node_to_keep_going_on_a_branch = 4
 
+    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
 
-    inlcude_openings = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian"]
-
-
-    #document = PGNDocument(database, opening_occurrences, inlcude_openings)
-    print("WWWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
-    document = PGNDocument(database, opening_occurrences, inlcude_openings)
-    print("WWWWWWWWWWWWWWWTime elapsed: " + (str(time.time() - start_time)) + " seconds")
-
-
-    print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
+    document = PGNDocument(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()
-    print("Time elapsed: " + (str(time.time() - start_time)) + " seconds")
-
-
 
 if __name__ == "__main__":
     main()
