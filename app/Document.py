@@ -60,7 +60,7 @@ class PGNDocument:
     ## MAIN COMPONENTS ##
 
     def create_document_heading(self):
-        self.document.add_heading('Chess Database', 0)
+        self.document.add_heading('Chess Report', 0)
 
     def create_document_body(self):
         self.create_document_introduction()
@@ -117,9 +117,9 @@ class PGNDocument:
         self.document.add_paragraph('This document is a summary of the chess database.')
 
     def save_document(self):
-        if os.path.exists('ChessDatabase.docx'):
-            os.remove('ChessDatabase.docx') # Remove the file if it already exists to avoid an error
-        self.document.save('ChessDatabase.docx')
+        if os.path.exists('ChessReport.docx'):
+            os.remove('ChessReport.docx') # Remove the file if it already exists to avoid an error
+        self.document.save('ChessReport.docx')
 
 
     ## SUBCOMPONENTS ##
