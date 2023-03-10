@@ -1,9 +1,0 @@
-https://www.pythonforbeginners.com/data-structures/tree-data-structure-in-python
-
-pip install python-docx
-
-
-
-Big tasks:
-Task 10: Parse the database into a tree structure
-
