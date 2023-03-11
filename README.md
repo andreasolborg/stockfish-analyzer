@@ -48,11 +48,3 @@ Task 2 and 3 are solved in the Database class, in the parse_from_pgn and compose
 	 		Lastly, the user must choose the minimum_opening_occurences_to_add_to_table, and this variable controls which openings that to store in the documents final table.
 
 
-**TODO:**
-- Legg til parameterne i Word filen og en intuituv beskrivelse til dem [x], ikke noe besrkivelse
-- fix alle linebreaks på tree plotting [x]
-- Jon les over dokumentasjon []
-- Test alt i Spyder før vi leverer []
-- fikse hyperlink path [x]
-- Fjern unødvenige databse filer i den mappa [x]
-- Få den til å lese alle stockfish navn så den funker på flere [x]
