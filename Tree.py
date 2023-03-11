@@ -1,5 +1,6 @@
 from Database import Database
 import os
+import time
   
 class OpeningTree:  
     def __init__(self, list_of_games):

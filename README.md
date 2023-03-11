@@ -11,16 +11,16 @@
 - OpeningTree:	Data structure for managing a tree of chessgames. Includes functions for creating the tree, and printing the tree.
 - TreeNode: 	Data structure for a single node in the OpeningTree.
 - Plot:			Class that encapsulates functions used for plotting given a list of games. 
-- Document:	 	Class that encapsulates functions used for creating a Word document given a list of games. Also includes functions for creating tables and inserting images. 
+- Document:	 	Class that encapsulates functions used for creating a Word document given a Database instance. Also includes functions for creating tables and inserting images. 
 
 # Proposed solution for each task:
 ## 2.1 Games
-**Task 1, 2, 3:** Task 1 is solved in the PGNGame class, where each game has a list of PGNMove objects. Each game has a dictionary of meta data, and a ordered list of moves
-Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and compose_to_pgn functions. For task 3, we assume you mean design function to export a game TO a textfile, and not from a textfile.
+**Task 1, 2, 3:** Task 1 is solved in the Game class, where each game has a list of Move objects. Each game has a dictionary of meta data, and a ordered list of moves
+Task 2 and 3 are solved in the Database class, in the parse_from_pgn and compose_to_pgn functions. For task 3, we assume you mean design function to export a game TO a textfile, and not from a textfile.
 
-**Task 4:** PGNDatabase includes a list of games. The parsing functionality implemented in task 2 supports managing multiple chessgames aswell as a single chessgame. JON SKRIV MER
+**Task 4:** The Database class includes a list of games, parsing and composing functionality, and query functions for different type of games. The query/getters for different type of games will return a list of games. The parsing and composing functionality impleneted in task 2 supports managing multiple chessgames aswell as a single chessgame.
 
-**Task 5:** Solved in PGNDatabase with the compose_to_excel and parse_to_excel functions. These function uses 
+**Task 5:** Solved in Database with the compose_to_excel and parse_to_excel functions. 
 
 ## 2.2 Statistics
 
@@ -37,7 +37,7 @@ Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and comp
 	
 ## 2.3 Openings
 **Task 9**:		The data structures for encoding trees are in the Tree.py file. This file contains two classes related to the data structure of a tree. 
-			Opon creating a new OpeningTree object with a chosen Database object as input parameter, it creates a tree by iterating through the moves for each game. If we encounter a new move (current node does not have a child with this move sequence), we create a new node and adds it as a child of the current node. If the move already is a child of the current node, we increment its result.
+			Opon creating a new OpeningTree object with a chosen list of Game instances as input parameter, it creates a tree by iterating through the moves for each game. If we encounter a new move (current node does not have a child with this move sequence), we create a new node and adds it as a child of the current node. If the move already is a child of the current node, we increment its result.
 
 **Task 10**: 	An OpeningTree object takes in a list of games as a parameter, and creates a tree by iterating over the moves for each game in the databases list_of_games. We 
 
@@ -49,10 +49,10 @@ Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and comp
 
 
 **TODO:**
-- Legg til parameterne i Word filen og en intuituv beskrivelse til dem []
+- Legg til parameterne i Word filen og en intuituv beskrivelse til dem [x], ikke noe besrkivelse
 - fix alle linebreaks på tree plotting [x]
 - Jon les over dokumentasjon []
 - Test alt i Spyder før vi leverer []
-- fikse hyperlink path
-- Fjern unødvenige databse filer i den mappa []
-- Få den til å lese alle stockfish navn så den funker på flere []
+- fikse hyperlink path [x]
+- Fjern unødvenige databse filer i den mappa [x]
+- Få den til å lese alle stockfish navn så den funker på flere [x]
