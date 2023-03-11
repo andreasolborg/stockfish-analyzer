@@ -12,13 +12,13 @@ class Document:
     '''
     Encapsulates a single PGN document
     '''
-    def __init__(self, database, minimum_opening_occurences_to_add_to_table, include_openings, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
+    def __init__(self, database, minimum_opening_occurences_to_add_to_table, include_openings_if_exist, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch):
 
         self.database = database
         self.document = docx_document()
 
         self.minimum_opening_occurences_to_add_to_table = minimum_opening_occurences_to_add_to_table
-        self.include_openings = include_openings
+        self.include_openings_if_exist = include_openings_if_exist
         self.max_tree_depth = max_tree_depth
         self.minimum_games_on_node_to_keep_going_on_a_branch = minimum_games_on_node_to_keep_going_on_a_branch
 
@@ -128,7 +128,7 @@ class Document:
 
 
     def create_openings_table(self):
-        self.document.add_heading('3.1 Openings', level=2)
+        self.document.add_heading('3.3 Openings', level=2)
         self.document.add_paragraph('The following table shows the openings that occured at least ' + str(self.minimum_opening_occurences_to_add_to_table) + ' times.')
         openings = self.database.get_openings_that_occurred_at_least_n_times(self.minimum_opening_occurences_to_add_to_table)
         table = self.document.add_table(rows=1, cols=5)
@@ -154,43 +154,38 @@ class Document:
             row_cells[4].text = str(len(list_of_games))
 
     def create_parameter_explanation_table(self):
-        self.document.add_heading('3.2 Parameter explanation', level=2)
-        self.document.add_paragraph('The following table shows the parameters used in the tree plotting.')
-        table = self.document.add_table(rows=1, cols=3)
-        table.style = 'Table Grid'
-        hdr_cells = table.rows[0].cells
-        hdr_cells[0].text = 'Parameter'
-        hdr_cells[1].text = 'Value'
-        hdr_cells[2].text = 'Explanation'
-        row_cells = table.add_row().cells
-        row_cells[0].text = 'max_tree_depth'
-        row_cells[1].text = str(self.max_tree_depth)
-        row_cells[2].text = 'The maximum depth of the tree.'
-        row_cells = table.add_row().cells
-        row_cells[0].text = 'minimum_games_on_node_to_keep_going_on_a_branch'
-        row_cells[1].text = str(self.minimum_games_on_node_to_keep_going_on_a_branch)
-        row_cells[2].text = 'The minimum amount of games on a node to keep going on a branch.'      
-        row_cells = table.add_row().cells
-        row_cells[0].text = 'minimum_opening_occurences_to_add_to_table'
-        row_cells[1].text = str(self.minimum_opening_occurences_to_add_to_table)
-        row_cells[2].text = 'The minimum amount of games on a node to keep going on a branch.'
-        row_cells = table.add_row().cells
-        row_cells[0].text = 'include_opening_graphs'
-        row_cells[1].text = str(self.include_openings)
-        row_cells[2].text = 'The openings for which graphs are included in the report.'
+        self.document.add_heading('3.1 Parameters', level=2)
+ 
+        p = self.document.add_paragraph("")
+        p.add_run("max_tree_depth: ").bold = True
+        p.add_run(str(self.max_tree_depth))
+
+        p = self.document.add_paragraph("")
+        p.add_run("minimum_games_on_node_to_keep_going_on_a_branch: ").bold = True
+        p.add_run(str(self.minimum_games_on_node_to_keep_going_on_a_branch))
+
+        p = self.document.add_paragraph("")
+        p.add_run("minimum_opening_occurences_to_add_to_table: ").bold = True
+        p.add_run(str(self.minimum_opening_occurences_to_add_to_table))
+
+        p = self.document.add_paragraph("")
+        p.add_run("include_openings_if_exist: ").bold = True
+        p.add_run(str(self.include_openings_if_exist))
+
+
+
 
 
     def create_document_section_for_tree_plotting(self):
         self.document.add_page_break()
-        self.document.add_heading('3 Tree plotting', level=1)
-        self.create_parameter_explanation_table()
+        self.document.add_heading('3 Tree graphs', level=1)
         self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
         self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
-
+        self.create_parameter_explanation_table()
         openings = self.database.get_opening_counts()
 
         for opening in openings:
-            if opening not in self.include_openings:
+            if opening not in self.include_openings_if_exist:
                 continue
 
             self.document.add_heading(opening, level=2)
@@ -310,9 +305,9 @@ def main():
     minimum_opening_occurences_to_add_to_table = 30
     max_tree_depth = 15
     minimum_games_on_node_to_keep_going_on_a_branch = 4
-    inlcude_opening_graphs = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening", "33525235"]
+    inlcude_opening__if_exist = ["Nimzo-Indian", "Sicilian", "Sicilian defence" ,"Ruy Lopez", "King's Indian", "Bird's opening", "33525235"]
 
-    document = Document(database, minimum_opening_occurences_to_add_to_table, inlcude_opening_graphs, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
+    document = Document(database, minimum_opening_occurences_to_add_to_table, inlcude_opening__if_exist, max_tree_depth, minimum_games_on_node_to_keep_going_on_a_branch)
     document.create_document()
 
     print(f"Time: {time.time() - time_start}")
