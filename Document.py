@@ -7,6 +7,7 @@ from Tree import OpeningTree, TreeNode
 import docx
 from docx.enum.dml import MSO_THEME_COLOR_INDEX
 from Plot import Plot
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 class Document:
     '''
@@ -196,8 +197,8 @@ class Document:
             tree.save_tree(self.max_tree_depth, self.minimum_games_on_node_to_keep_going_on_a_branch ,opening_filename)
 
             p = self.document.add_paragraph('')
-            print("graphs/ " + opening_filename + ".png")
-            self.add_hyperlink(p, 'open full picture', "graphs/" + opening_filename + ".png")
+            print("graphs/" + opening_filename + ".png")
+            self.add_hyperlink(p, 'open full picture', ROOT_DIR + "/graphs/" + opening_filename + ".png")
             self.document.add_picture("graphs/" + opening_filename + ".png", width=Inches(6))
             self.document.add_page_break()
 
