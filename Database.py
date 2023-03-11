@@ -59,7 +59,9 @@ class Database:
     def get_list_of_stockfish_wins_as_white(self):
         stockfish_wins = []
         for game in self.games:
-            if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+            # i want it to lookup metadata where the value includes stockfish
+
+            if game.lookup_meta_data('Result') == '1-0' and 'stockfish' in game.lookup_meta_data('White').lower():
                 stockfish_wins.append(game)
         return stockfish_wins
     
@@ -67,35 +69,35 @@ class Database:
         stockfish_wins = []
         for game in self.games:
     
-            if game.lookup_meta_data('Result') == '0-1' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+            if game.lookup_meta_data('Result') == '0-1' and 'stockfish' in game.lookup_meta_data('Black').lower():
                 stockfish_wins.append(game)
         return stockfish_wins
     
     def get_list_of_stockfish_losses_as_white(self):
         stockfish_wins = []
         for game in self.games:
-            if game.lookup_meta_data('Result') == '0-1' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+            if game.lookup_meta_data('Result') == '0-1' and 'stockfish' in game.lookup_meta_data('White').lower():
                 stockfish_wins.append(game)
         return stockfish_wins
     
     def get_list_of_stockfish_losses_as_black(self):
         stockfish_wins = []
         for game in self.games:
-            if game.lookup_meta_data('Result') == '1-0' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+            if game.lookup_meta_data('Result') == '1-0' and 'stockfish' in game.lookup_meta_data('Black').lower():
                 stockfish_wins.append(game)
         return stockfish_wins
     
     def get_list_of_stockfish_draws_as_white(self):
         stockfish_draws = []
         for game in self.games:
-            if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('White') == 'Stockfish 15 64-bit':
+            if game.lookup_meta_data('Result') == '1/2-1/2' and 'stockfish' in game.lookup_meta_data('White').lower():
                 stockfish_draws.append(game)
         return stockfish_draws
     
     def get_list_of_stockfish_draws_as_black(self):
         stockfish_draws = []
         for game in self.games:
-            if game.lookup_meta_data('Result') == '1/2-1/2' and game.lookup_meta_data('Black') == 'Stockfish 15 64-bit':
+            if game.lookup_meta_data('Result') == '1/2-1/2' and 'stockfish' in game.lookup_meta_data('Black').lower():
                 stockfish_draws.append(game)
         return stockfish_draws
     
