@@ -53,5 +53,6 @@ Task 2 and 3 are solved in the PGNDatabase class, in the parse_from_pgn and comp
 - fix alle linebreaks på tree plotting [x]
 - Jon les over dokumentasjon []
 - Test alt i Spyder før vi leverer []
+- fikse hyperlink path
 - Fjern unødvenige databse filer i den mappa []
 - Få den til å lese alle stockfish navn så den funker på flere []
