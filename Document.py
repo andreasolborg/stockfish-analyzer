@@ -172,24 +172,26 @@ class Document:
         p = self.document.add_paragraph("")
         p.add_run("include_openings_if_exist: ").bold = True
         p.add_run(str(self.include_openings_if_exist))
-
-
-
-
+        
+    def create_plot_subsection(self):
+        self.document.add_heading('3.2 Plotting', level=2)
+        self.document.add_paragraph('The following subsections describe the plotting of the trees, given the parameters described in the previous section.')
 
     def create_document_section_for_tree_plotting(self):
         self.document.add_page_break()
         self.document.add_heading('3 Tree graphs', level=1)
-        self.document.add_paragraph('The following section describes the tree plotting. The tree plotting is done using the Tree class........')
-        self.document.add_paragraph('We choose to plot the following trees with depth 10, first the Sicilian defence, then the French defence.')
+        self.document.add_paragraph('The following section describes the tree plotting.')
+        
         self.create_parameter_explanation_table()
+        self.create_plot_subsection()
+        
         openings = self.database.get_opening_counts()
-
+        counter = 1
         for opening in openings:
             if opening not in self.include_openings_if_exist:
                 continue
 
-            self.document.add_heading(opening, level=2)
+            self.document.add_heading("3.2." + str(counter) + " " + opening, level=3)
             list_of_games = self.database.get_list_with_opening(opening)
             opening_filename = opening.lower().replace(" ", "_").replace("'", "")
             
@@ -201,11 +203,13 @@ class Document:
             self.add_hyperlink(p, 'open full picture', ROOT_DIR + "/graphs/" + opening_filename + ".png")
             self.document.add_picture("graphs/" + opening_filename + ".png", width=Inches(6))
             self.document.add_page_break()
+            counter += 1
+            
 
-    def create_document_section_for_all_games(self):
-        # Should include a table with game count for each player
-        self.document.add_heading('2 Games', level=2)
-        self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
+    # def create_document_section_for_all_games(self):
+    #     # Should include a table with game count for each player
+    #     self.document.add_heading('2 Games', level=2)
+    #     self.document.add_paragraph('The database contains ' + str(len(self.database.get_games())) + ' games. The following sections describe the games in more detail.')
 
     def create_document_result_table_for_all_games(self):
         table = self.document.add_table(rows=1, cols=4)
@@ -259,9 +263,9 @@ class Document:
         plot.plot_multiple_move_count_histogram_cumulative(dict, filename)
         self.document.add_picture(filename, width=Inches(6))
 
-    def create_document_moves_table_mean_and_standard_deviation(self):
-        self.document.add_heading('2.4.1 Moves table', level=2)
-        self.document.add_paragraph('The following table shows the mean and standard deviation of the number of moves in the database.')
+    # def create_document_moves_table_mean_and_standard_deviation(self):
+    #     self.document.add_heading('2.4.1 Moves table', level=2)
+    #     self.document.add_paragraph('The following table shows the mean and standard deviation of the number of moves in the database.')
         
     def add_table_of_mean_and_standard_deviation_of_moves(self, database):
         table = self.document.add_table(rows=1, cols=3)
