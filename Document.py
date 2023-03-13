@@ -180,7 +180,7 @@ class Document:
     def create_document_section_for_tree_plotting(self):
         self.document.add_page_break()
         self.document.add_heading('3 Tree graphs', level=1)
-        self.document.add_paragraph('The following section describes the tree plotting.')
+        self.document.add_paragraph('The following section describes the tree plotting. Each node has the number of games played on it. The nodes also show results of games played on that node (white wins, draws, black wins) shown as W: x, D: x, B: x.')
         
         self.create_parameter_explanation_table()
         self.create_plot_subsection()
