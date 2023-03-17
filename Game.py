@@ -1,5 +1,9 @@
-from Move import Move
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
 
+from Move import Move
 
 class Game:
     '''

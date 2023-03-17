@@ -1,3 +1,8 @@
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
+
 from Game import Game
 from Move import Move
 import os

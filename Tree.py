@@ -1,3 +1,8 @@
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
+
 from Database import Database
 import os
 import time

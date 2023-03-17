@@ -1,3 +1,8 @@
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
+
 import matplotlib.pyplot as plt
 from Database import Database 
 import os

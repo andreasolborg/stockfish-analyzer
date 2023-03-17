@@ -1,3 +1,8 @@
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
+
 import os
 import time
 from docx import Document as docx_document

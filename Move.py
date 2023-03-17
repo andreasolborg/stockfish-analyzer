@@ -1,3 +1,8 @@
+"""
+Authors: Andreas Olborg and Jon Grendstad
+Group: group_4
+"""
+
 class Move:  
     '''
     Describes a single chess move from PGN format.
