@@ -108,6 +108,7 @@ def main():
     dictionary = {"All games": list_of_games, "Games where Stockfish is white": list_of_games_where_stockfish_is_white, "Games where Stockfish is black": list_of_games_where_stockfish_is_black} 
 
     plot = Plot()
+    print("Saving plot to plots/test.png")
     plot.plot_multiple_move_count_histogram_cumulative(dictionary, "plots/test.png")
 
     
